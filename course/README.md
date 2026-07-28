@@ -1,6 +1,6 @@
 # Course content
 
-This folder contains the files that the marimo team can integrate into its website.
+This folder contains the portable course files for website integration.
 
 ## Folder structure
 
@@ -31,7 +31,7 @@ course/
 
 `notebooks/examples/` contains optional marimo notebooks that are not used directly in the current lesson.
 
-`components/placeholders.mdx` describes the custom MDX components used in the lessons. The marimo team can map these names to components on its website.
+`components/placeholders.mdx` describes the custom MDX components used in the lessons. These names can be mapped to the components provided by the website.
 
 ## Module 1 notebooks
 

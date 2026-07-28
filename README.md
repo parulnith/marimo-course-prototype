@@ -1,6 +1,6 @@
 # marimo course prototype
 
-This repository contains course content and a standalone preview for the marimo team.
+This repository contains course content and a standalone course preview.
 
 ## View the course
 
@@ -8,7 +8,7 @@ Open the [live course preview](https://parulnith.github.io/marimo-course-prototy
 
 ## Course files
 
-The marimo team can find the files for website integration in `course/`.
+The files for website integration are in `course/`.
 
 - `course/modules/` contains the MDX lessons.
 - `course/images/` contains the images and GIFs used by the lessons.
@@ -19,7 +19,7 @@ See [`course/README.md`](course/README.md) for the full folder structure and int
 
 ## Preview files
 
-The `preview/` folder contains the React and Vite site used for the live course preview. The marimo team does not need to copy this folder into its website.
+The `preview/` folder contains the React and Vite site used for the live course preview. It is separate from the portable course content.
 
 `preview/public/notebooks/` contains generated web files for the notebook embeds in the live preview. These files are required by the preview. The notebook source files are stored separately in `course/notebooks/`.
 
