@@ -1,0 +1,205 @@
+---
+title: Why Interactive Programming Environments Matter for AI and ML
+shortTitle: Why Interactive Environments Matter
+description: Learn where traditional notebooks break down and how marimo uses reactive execution to keep code, data, and outputs aligned.
+order: 1
+duration: 15 min
+---
+
+## Why Interactive Programming Environments Matter for AI and ML
+
+Interactive programming environments are a fundamental part of today's AI and ML development stack.
+
+This is one the reasons why AI and ML researchers like Notebooks because they combine software code, computational output, and explanatory text in a single document.
+
+This is quite different than software engineering. You just don't write code, compile, and ship; rather, you explore, experiment, and iterate and constantly moving between code, data, and results.
+
+![The loop between code, data and results](../assets/module-1/loop.png)
+
+This loop can happen many times during a project and each result can change what you try next.
+
+Interactive environments like notebooks support this fast feedback loop since we can see the outputs right next to the code. Infact, some of the most important breakthroughs in modern AI, including early GPT work, were built in notebooks. That tells you how powerful this medium can be.
+
+<Callout title="💡">
+Alec Radford, the first author of the original GPT paper and the researcher behind GPT-2, CLIP, DALL-E, and Whisper, did much of his groundbreaking work inside Jupyter Notebooks.
+
+[Source](https://x.com/jeremyphoward/status/1873860513920364660?s=20)
+</Callout>
+
+
+## Drawbacks of Traditional Notebooks
+
+Traditional notebooks are useful, but they also have serious limitations.
+A large study by [Pimentel et al.](https://leomurta.github.io/papers/pimentel2019a.pdf) examined more than 1.1 million Jupyter notebooks from over 264,000 GitHub repositories. Only 24.11% executed without errors. Only 4.03% produced the same results as their stored outputs. Around 36% had cells executed out of order, while 77% had gaps in their execution counters, which can indicate hidden state.
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Findings</th>
+      <th align="right">Percentage of Notebooks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Executed without errors</td>
+      <td align="right">24.11</td>
+    </tr>
+    <tr>
+      <td>Reproduced stored outputs</td>
+      <td align="right">4.03</td>
+    </tr>
+    <tr>
+      <td>Cells executed out of order</td>
+      <td align="right">36</td>
+    </tr>
+    <tr>
+      <td>Skips in execution counters, which can indicate hidden state</td>
+      <td align="right">77</td>
+    </tr>
+  </tbody>
+</table>
+
+The problem stems from how traditional notebooks execute code. You run a cell and it changes the state held in memory. You then run another cell, and the state changes again. The notebook does not automatically track how one cell depends on another.
+
+This leads to two common problems.
+
+### 1. Hidden State
+
+Consider the Jupyter notebook below, where `a` is set to `1`, `b` is set to `2`, and the final cell adds them together to return `3`.
+
+As you can see we then change the value of `b` to `11`. After the cell runs, it is deleted. When `a + b` runs again, the notebook returns `12`. The code that set `b` to `11` is gone, but its value remains in memory.
+
+![Hidden state in a traditional notebook](../assets/module-1/jupyter-hidden-state.gif) 
+
+<Callout title="Hidden state">
+Hidden state is runtime information that affects a result but is not fully represented by the visible code.
+</Callout>
+
+### 2. Out-of-Order Execution
+
+Consider another Jupyter notebook that calculates compound interest. It begins with a principal of `1,000`, an annual rate of `7%`, and a period of `20` years. Running the notebook calculates the final balance and creates a summary table. The `years_used` column shows `20` for every row.
+
+Now suppose we change `years` from `20` to `50` and run only the parameter cell. Jupyter updates the value of `years` in memory, but it does not run the summary table cell again. The parameter cell now says `50`, while the table still shows `20` in the `years_used` column.
+
+This is an out-of-order execution problem. The parameter cell has run more recently than the table cell that uses it. The visible code and the stored output no longer agree. We must manually rerun the table cell to update it.
+
+![Out-of-order execution in a Jupyter notebook](../assets/module-1/jupyter-out-of-order.gif) 
+
+Restarting the kernel and running every cell can fix these problems. People often avoid that step when a workflow must load a large dataset or train a model. Generating embeddings or running inference can also take a long time. Repeating all of that work after each change may be too expensive.
+
+## A Better Alternative: Reactive Notebooks
+
+A better alternative is a reactive notebook that tracks which values each cell defines and which values it uses. It can then build a dependency graph that shows how the cells are connected. When an input changes, every cell that depends on that input runs again in the correct order.
+
+Below we have a reactive notebool and it uses the same hidden-state example from the Jupyter notebook. 
+
+<MarimoEmbed
+  notebook="/notebooks/1_2_marimo_reactive_workflow.html"
+  openUrl="https://molab.marimo.io/github/parulnith/marimo-for-ai-and-ml-development-oreilly-workshop/blob/main/Module_1/1_2_marimo_reactive_workflow.py"
+  title="Hidden state in marimo"
+/>
+
+<TryIt>
+Change `b` from `2` to `11`. Run that cell by clicking its play button or pressing `Cmd + Enter`. This reactive notebook then reruns the dependent cell and updates `c` from `3` to `12`. Next, remove the line that defines `b` and run the cell again. Check what happens to the cell that uses `b`.
+</TryIt>
+
+You must have observed that the notebook invalidates the result when one of its inputs is missing. It does not keep using the deleted value. 
+
+The next example uses the reactive compound-interest workflow.
+In this flow, changing `principal`, `annual_rate`, or `years` updates `final_balance`. The new balance then updates `summary`. The table and chart use the same inputs, so they also update as part of the same change.
+
+The reactive notebook below connects `years` to the final balance, yearly table, chart, and summary.
+
+<MarimoEmbed
+  notebook="/notebooks/1_2_marimo_reactive_workflow.html"
+  openUrl="https://molab.marimo.io/github/parulnith/marimo-for-ai-and-ml-development-oreilly-workshop/blob/main/Module_1/1_2_marimo_reactive_workflow.py"
+  title="Reactive compound-interest notebook"
+/>
+
+<TryIt>
+Change `years` from `20` to `50`. Observe how the table, chart, final balance, and summary update together.
+</TryIt>
+
+## marimo: A Reactive Notebook
+
+What you just used is **marimo**, a reactive Python notebook. marimo analyzes the variables that each cell defines and uses. It represents these relationships as a [directed acyclic graph, or DAG](https://marimo.io/blog/dataflow). Each cell is a node in the graph. A connection from one cell to another shows that the second cell depends on a value defined by the first.
+
+![A marimo notebook represented as a directed acyclic graph](../assets/module-1/DAG_workflow.png)
+
+<p className="figure-caption">
+  A marimo notebook is shown on the left, with its dataflow graph in the middle. On the right, the same graph is executed in three ways: as a reactive notebook, as a script, and as a web app. <a href="https://marimo.io/blog/dataflow">Source: marimo</a>
+</p>
+
+When `years` changes, marimo follows the [DAG](https://marimo.io/blog/dataflow) and runs every affected cell in the correct order. The graph is acyclic because a cell cannot depend on itself, either directly or through other cells.
+
+The same DAG also prevents hidden state. If a cell that defines a variable is removed, marimo invalidates every cell that depends on it. Those cells cannot keep using an old value left in memory. The missing definition must be restored before the dependent cells can run.
+
+**Lazy execution**
+
+Some cells are expensive to run. Lazy execution lets you change an upstream value without running every dependent cell at once. marimo marks affected cells as stale, so you can see which results need to be updated and choose when to run them.
+![Lazy execution in marimo](../assets/module-1/lazy.png)
+
+
+<TryIt>
+In the compound-interest notebook above, enable lazy execution. Change `years`, then inspect which table, chart, balance, and summary cells are marked as stale.
+</TryIt>
+
+## Hands On with marimo
+
+This guided tutorial is included with marimo. It gives you a more detailed tour of the editor and explains how cells, outputs, dependencies, and notebook tools work.
+
+<MarimoEmbed
+  notebook="https://marimo.app/?slug=c7h6pz"
+  openUrl="https://marimo.app/?slug=c7h6pz"
+  title="marimo guided tutorial"
+/>
+
+<TryIt>
+Explore the panels in the notebook and see what options are available.
+
+- Open the variables panel and see what information it shows.
+- Open the dependency graph and select different cells.
+- Look through the other panels in the sidebar.
+- Open the menu for a cell and review the available actions.
+- Open the command palette and browse the notebook commands.
+
+You do not need to use every option. The goal is to see what is available and become familiar with the notebook interface.
+</TryIt>
+
+If you are coming from Jupyter, you can convert an existing notebook.
+
+<TryIt>
+Run this command:
+
+```bash
+marimo convert notebook.ipynb -o notebook.py
+```
+
+</TryIt>
+
+<Quiz
+  question="What has been your biggest challenge with traditional notebook systems"
+  options={[
+    "I changed the code, but the outputs stayed stale.",
+    "It works on my machine, but not yours.",
+    "Poor Git/version control experience.",
+    "Hard to turn notebooks into real apps/scripts."
+  ]}
+  insights={[
+    "This means your main concern is trust. You need to know that every output matches the current code.",
+    "This means your main concern is reproducibility. Other people need to get the same result in their own environment.",
+    "This means your main concern is collaboration. You need changes to be easy to review and merge.",
+    "This means your main concern is moving work into production. You need a clear path from exploration to something other people can use."
+  ]}
+  courseSections={[
+    "Module 1. Why Interactive Environments Matter",
+    "Module 2. Reproducibility and Trustworthy AI",
+    "Module 3. Why Interactivity Accelerates AI Discovery",
+    "Module 4. Using coding agents in marimo",
+    "Module 5. From Interactive Work to Reusable Systems"
+  ]}
+/>
+
+## Summary
+
+Traditional notebooks can depend on hidden runtime state and manual execution order. marimo tracks dependencies between cells so related code and outputs stay aligned, while lazy execution gives you control over expensive computations.

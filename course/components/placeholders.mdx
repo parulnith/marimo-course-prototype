@@ -1,0 +1,57 @@
+# Placeholder component contract
+
+This file documents the custom components used by the course MDX. It does not implement them. The marimo Learn team should replace each name with an existing site component or add a small adapter in the site repository.
+
+## `MarimoEmbed`
+
+Displays an interactive marimo notebook.
+
+```mdx
+<MarimoEmbed
+  notebook="/notebooks/module-1/reactive-workflow.py"
+  title="Reactive compound-interest workflow"
+/>
+```
+
+Props:
+
+- `notebook` is a local path or hosted notebook URL.
+- `title` is the accessible name shown with the embed.
+
+The site should provide a useful loading state and a fallback link when the notebook cannot load.
+
+## `TryIt`
+
+Displays a short learner action.
+
+```mdx
+<TryIt>
+Change `years` from `20` to `50` and observe which outputs update.
+</TryIt>
+```
+
+## `Callout`
+
+Displays supporting information with an optional title.
+
+```mdx
+<Callout title="Hidden state">
+Hidden state is runtime information that affects a result but is not fully represented by the visible code.
+</Callout>
+```
+
+## `DemoPlaceholder`
+
+Reserves space for a future visual or interactive demonstration.
+
+```mdx
+<DemoPlaceholder
+  type="jupyter"
+  title="Hidden state in a traditional notebook"
+/>
+```
+
+Props:
+
+- `type` identifies the source or format of the future demonstration.
+- `title` gives the placeholder an accessible label.
