@@ -14,7 +14,7 @@ This is one the reasons why AI and ML researchers like Notebooks because they co
 
 This is quite different than software engineering. You just don't write code, compile, and ship; rather, you explore, experiment, and iterate and constantly moving between code, data, and results.
 
-![The loop between code, data and results](../assets/module-1/loop.png)
+![The loop between code, data and results](../images/module-1/loop.png)
 
 This loop can happen many times during a project and each result can change what you try next.
 
@@ -69,7 +69,7 @@ Consider the Jupyter notebook below, where `a` is set to `1`, `b` is set to `2`,
 
 As you can see we then change the value of `b` to `11`. After the cell runs, it is deleted. When `a + b` runs again, the notebook returns `12`. The code that set `b` to `11` is gone, but its value remains in memory.
 
-![Hidden state in a traditional notebook](../assets/module-1/jupyter-hidden-state.gif) 
+![Hidden state in a traditional notebook](../images/module-1/jupyter-hidden-state.gif)
 
 <Callout title="Hidden state">
 Hidden state is runtime information that affects a result but is not fully represented by the visible code.
@@ -83,7 +83,7 @@ Now suppose we change `years` from `20` to `50` and run only the parameter cell.
 
 This is an out-of-order execution problem. The parameter cell has run more recently than the table cell that uses it. The visible code and the stored output no longer agree. We must manually rerun the table cell to update it.
 
-![Out-of-order execution in a Jupyter notebook](../assets/module-1/jupyter-out-of-order.gif) 
+![Out-of-order execution in a Jupyter notebook](../images/module-1/jupyter-out-of-order.gif)
 
 Restarting the kernel and running every cell can fix these problems. People often avoid that step when a workflow must load a large dataset or train a model. Generating embeddings or running inference can also take a long time. Repeating all of that work after each change may be too expensive.
 
@@ -124,7 +124,7 @@ Change `years` from `20` to `50`. Observe how the table, chart, final balance, a
 
 What you just used is **marimo**, a reactive Python notebook. marimo analyzes the variables that each cell defines and uses. It represents these relationships as a [directed acyclic graph, or DAG](https://marimo.io/blog/dataflow). Each cell is a node in the graph. A connection from one cell to another shows that the second cell depends on a value defined by the first.
 
-![A marimo notebook represented as a directed acyclic graph](../assets/module-1/DAG_workflow.png)
+![A marimo notebook represented as a directed acyclic graph](../images/module-1/DAG_workflow.png)
 
 <p className="figure-caption">
   A marimo notebook is shown on the left, with its dataflow graph in the middle. On the right, the same graph is executed in three ways: as a reactive notebook, as a script, and as a web app. <a href="https://marimo.io/blog/dataflow">Source: marimo</a>
@@ -137,7 +137,7 @@ The same DAG also prevents hidden state. If a cell that defines a variable is re
 **Lazy execution**
 
 Some cells are expensive to run. Lazy execution lets you change an upstream value without running every dependent cell at once. marimo marks affected cells as stale, so you can see which results need to be updated and choose when to run them.
-![Lazy execution in marimo](../assets/module-1/lazy.png)
+![Lazy execution in marimo](../images/module-1/lazy.png)
 
 
 <TryIt>

@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import ModuleOne from "../../course/modules/01-interactive-environments.mdx";
 import "../styles.css";
 
-const moduleOneImages = import.meta.glob("../../course/assets/module-1/*", {
+const moduleOneImages = import.meta.glob("../../course/images/module-1/*", {
   eager: true,
   query: "?url",
   import: "default",
