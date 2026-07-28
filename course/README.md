@@ -17,8 +17,7 @@ course/
 │   ├── 04-ai-coding-agents.mdx
 │   └── 05-reusable-systems.mdx
 └── notebooks/
-    ├── module-1/
-    └── examples/
+    └── module-1/
 ```
 
 ## What each folder contains
@@ -29,8 +28,6 @@ course/
 
 `notebooks/module-1/` contains the Jupyter and marimo notebook source files used to create the Module 1 examples.
 
-`notebooks/examples/` contains optional marimo notebooks that are not used directly in the current lesson.
-
 `components/placeholders.mdx` describes the custom MDX components used in the lessons. These names can be mapped to the components provided by the website.
 
 ## Module 1 notebooks
@@ -39,7 +36,9 @@ The Module 1 notebook source files are:
 
 - `notebooks/module-1/1_1_jupyter_baseline.ipynb`
 - `notebooks/module-1/1_2_marimo_reactive_workflow.py`
+- `notebooks/module-1/environment-tour.py`
 - `notebooks/module-1/marimo_baseline.py`
+- `notebooks/module-1/reactive-workflow.py`
 
 ## Run a marimo notebook
 
