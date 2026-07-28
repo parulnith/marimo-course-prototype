@@ -25,13 +25,9 @@ def _():
 
 @app.cell
 def _(a, b):
-    a + b
-    return
-
-
-@app.cell
-def _():
-    return
+    c = a + b
+    c
+    return (c,)
 
 
 if __name__ == "__main__":

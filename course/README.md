@@ -38,7 +38,6 @@ The Module 1 notebook source files are:
 - `notebooks/module-1/1_2_marimo_reactive_workflow.py`
 - `notebooks/module-1/environment-tour.py`
 - `notebooks/module-1/marimo_baseline.py`
-- `notebooks/module-1/reactive-workflow.py`
 
 ## Run a marimo notebook
 

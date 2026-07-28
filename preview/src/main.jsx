@@ -117,12 +117,16 @@ function MarimoEmbed({ title, notebook, openUrl }) {
   const embedUrl = notebook?.startsWith("/")
     ? `${import.meta.env.BASE_URL}${notebook.slice(1)}`
     : notebook;
+  const requestedOpenUrl = openUrl || notebook;
+  const openNotebookUrl = requestedOpenUrl?.startsWith("/")
+    ? `${import.meta.env.BASE_URL}${requestedOpenUrl.slice(1)}`
+    : requestedOpenUrl;
   return (
     <div className={`notebook ${isEmbedded ? "notebook-embedded" : ""}`} data-notebook={notebook}>
       <div className="notebook-bar">
         <div><i></i><i></i><i></i></div>
         <span>{title || "marimo notebook"}</span>
-        <a href={openUrl || notebook} target="_blank" rel="noreferrer">Open notebook ↗</a>
+        <a href={openNotebookUrl} target="_blank" rel="noreferrer">Open notebook ↗</a>
       </div>
       {isEmbedded
         ? <iframe src={embedUrl} title={title || "Interactive marimo notebook"} loading="lazy" />
