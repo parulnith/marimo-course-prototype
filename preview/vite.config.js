@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 import { fileURLToPath } from "node:url";
 
 export default defineConfig({
+  base: process.env.GITHUB_ACTIONS ? "/marimo-course-prototype/" : "/",
   plugins: [
     {
       enforce: "pre",

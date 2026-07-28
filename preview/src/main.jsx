@@ -114,6 +114,9 @@ function DemoPlaceholder({ title }) {
 
 function MarimoEmbed({ title, notebook, openUrl }) {
   const isEmbedded = notebook?.endsWith(".html") || /^https?:\/\//.test(notebook || "");
+  const embedUrl = notebook?.startsWith("/")
+    ? `${import.meta.env.BASE_URL}${notebook.slice(1)}`
+    : notebook;
   return (
     <div className={`notebook ${isEmbedded ? "notebook-embedded" : ""}`} data-notebook={notebook}>
       <div className="notebook-bar">
@@ -122,7 +125,7 @@ function MarimoEmbed({ title, notebook, openUrl }) {
         <a href={openUrl || notebook} target="_blank" rel="noreferrer">Open notebook ↗</a>
       </div>
       {isEmbedded
-        ? <iframe src={notebook} title={title || "Interactive marimo notebook"} loading="lazy" />
+        ? <iframe src={embedUrl} title={title || "Interactive marimo notebook"} loading="lazy" />
         : <div className="notebook-body"><span className="badge green">Interactive notebook</span><h3>{title}</h3><p>The live marimo notebook will appear here when its hosted URL is available.</p></div>}
     </div>
   );
