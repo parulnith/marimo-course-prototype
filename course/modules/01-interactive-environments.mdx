@@ -10,7 +10,7 @@ duration: 15 min
 
 Interactive programming environments are a fundamental part of today's AI and ML development stack.
 
-This is one the reasons why AI and ML researchers like Notebooks because they combine software code, computational output, and explanatory text in a single document.
+Researchers and data practitioners love notebooks because they combine code, computational output, and explanatory text into a single document.
 
 This is quite different than software engineering. You just don't write code, compile, and ship; rather, you explore, experiment, and iterate and constantly moving between code, data, and results.
 
@@ -18,7 +18,7 @@ This is quite different than software engineering. You just don't write code, co
 
 This loop can happen many times during a project and each result can change what you try next.
 
-Interactive environments like notebooks support this fast feedback loop since we can see the outputs right next to the code. Infact, some of the most important breakthroughs in modern AI, including early GPT work, were built in notebooks. That tells you how powerful this medium can be.
+Interactive development environments like notebooks support this rapid feedback loop as we can view outputs alongside code. In fact, many important breakthroughs in modern AI, including early work on GPT at OpenAI, happened in notebooks.
 
 <Callout title="💡">
 Alec Radford, the first author of the original GPT paper and the researcher behind GPT-2, CLIP, DALL-E, and Whisper, did much of his groundbreaking work inside Jupyter Notebooks.
@@ -89,7 +89,7 @@ Restarting the kernel and running every cell can fix these problems. People ofte
 
 ## A Better Alternative: Reactive Notebooks
 
-A better alternative is a reactive notebook that tracks which values each cell defines and which values it uses. It can then build a dependency graph that shows how the cells are connected. When an input changes, every cell that depends on that input runs again in the correct order.
+Reactive notebooks provide a better alternative that tracks all variable dependencies. Reactive environments build dependency graphs that showcase how all cells are connected. This means when an input changes, every cell that depends on that input or variable automatically reruns in the correct order, ensuring you see the exact same output no matter when or how cells are executed.
 
 Below we have a reactive notebool and it uses the same hidden-state example from the Jupyter notebook. 
 
@@ -102,7 +102,7 @@ Below we have a reactive notebool and it uses the same hidden-state example from
 Change `b` from `2` to `11`. Run that cell by clicking its play button or pressing `Cmd + Enter`. This reactive notebook then reruns the dependent cell and updates `c` from `3` to `12`. Next, remove the line that defines `b` and run the cell again. Check what happens to the cell that uses `b`.
 </TryIt>
 
-You must have observed that the notebook invalidates the result when one of its inputs is missing. It does not keep using the deleted value. 
+Notice that the notebook invalidates the result when an input is missing. It does not continue to use the deleted value.
 
 The next example uses the reactive compound-interest workflow.
 In this flow, changing `principal`, `annual_rate`, or `years` updates `final_balance`. The new balance then updates `summary`. The table and chart use the same inputs, so they also update as part of the same change.
