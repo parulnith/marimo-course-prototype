@@ -18,6 +18,14 @@ Let's take the Jupyter notebook below that contains two examples of environment 
 
 In the first example, the notebook uses `CalibratedClassifierCV(method="temperature")`. This works in scikit-learn `1.8.0`, but it fails in scikit-learn `1.7.2`, where that option is not available.
 
+<div className="environment-drift-images">
+
+![The temperature method runs successfully with scikit-learn 1.8.0](../images/module-2/sklearn-1-8-success.png)
+
+![The same method raises an error with scikit-learn 1.7.2](../images/module-2/sklearn-1-7-error.png)
+
+</div>
+
 In the second example, the notebook reads a CSV with `delim_whitespace=True`.
 
 | Code | pandas 2.x | pandas 3.x |
@@ -186,7 +194,3 @@ Use the **Open notebook** link above the sandboxed environment notebook. In mola
 </TryIt>
 
 Using the same source file and recorded environment makes it easier to move an experiment from a personal prototype into a reviewed project. Later modules will continue this path by turning interactive work into tools that other people can run.
-
-## Summary
-
-Reproducibility requires more than rerunning code. You must also control the Python environment and record the dependencies that produced the result. marimo can store notebook dependencies for an isolated sandbox, while its Python file format keeps Git changes focused on the code. These features make experiments easier to reproduce, review, and prepare for production.

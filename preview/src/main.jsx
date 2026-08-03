@@ -45,7 +45,6 @@ const modules = {
       ["how-marimo-helps", "How marimo Helps", null, 5],
       ["version-control-and-reviewable-experiments", "Version Control and Reviewable Experiments", null, 6],
       ["working-locally-in-vs-code-and-in-molab", "Working Locally, in VS Code, and in molab", null, 7],
-      ["summary", "Summary", null, 8],
     ],
   },
 };
