@@ -128,7 +128,7 @@ What you just used is **marimo**, a reactive Python notebook. marimo analyzes th
   A marimo notebook is shown on the left, with its dataflow graph in the middle. On the right, the same graph is executed in three ways: as a reactive notebook, as a script, and as a web app. <a href="https://marimo.io/blog/dataflow">Source: marimo</a>
 </p>
 
-When `years` changes, marimo follows the [DAG](https://marimo.io/blog/dataflow) and runs every affected cell in the correct order. The graph is acyclic because a cell cannot depend on itself, either directly or through other cells.
+When `years` change, marimo follows the [DAG](https://marimo.io/blog/dataflow) and runs every affected cell in the correct order. The graph is acyclic because a cell cannot depend on itself, either directly or through other cells.
 
 The same DAG also prevents hidden state. If a cell that defines a variable is removed, marimo invalidates every cell that depends on it. Those cells cannot keep using an old value left in memory. The missing definition must be restored before the dependent cells can run.
 

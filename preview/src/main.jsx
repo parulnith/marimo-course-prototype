@@ -41,7 +41,7 @@ const modules = {
       ["top", "Reproducibility as a Baseline for Trustworthy AI", null, 1],
       ["the-it-works-on-my-machine-problem", 'The "It Works on My Machine" Problem', null, 2],
       ["the-hidden-culprits-dependencies-and-environments", "The Hidden Culprits", null, 3],
-      ["install-and-start-marimo", "Install and Start marimo", null, 4],
+      ["start-using-marimo", "Start Using marimo", null, 4],
       ["how-marimo-helps", "How marimo Helps", null, 5],
       ["version-control-and-reviewable-experiments", "Version Control and Reviewable Experiments", null, 6],
       ["working-locally-in-vs-code-and-in-molab", "Working Locally, in VS Code, and in molab", null, 7],
@@ -92,6 +92,44 @@ function Callout({ title, children }) {
 
 function TryIt({ children }) {
   return <aside className="try-it"><div className="try-label"><span>✦</span> Try it</div><div>{children}</div></aside>;
+}
+
+function SetupTab({ children }) {
+  return children;
+}
+
+function SetupTabs({ children }) {
+  const [active, setActive] = useState(0);
+  const tabs = (Array.isArray(children) ? children : [children]).filter(Boolean);
+  const tabId = useId();
+  return (
+    <div className="setup-tabs">
+      <div className="setup-tab-list" role="tablist" aria-label="Choose how to use marimo">
+        {tabs.map((tab, index) => (
+          <button
+            id={`${tabId}-tab-${index}`}
+            aria-controls={`${tabId}-panel-${index}`}
+            aria-selected={active === index}
+            className={active === index ? "active" : ""}
+            key={tab.props.label}
+            onClick={() => setActive(index)}
+            role="tab"
+            type="button"
+          >
+            {tab.props.label}
+          </button>
+        ))}
+      </div>
+      <div
+        aria-labelledby={`${tabId}-tab-${active}`}
+        className="setup-tab-panel"
+        id={`${tabId}-panel-${active}`}
+        role="tabpanel"
+      >
+        {tabs[active]?.props.children}
+      </div>
+    </div>
+  );
 }
 
 function Quiz({ question, options, answer, insights = [], courseSections = [], correctFeedback, incorrectFeedback }) {
@@ -177,6 +215,8 @@ const mdxComponents = {
   pre: CodeBlock,
   Callout,
   TryIt,
+  SetupTabs,
+  SetupTab,
   Quiz,
   DemoPlaceholder,
   MarimoEmbed,

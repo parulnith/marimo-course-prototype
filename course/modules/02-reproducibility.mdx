@@ -46,77 +46,40 @@ Teams often use a `requirements.txt` or `pyproject.toml` file to record dependen
 
 An environment definition that is missing a package or contains a broad version range may not recreate the environment that produced the original result.
 
-## Install and Start marimo
+## Start Using marimo
 
-From this point in the course, you will use marimo directly. You need Python and a terminal. The [official installation guide](https://docs.marimo.io/getting_started/installation/) recommends installing marimo inside a virtual environment so its packages do not conflict with other projects.
+You can complete the course in your browser or install marimo on your computer. Choose the option that works for you.
 
-### Install with pip
+<SetupTabs>
+  <SetupTab label="Use in browser">
+    You do not need to install anything. Use the embedded notebooks in the lesson. Select **Open notebook** when you want to continue working in molab with more space.
+  </SetupTab>
+  <SetupTab label="Install locally">
+    <TryIt>
+    Install marimo from a terminal:
 
-Create a virtual environment:
+    ```bash
+    pip install marimo
+    ```
 
-```bash
-python -m venv marimo-env
-```
+    Check the installation by opening the introductory tutorial:
 
-Activate it on macOS or Linux:
+    ```bash
+    marimo tutorial intro
+    ```
 
-```bash
-source marimo-env/bin/activate
-```
+    To create or open your own notebook, run:
 
-On Windows, run:
+    ```bash
+    marimo edit my_notebook.py
+    ```
 
-```bash
-marimo-env\Scripts\activate
-```
+    The notebook opens in your browser. See the [installation guide](https://docs.marimo.io/getting_started/installation/) if you use another package manager.
+    </TryIt>
+  </SetupTab>
+</SetupTabs>
 
-Install marimo in the active environment:
-
-```bash
-pip install marimo
-```
-
-If you use `uv`, you can add marimo to a project instead:
-
-```bash
-uv add marimo
-```
-
-### Check the installation
-
-Run the introductory tutorial:
-
-```bash
-marimo tutorial intro
-```
-
-If you installed marimo with `uv`, run:
-
-```bash
-uv run marimo tutorial intro
-```
-
-A tutorial notebook should open in your browser.
-
-### Open and run notebooks
-
-Use `edit` when you want to change a notebook. The command creates the file if it does not exist:
-
-```bash
-marimo edit my_notebook.py
-```
-
-Use `run` when you want to open a notebook without the editing tools:
-
-```bash
-marimo run my_notebook.py
-```
-
-Later in this module, you will also use `--sandbox`. This option opens the notebook in an isolated environment and installs the dependencies recorded inside the notebook file.
-
-<TryIt>
-Install marimo, then run `marimo tutorial intro`. Once the tutorial opens, edit one cell and run it with the play button. Keep the terminal open while you work. Return to the terminal and press `Ctrl + C` when you want to stop marimo.
-</TryIt>
+Later in this module, `--sandbox` will open a notebook in an isolated environment and install the dependencies recorded inside the notebook file.
 
 ## How marimo Helps
 
