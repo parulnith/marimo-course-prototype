@@ -16,6 +16,7 @@ Displays an interactive marimo notebook.
 Props:
 
 - `notebook` is a local path or hosted notebook URL.
+- `openUrl` is the URL used by the Open notebook link when it differs from the embedded notebook.
 - `title` is the accessible name shown with the embed.
 
 The site should provide a useful loading state and a fallback link when the notebook cannot load.
@@ -29,6 +30,22 @@ Displays a short learner action.
 Change `years` from `20` to `50` and observe which outputs update.
 </TryIt>
 ```
+
+## `Quiz`
+
+Displays a multiple-choice knowledge check.
+
+```mdx
+<Quiz
+  question="Why is the diff larger?"
+  options={["First answer", "Second answer"]}
+  answer={1}
+  correctFeedback="Correct. This is why."
+  incorrectFeedback="Not quite. Review what the file stores."
+/>
+```
+
+`answer` is the zero-based index of the correct option. The feedback text can be written for each question.
 
 ## `Callout`
 

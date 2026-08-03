@@ -1,36 +1,63 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { createRoot } from "react-dom/client";
 import ModuleOne from "../../course/modules/01-interactive-environments.mdx";
+import ModuleTwo from "../../course/modules/02-reproducibility.mdx";
 import "../styles.css";
 
-const moduleOneImages = import.meta.glob("../../course/images/module-1/*", {
+const courseImages = import.meta.glob("../../course/images/**/*", {
   eager: true,
   query: "?url",
   import: "default",
 });
 
-function resolveModuleOneImage(src) {
+function resolveCourseImage(src) {
   const filename = src?.split("/").at(-1);
-  const match = Object.entries(moduleOneImages).find(([path]) => path.endsWith(`/${filename}`));
+  const match = Object.entries(courseImages).find(([path]) => path.endsWith(`/${filename}`));
   return match?.[1] || src;
 }
 
-const lessons = [
-  ["top", "Why Interactive Programming Environments Matter for AI and ML", null, 1],
-  ["drawbacks-of-traditional-notebooks", "Drawbacks of Traditional Notebooks", null, 2],
-  ["hidden-state", "Hidden State", "nested"],
-  ["out-of-order-execution", "Out-of-Order Execution", "nested"],
-  ["a-better-alternative-reactive-notebooks", "A Better Alternative: Reactive Notebooks", null, 3],
-  ["marimo-a-reactive-notebook", "marimo: A Reactive Notebook", null, 4],
-  ["hands-on-with-marimo", "Hands On with marimo", null, 5],
-];
+const modules = {
+  1: {
+    number: 1,
+    title: "Why Interactive Environments Matter",
+    duration: "15 min",
+    Content: ModuleOne,
+    lessons: [
+      ["top", "Why Interactive Programming Environments Matter for AI and ML", null, 1],
+      ["drawbacks-of-traditional-notebooks", "Drawbacks of Traditional Notebooks", null, 2],
+      ["hidden-state", "Hidden State", "nested"],
+      ["out-of-order-execution", "Out-of-Order Execution", "nested"],
+      ["a-better-alternative-reactive-notebooks", "A Better Alternative: Reactive Notebooks", null, 3],
+      ["marimo-a-reactive-notebook", "marimo: A Reactive Notebook", null, 4],
+      ["hands-on-with-marimo", "Hands On with marimo", null, 5],
+    ],
+  },
+  2: {
+    number: 2,
+    title: "Reproducibility and Trustworthy AI",
+    duration: "20 min",
+    Content: ModuleTwo,
+    lessons: [
+      ["top", "Reproducibility as a Baseline for Trustworthy AI", null, 1],
+      ["the-it-works-on-my-machine-problem", 'The "It Works on My Machine" Problem', null, 2],
+      ["the-hidden-culprits-dependencies-and-environments", "The Hidden Culprits", null, 3],
+      ["how-marimo-helps", "How marimo Helps", null, 4],
+      ["version-control-and-reviewable-experiments", "Version Control and Reviewable Experiments", null, 5],
+      ["working-locally-in-vs-code-and-in-molab", "Working Locally, in VS Code, and in molab", null, 6],
+      ["summary", "Summary", null, 7],
+    ],
+  },
+};
 
-const moduleGroups = [
-  "2. Reproducibility and Trustworthy AI",
+const futureModules = [
   "3. Interactivity and AI Discovery",
   "4. AI Coding Agents for AI and ML",
   "5. From Interactive Work to Reusable Systems",
 ];
+
+function moduleHref(number, section = "top") {
+  return `${window.location.pathname}?module=${number}#${section}`;
+}
 
 function slugify(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -66,14 +93,15 @@ function TryIt({ children }) {
   return <aside className="try-it"><div className="try-label"><span>✦</span> Try it</div><div>{children}</div></aside>;
 }
 
-function Quiz({ question, options, answer, insights = [], courseSections = [] }) {
+function Quiz({ question, options, answer, insights = [], courseSections = [], correctFeedback, incorrectFeedback }) {
   const [selected, setSelected] = useState(null);
+  const questionId = useId();
   const hasCorrectAnswer = Number.isInteger(answer);
   const isCorrect = selected === answer;
   return (
-    <section className="quiz" aria-labelledby="quiz-question">
+    <section className="quiz" aria-labelledby={questionId}>
       <p className="quiz-label">Check your understanding</p>
-      <h3 id="quiz-question">{question}</h3>
+      <h3 id={questionId}>{question}</h3>
       <div className="quiz-options">
         {options.map((option, index) => (
           <button
@@ -91,8 +119,8 @@ function Quiz({ question, options, answer, insights = [], courseSections = [] })
       {selected !== null && hasCorrectAnswer && (
         <p className={`quiz-feedback ${isCorrect ? "correct" : "incorrect"}`} role="status">
           {isCorrect
-            ? "Correct. The code changed, but the old outputs remained visible."
-            : "Not quite. The example showed code and outputs that no longer agreed. Try again."}
+            ? correctFeedback || "Correct. The code changed, but the old outputs remained visible."
+            : incorrectFeedback || "Not quite. The example showed code and outputs that no longer agreed. Try again."}
         </p>
       )}
       {selected !== null && !hasCorrectAnswer && (
@@ -144,7 +172,7 @@ const mdxComponents = {
     const id = text.startsWith("Outputs can also become stale") ? "stale-outputs" : undefined;
     return <p id={id} {...props}>{children}</p>;
   },
-  img: ({ src, ...props }) => <img src={resolveModuleOneImage(src)} {...props} />,
+  img: ({ src, ...props }) => <img src={resolveCourseImage(src)} {...props} />,
   pre: CodeBlock,
   Callout,
   TryIt,
@@ -153,23 +181,29 @@ const mdxComponents = {
   MarimoEmbed,
 };
 
-function Sidebar({ open, setOpen }) {
+function Sidebar({ module, open, setOpen }) {
   const [active, setActive] = useState("top");
   useEffect(() => {
-    const targets = lessons.map(([id]) => document.getElementById(id)).filter(Boolean);
+    setActive("top");
+    const targets = module.lessons.map(([id]) => document.getElementById(id)).filter(Boolean);
     const observer = new IntersectionObserver((entries) => {
       const visible = entries.filter((entry) => entry.isIntersecting).at(-1);
       if (visible) setActive(visible.target.id);
     }, { rootMargin: "-15% 0px -70% 0px" });
     targets.forEach((target) => observer.observe(target));
     return () => observer.disconnect();
-  }, []);
-  return <aside className={`sidebar ${open ? "open" : ""}`} id="courseSidebar"><div className="sidebar-inner"><p className="overline">The Modern AI and ML Development Stack</p><div className="progress"><span /></div><p className="progress-label">1 of 5 modules</p><nav className="course-outline" aria-label="Course lessons"><div className="module-group"><p>1. Why Interactive Environments Matter</p><ol>{lessons.map(([id, title, level, number]) => <li className={level === "nested" ? "nested-lesson" : ""} key={id}><a className={active === id ? "current" : ""} href={`#${id}`} onClick={() => setOpen(false)}><span>{level === "nested" ? "↳" : number}</span>{title}</a></li>)}</ol></div>{moduleGroups.map((title) => <div className="module-group future-group" key={title}><p>{title}</p></div>)}</nav></div></aside>;
+  }, [module]);
+  return <aside className={`sidebar ${open ? "open" : ""}`} id="courseSidebar"><div className="sidebar-inner"><p className="overline">The Modern AI and ML Development Stack</p><div className="progress"><span style={{ width: `${module.number * 20}%` }} /></div><p className="progress-label">{module.number} of 5 modules</p><nav className="course-outline" aria-label="Course lessons">{Object.values(modules).map((item) => <div className={`module-group ${item.number === module.number ? "" : "collapsed-group"}`} key={item.number}><p><a className="module-link" href={moduleHref(item.number)}>{item.number}. {item.title}</a></p>{item.number === module.number && <ol>{item.lessons.map(([id, title, level, number]) => <li className={level === "nested" ? "nested-lesson" : ""} key={id}><a className={active === id ? "current" : ""} href={`#${id}`} onClick={() => setOpen(false)}><span>{level === "nested" ? "↳" : number}</span>{title}</a></li>)}</ol>}</div>)}{futureModules.map((title) => <div className="module-group future-group" key={title}><p>{title}</p></div>)}</nav></div></aside>;
 }
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  return <><header className="site-header"><a className="brand" href="#top" aria-label="marimo course preview"><img src="https://marimo.io/logotype-wide.svg" alt="marimo" /></a><nav><a className="active" href="#top">Learn</a><a href="https://docs.marimo.io" target="_blank" rel="noreferrer">Docs ↗</a></nav></header><div className="mobile-course-bar"><button onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="courseSidebar"><span>Module 1 of 5</span><span>{menuOpen ? "×" : "☰"}</span></button></div><div className="page-shell"><Sidebar open={menuOpen} setOpen={setMenuOpen} /><main><article className="mdx-content" id="course"><div className="lesson-meta"><span>Module 01</span><span>15 min</span></div><ModuleOne components={mdxComponents} /><nav className="lesson-nav"><span></span><a href="#future"><small>Next module</small><strong>Reproducibility and Trustworthy AI →</strong></a></nav></article></main></div></>;
+  const requestedModule = Number(new URLSearchParams(window.location.search).get("module")) || 1;
+  const module = modules[requestedModule] || modules[1];
+  const Content = module.Content;
+  const previous = modules[module.number - 1];
+  const next = modules[module.number + 1];
+  return <><header className="site-header"><a className="brand" href={moduleHref(1)} aria-label="marimo course preview"><img src="https://marimo.io/logotype-wide.svg" alt="marimo" /></a><nav><a className="active" href={moduleHref(module.number)}>Learn</a><a href="https://docs.marimo.io" target="_blank" rel="noreferrer">Docs ↗</a></nav></header><div className="mobile-course-bar"><button onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="courseSidebar"><span>Module {module.number} of 5</span><span>{menuOpen ? "×" : "☰"}</span></button></div><div className="page-shell"><Sidebar module={module} open={menuOpen} setOpen={setMenuOpen} /><main><article className="mdx-content" id="course"><div className="lesson-meta"><span>Module {String(module.number).padStart(2, "0")}</span><span>{module.duration}</span></div><Content components={mdxComponents} /><nav className={`lesson-nav ${previous ? "has-previous" : ""}`}>{previous ? <a className="previous" href={moduleHref(previous.number)}><small>Previous module</small><strong>← {previous.title}</strong></a> : <span />}{next && <a className="next" href={moduleHref(next.number)}><small>Next module</small><strong>{next.title} →</strong></a>}</nav></article></main></div></>;
 }
 
 createRoot(document.getElementById("root")).render(<App />);
