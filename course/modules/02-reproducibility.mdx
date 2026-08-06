@@ -6,111 +6,81 @@ order: 2
 duration: 20 min
 ---
 
-## Reproducibility as a Baseline for Trustworthy AI
-
-There is a difference between running your code again and getting the same results across computers and over time. Reproducible work requires the code, data, and environment to stay consistent.This becomes more important as an experiment moves from a prototype into production. Other people and systems need to run the work without relying on details that exist only on the original computer.
+There is a difference between running your code again and getting the same results across computers and over time. Reproducible work requires the code, data, and environment to stay consistent. This becomes more important as an experiment moves from a prototype into production. Other people and systems need to run the work without relying on details that exist only on the original computer.
 
 ## The "It Works on My Machine" Problem
 
-Reproducibility helps people trust a result, but it must be part of the environment in which the code runs. The same notebook can behave differently when a package or Python version changes.
+Reproducibility helps people trust a result, but it must be part of the environment in which the code runs. The same notebook can behave differently when a package or Python version changes. Let's consider two scenarios that show how changes in the environment can affect the same Jupyter notebook.
 
-Let's take the Jupyter notebook below that contains two examples of environment drift.
+### Scenario 1: A scikit-learn version changes
 
-In the first example, the notebook uses `CalibratedClassifierCV(method="temperature")`. This works in scikit-learn `1.8.0`, but it fails in scikit-learn `1.7.2`, where that option is not available.
+The first notebook creates a small classification dataset and divides it into training and test data. It trains a logistic regression model, then uses `CalibratedClassifierCV` to adjust the model's predicted probabilities. Finally, it prints the scikit-learn version and the model's accuracy.
 
-<div className="environment-drift-images">
+The calibration step uses `method="temperature"`. Scikit-learn `1.8.0` supports this option, so the notebook can train and evaluate the model. Scikit-learn `1.7.2` does not support it, so the same code stops with an error before it can print the accuracy.
 
-![The temperature method runs successfully with scikit-learn 1.8.0](../images/module-2/sklearn-1-8-success.png)
+![](../images/module-2/scikit-learn-env-drift.png)
 
-![The same method raises an error with scikit-learn 1.7.2](../images/module-2/sklearn-1-7-error.png)
 
-</div>
+### Scenario 2: A pandas API changes
 
-In the second example, the notebook reads a CSV with `delim_whitespace=True`.
+The second notebook creates a small table in which spaces separate the values. It then uses `pd.read_csv()` to read the data into a pandas DataFrame and print the result. The call includes `delim_whitespace=True` to tell pandas that the values are separated by spaces instead of commas.
 
-| Code | pandas 2.x | pandas 3.x |
-|---|---|---|
-| `delim_whitespace=True` | Works with a deprecation warning | Raises an error |
+In pandas 2.x, this code still reads the data, but pandas displays a warning that `delim_whitespace` will be removed. In pandas 3.x, the option is no longer available, so the same code raises an error instead of creating the DataFrame.
 
-The notebook code has not changed. The result changes because the environment has changed. The example shows why saving the code alone is not enough to reproduce the result.
+![Pandas API drift](../images/module-2/pandas-api-drift.png)
+
+In both scenarios, the notebook code stays the same, but the result changes because the environment has changed. Saving the code alone is therefore not enough to reproduce a result.
 
 ## The Hidden Culprits: Dependencies and Environments
 
-When reproducibility breaks, the cause is more often than not hidden in the environment. The environment includes the Python version, installed packages, and system configuration.
+When reproducibility breaks, the cause is often hidden in the environment. The environment includes the Python version, installed packages, and system configuration. Some common reasons as to why a notebook may not run the same way on different computers or at different times are:
 
-Common causes include:
 
-- **Library versions.** Package updates can change APIs, default settings, and behaviour.
-- **Python versions.** Changes to the language and runtime can affect how code runs.
+- **Different Library versions.** Package updates can change APIs, default settings, and behaviour.
+- **Different Python versions.** Changes to the language and runtime can affect how code runs.
 - **Transitive dependencies.** A package that you did not install directly can still change when another package is updated.
 
-![Python versions, library versions, and system configuration can change notebook results](../images/module-2/environment-culprits.png)
+<Callout title="Recall">
+[Pimentel et al. (2019)](https://leomurta.github.io/papers/pimentel2019a.pdf) found that only 4% of Jupyter notebooks reproduced their original results. A major reason was environment drift.
+</Callout>
 
-<p className="figure-caption">
-The Python version, library versions, and system configuration are all part of the environment needed to reproduce a result.
-</p>
+Teams often use a `requirements.txt` file to record the packages that their work needs. This can help recreate an environment, but someone must keep the file up to date. A missing package or a broad version range can still produce a different environment. Everyone must also install the packages from the file before running the notebook.
 
-Teams often use a `requirements.txt` or `pyproject.toml` file to record dependencies. These files help, but people must keep them in sync with the notebook. Someone must add each package, choose the right version, and make sure everyone installs those dependencies before running the work.
-
-An environment definition that is missing a package or contains a broad version range may not recreate the environment that produced the original result.
-
-## Start Using marimo
-
-You can complete the course in your browser or install marimo on your computer. Choose the option that works for you.
-
-<SetupTabs>
-  <SetupTab label="Use in browser">
-    You do not need to install anything. Use the embedded notebooks in the lesson. Select **Open notebook** when you want to continue working in molab with more space.
-  </SetupTab>
-  <SetupTab label="Install locally">
-    <TryIt>
-    Install marimo from a terminal:
-
-    ```bash
-    pip install marimo
-    ```
-
-    Check the installation by opening the introductory tutorial:
-
-    ```bash
-    marimo tutorial intro
-    ```
-
-    To create or open your own notebook, run:
-
-    ```bash
-    marimo edit my_notebook.py
-    ```
-
-    The notebook opens in your browser. See the [installation guide](https://docs.marimo.io/getting_started/installation/) if you use another package manager.
-    </TryIt>
-  </SetupTab>
-</SetupTabs>
-
-Later in this module, `--sandbox` will open a notebook in an isolated environment and install the dependencies recorded inside the notebook file.
-
-## How marimo Helps
+## How marimo helps
 
 marimo has built-in package management. When a notebook imports a missing package, marimo can prompt you to install it with your package manager.
 
-Outside sandbox mode, marimo installs packages into the active environment or project. In sandbox mode, marimo records notebook-specific dependencies inside the notebook file.
+By default, marimo uses the Python environment in which you started it. Packages installed from the notebook are added to that active environment.
 
-The `--sandbox` option uses `uv` to create an isolated environment. It installs the dependencies recorded in the notebook instead of relying on packages that happen to be installed on the computer.
+Sandbox mode gives one notebook its own isolated Python environment. marimo uses `uv` to create this environment and install the dependencies recorded in the notebook file. The notebook does not have to rely on whichever package versions happen to be installed elsewhere on the computer. This also prevents its packages from changing the main project environment.
+
+You turn on sandbox mode when you open the notebook from a terminal. From the root of this course repository, run:
+
+<TryIt>
+
+```bash
+marimo edit --sandbox course/notebooks/module-2/2_2_sandboxed_environment.py
+```
+
+The first launch may take a little longer while `uv` creates the environment and installs the notebook's packages. When the editor opens, inspect the package versions printed by the notebook.
+
+</TryIt>
+
+For notebooks that are part of a Python project, marimo can use a shared environment defined in `pyproject.toml`. Teams can also use this file to share marimo settings and configure paths for project imports. This allows the project and its notebooks to use the same dependencies and configuration. You can learn more in the [marimo guide to notebooks in existing projects](https://docs.marimo.io/guides/package_management/notebooks_in_projects/).
 
 <Callout title="Sandbox mode">
-Sandbox mode gives you the strongest reproducibility because the notebook runs in an isolated environment with its own recorded dependencies.
+Use sandbox mode when a notebook needs its own recorded dependencies. Use a shared project environment when several notebooks need the same local package and configuration.
 </Callout>
 
 The notebook below records its Python requirement and exact versions of pandas and scikit-learn. It also reports the active Python executable and package versions when it runs.
 
 <MarimoEmbed
   notebook="/notebooks/2_2_sandboxed_environment.html"
-  openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-2/2_2_sandboxed_environment.py"
   title="A sandboxed marimo environment"
 />
 
 <TryIt>
-Run the notebook and inspect the active Python, scikit-learn, and pandas versions. Select **Open notebook** to open the same file in molab. Review the packages recorded for the notebook and compare them with the versions printed in the output.
+Run the notebook and inspect the active Python, scikit-learn, and pandas versions. Review the packages recorded for the notebook and compare them with the versions printed in the output.
 </TryIt>
 
 ## Version Control and Reviewable Experiments
@@ -131,39 +101,12 @@ A marimo notebook is a Python file. Each cell is stored as Python code, and mari
 
 <MarimoEmbed
   notebook="/notebooks/2_3_marimo_diff_demo.html"
-  openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-2/2_3_marimo_diff_demo.py"
   title="A reviewable marimo experiment"
 />
 
 <TryIt>
-In the marimo notebook above, change `power = 3` to `power = 4` and run the cell. Notice that the plot updates while the notebook source remains a Python file. Select **Open notebook** if you want to inspect the complete source in molab.
+In the marimo notebook above, change `power = 3` to `power = 4` and run the cell. Notice that the plot updates while the notebook source remains a Python file.
 </TryIt>
-
-<Quiz
-  question="A one-line change is made in both a marimo notebook and an equivalent .ipynb notebook. The .ipynb diff is much larger. What is the best explanation?"
-  options={[
-    "Git handles notebook files incorrectly.",
-    "The marimo notebook hides parts of the diff automatically.",
-    "The .ipynb file stores code together with notebook structure, execution state, and output data.",
-    "The .ipynb change must be more important than the marimo change."
-  ]}
-  answer={2}
-  correctFeedback="Correct. An .ipynb file can store execution details and outputs alongside its code, so running and saving it can change much more than the edited line."
-  incorrectFeedback="Not quite. Git shows the file changes it receives. Think about what an .ipynb file stores in addition to its code."
-/>
-
-<Quiz
-  question="Why does the same one-line edit usually produce a cleaner diff in a marimo notebook?"
-  options={[
-    "marimo notebooks do not allow outputs or Markdown.",
-    "marimo notebooks are Python files and do not save outputs in the notebook file.",
-    "marimo notebooks automatically remove all metadata from Git.",
-    "marimo notebooks always change only one cell at a time."
-  ]}
-  answer={1}
-  correctFeedback="Correct. The notebook source is a Python file, and rendered outputs are not stored in that file. The diff stays focused on the code that changed."
-  incorrectFeedback="Not quite. marimo supports outputs and Markdown. The key difference is what gets stored in the notebook file."
-/>
 
 ## Working Locally, in VS Code, and in molab
 
@@ -190,7 +133,35 @@ https://molab.marimo.io/github/<user>/<repo>/blob/main/<path-to-notebook>.py
 ```
 
 <TryIt>
-Use the **Open notebook** link above the sandboxed environment notebook. In molab, inspect the notebook's package information and run the cells. Check that the recorded package versions match the versions printed in the notebook output.
+Open the [sandboxed environment notebook in molab](https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-2/2_2_sandboxed_environment.py). Inspect its package information and run the cells. Check that the recorded package versions match the versions printed in the notebook output.
 </TryIt>
 
 Using the same source file and recorded environment makes it easier to move an experiment from a personal prototype into a reviewed project. Later modules will continue this path by turning interactive work into tools that other people can run.
+
+## Check your understanding
+
+<Quiz
+  question="A one-line change is made in both a marimo notebook and an equivalent .ipynb notebook. The .ipynb diff is much larger. What is the best explanation?"
+  options={[
+    "Git handles notebook files incorrectly.",
+    "The marimo notebook hides parts of the diff automatically.",
+    "The .ipynb file stores code together with notebook structure, execution state, and output data.",
+    "The .ipynb change must be more important than the marimo change."
+  ]}
+  answer={2}
+  correctFeedback="Correct. An .ipynb file can store execution details and outputs alongside its code, so running and saving it can change much more than the edited line."
+  incorrectFeedback="Not quite. Git shows the file changes it receives. Think about what an .ipynb file stores in addition to its code."
+/>
+
+<Quiz
+  question="Why does the same one-line edit usually produce a cleaner diff in a marimo notebook?"
+  options={[
+    "marimo notebooks do not allow outputs or Markdown.",
+    "marimo notebooks are Python files and do not save outputs in the notebook file.",
+    "marimo notebooks automatically remove all metadata from Git.",
+    "marimo notebooks always change only one cell at a time."
+  ]}
+  answer={1}
+  correctFeedback="Correct. The notebook source is a Python file, and rendered outputs are not stored in that file. The diff stays focused on the code that changed."
+  incorrectFeedback="Not quite. marimo supports outputs and Markdown. The key difference is what gets stored in the notebook file."
+/>

@@ -6,11 +6,7 @@ order: 1
 duration: 15 min
 ---
 
-## Why Interactive Programming Environments Matter for AI and ML
-
-Interactive programming environments are a fundamental part of today's AI and ML development stack.
-
-Researchers and data practitioners love notebooks because they combine code, computational output, and explanatory text into a single document.
+Interactive programming environments are a fundamental part of today's AI and ML development stack. Researchers and data practitioners love notebooks because they combine code, computational output, and explanatory text into a single document.
 
 This is quite different than software engineering. You just don't write code, compile, and ship; rather, you explore, experiment, and iterate and constantly moving between code, data, and results.
 
@@ -142,7 +138,46 @@ Some cells are expensive to run. Lazy execution lets you change an upstream valu
 In the compound-interest notebook above, enable lazy execution. Change `years`, then inspect which table, chart, balance, and summary cells are marked as stale.
 </TryIt>
 
-## Hands On with marimo
+## Getting started with marimo
+
+You can use the embedded notebooks in this course without installing anything. Install marimo locally only if you want to create and edit notebooks on your computer.
+
+<SetupTabs>
+  <SetupTab label="Use in browser">
+    No installation is required. You can run and edit the embedded notebooks directly in each lesson, or use [molab](https://molab.marimo.io/notebooks/nb_jJiFFtznAy4BxkrrZA1o9b/app?show-code=true) to work with the notebook in the cloud.
+  </SetupTab>
+  <SetupTab label="Install locally">
+    You can install marimo with either `pip` or `uv`. With `pip`, you create and activate the virtual environment yourself. With `uv`, the project environment is managed for you.
+
+    <TryIt>
+    **Using pip**
+
+    Create a virtual environment, activate it, and install marimo:
+
+    ```bash
+    python -m venv marimo-env
+    source marimo-env/bin/activate
+    pip install marimo
+    marimo tutorial intro
+    ```
+
+    **Using uv**
+
+    Create a project and add marimo. `uv` creates the environment for the project:
+
+    ```bash
+    uv init marimo-project
+    cd marimo-project
+    uv add marimo
+    uv run marimo tutorial intro
+    ```
+
+    The tutorial opens in your browser when the installation works. To create a notebook, use `marimo edit my_notebook.py` with pip or `uv run marimo edit my_notebook.py` with uv.
+    </TryIt>
+  </SetupTab>
+</SetupTabs>
+
+See the [marimo installation guide](https://docs.marimo.io/getting_started/installation/) if you use Windows or need help with installation.
 
 This guided tutorial is included with marimo. It gives you a more detailed tour of the editor and explains how cells, outputs, dependencies, and notebook tools work.
 
@@ -175,6 +210,8 @@ marimo convert notebook.ipynb -o notebook.py
 
 </TryIt>
 
+## Check your understanding
+
 <Quiz
   question="What has been your biggest challenge with traditional notebook systems"
   options={[
@@ -197,4 +234,3 @@ marimo convert notebook.ipynb -o notebook.py
     "Module 5. From Interactive Work to Reusable Systems"
   ]}
 />
-

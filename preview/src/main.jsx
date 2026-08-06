@@ -23,13 +23,13 @@ const modules = {
     duration: "15 min",
     Content: ModuleOne,
     lessons: [
-      ["top", "Why Interactive Programming Environments Matter for AI and ML", null, 1],
-      ["drawbacks-of-traditional-notebooks", "Drawbacks of Traditional Notebooks", null, 2],
+      ["drawbacks-of-traditional-notebooks", "Drawbacks of Traditional Notebooks", null, 1],
       ["hidden-state", "Hidden State", "nested"],
       ["out-of-order-execution", "Out-of-Order Execution", "nested"],
-      ["a-better-alternative-reactive-notebooks", "A Better Alternative: Reactive Notebooks", null, 3],
-      ["marimo-a-reactive-notebook", "marimo: A Reactive Notebook", null, 4],
-      ["hands-on-with-marimo", "Hands On with marimo", null, 5],
+      ["a-better-alternative-reactive-notebooks", "A Better Alternative: Reactive Notebooks", null, 2],
+      ["marimo-a-reactive-notebook", "marimo: A Reactive Notebook", null, 3],
+      ["getting-started-with-marimo", "Getting started with marimo", null, 4],
+      ["check-your-understanding", "Quiz", null, 5],
     ],
   },
   2: {
@@ -38,13 +38,12 @@ const modules = {
     duration: "20 min",
     Content: ModuleTwo,
     lessons: [
-      ["top", "Reproducibility as a Baseline for Trustworthy AI", null, 1],
-      ["the-it-works-on-my-machine-problem", 'The "It Works on My Machine" Problem', null, 2],
-      ["the-hidden-culprits-dependencies-and-environments", "The Hidden Culprits", null, 3],
-      ["start-using-marimo", "Start Using marimo", null, 4],
-      ["how-marimo-helps", "How marimo Helps", null, 5],
-      ["version-control-and-reviewable-experiments", "Version Control and Reviewable Experiments", null, 6],
-      ["working-locally-in-vs-code-and-in-molab", "Working Locally, in VS Code, and in molab", null, 7],
+      ["the-it-works-on-my-machine-problem", 'The "It Works on My Machine" Problem', null, 1],
+      ["the-hidden-culprits-dependencies-and-environments", "The Hidden Culprits", null, 2],
+      ["how-marimo-helps", "How marimo helps", null, 3],
+      ["version-control-and-reviewable-experiments", "Version Control and Reviewable Experiments", null, 4],
+      ["working-locally-in-vs-code-and-in-molab", "Working Locally, in VS Code, and in molab", null, 5],
+      ["check-your-understanding", "Quiz", null, 6],
     ],
   },
 };
@@ -95,6 +94,21 @@ function TryIt({ children }) {
 
 function SetupTab({ children }) {
   return children;
+}
+
+function ImageComparison({ leftImage, leftLabel, rightImage, rightLabel }) {
+  return (
+    <div className="image-comparison" aria-label="Version comparison">
+      <figure className="comparison-card comparison-success">
+        <figcaption><span aria-hidden="true">✓</span>{leftLabel}</figcaption>
+        <img src={resolveCourseImage(leftImage)} alt="" />
+      </figure>
+      <figure className="comparison-card comparison-error">
+        <figcaption><span aria-hidden="true">×</span>{rightLabel}</figcaption>
+        <img src={resolveCourseImage(rightImage)} alt="" />
+      </figure>
+    </div>
+  );
 }
 
 function SetupTabs({ children }) {
@@ -192,7 +206,7 @@ function MarimoEmbed({ title, notebook, openUrl }) {
       <div className="notebook-bar">
         <div><i></i><i></i><i></i></div>
         <span>{title || "marimo notebook"}</span>
-        <a href={openNotebookUrl} target="_blank" rel="noreferrer">Open notebook ↗</a>
+        {openUrl && <a href={openNotebookUrl} target="_blank" rel="noreferrer">Open notebook ↗</a>}
       </div>
       {isEmbedded
         ? <iframe src={embedUrl} title={title || "Interactive marimo notebook"} loading="lazy" />
@@ -216,15 +230,16 @@ const mdxComponents = {
   TryIt,
   SetupTabs,
   SetupTab,
+  ImageComparison,
   Quiz,
   DemoPlaceholder,
   MarimoEmbed,
 };
 
 function Sidebar({ module, open, setOpen }) {
-  const [active, setActive] = useState("top");
+  const [active, setActive] = useState(module.lessons[0]?.[0] || "top");
   useEffect(() => {
-    setActive("top");
+    setActive(module.lessons[0]?.[0] || "top");
     const targets = module.lessons.map(([id]) => document.getElementById(id)).filter(Boolean);
     const observer = new IntersectionObserver((entries) => {
       const visible = entries.filter((entry) => entry.isIntersecting).at(-1);
