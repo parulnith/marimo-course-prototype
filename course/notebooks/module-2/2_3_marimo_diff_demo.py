@@ -27,13 +27,15 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    **Try it:** change `power = 3` to `power = 4`, save the file, then run:
+    **Try it in this embed:** change `power = 3` to `power = 4` and run the cell. The plot updates immediately.
+
+    To inspect the source change with Git, open a copy of this notebook locally inside a Git project. Open marimo's **Terminal** tab from the developer panel, change and save the value, then run:
 
     ```bash
-    git diff Module_2/2_3_marimo_diff_demo.py
+    git diff -- your_notebook.py
     ```
 
-    You'll see one line in the diff.
+    Replace `your_notebook.py` with the notebook's filename. The diff shows the changed Python line and does not include the regenerated plot. The course embed has no Git history, so run this part in a locally tracked notebook.
     """)
     return
 

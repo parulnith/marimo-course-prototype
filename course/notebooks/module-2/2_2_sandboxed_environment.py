@@ -90,5 +90,26 @@ def _():
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Install an exact package version
+
+    Open the **Packages** panel in the left sidebar. In the add-package field, enter `humanize==4.14.0`, then select **Install**. The `==` tells the package manager to install that exact version.
+
+    After the installation finishes, add a new Python cell and enter:
+
+    ```python
+    import humanize
+    humanize.intcomma(1_000_000)
+    ```
+
+    Run the new cell. The output should be `1,000,000`.
+
+    In this embedded notebook, the change lasts for the current browser session. When you open a local notebook with `--sandbox`, installing or removing a package from this panel also updates the dependencies recorded in the notebook file.
+    """)
+    return
+
+
 if __name__ == "__main__":
     app.run()

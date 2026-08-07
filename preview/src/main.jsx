@@ -39,10 +39,10 @@ const modules = {
     Content: ModuleTwo,
     lessons: [
       ["the-it-works-on-my-machine-problem", 'The "It Works on My Machine" Problem', null, 1],
-      ["the-hidden-culprits-dependencies-and-environments", "The Hidden Culprits", null, 2],
-      ["how-marimo-helps", "How marimo helps", null, 3],
-      ["version-control-and-reviewable-experiments", "Version Control and Reviewable Experiments", null, 4],
-      ["working-locally-in-vs-code-and-in-molab", "Working Locally, in VS Code, and in molab", null, 5],
+      ["what-causes-environment-drift", "What Causes Environment Drift", null, 2],
+      ["reproducible-environments-with-marimo", "Reproducible Environments with marimo", null, 3],
+      ["clean-and-reviewable-git-diffs", "Clean and Reviewable Git Diffs", null, 4],
+      ["using-one-notebook-across-environments", "Using One Notebook Across Environments", null, 5],
       ["check-your-understanding", "Quiz", null, 6],
     ],
   },
@@ -107,6 +107,16 @@ function ImageComparison({ leftImage, leftLabel, rightImage, rightLabel }) {
         <figcaption><span aria-hidden="true">×</span>{rightLabel}</figcaption>
         <img src={resolveCourseImage(rightImage)} alt="" />
       </figure>
+    </div>
+  );
+}
+
+function ImagePlaceholder({ title, description }) {
+  return (
+    <div className="visual-placeholder" role="img" aria-label={`${title}. ${description}`}>
+      <strong>{title}</strong>
+      <span>{description}</span>
+      <small>Image placeholder</small>
     </div>
   );
 }
@@ -231,6 +241,7 @@ const mdxComponents = {
   SetupTabs,
   SetupTab,
   ImageComparison,
+  ImagePlaceholder,
   Quiz,
   DemoPlaceholder,
   MarimoEmbed,

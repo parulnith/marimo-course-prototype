@@ -116,7 +116,11 @@ Change `years` from `20` to `50`. Observe how the table, chart, final balance, a
 
 ## marimo: A Reactive Notebook
 
-What you just used is **marimo**, a reactive Python notebook. marimo analyzes the variables that each cell defines and uses. It represents these relationships as a [directed acyclic graph, or DAG](https://marimo.io/blog/dataflow). Each cell is a node in the graph. A connection from one cell to another shows that the second cell depends on a value defined by the first.
+What you just used is **marimo**, an open-source Python notebook designed for reproducible, interactive work. Each marimo notebook is stored as a Python `.py` file. The same file can be edited as a notebook, run as a script, or deployed as a web app.
+
+marimo is reactive. It analyzes the variables that each cell defines and uses, then automatically runs the cells affected by a change. This keeps the code, program state, and outputs consistent.
+
+marimo represents the relationships between cells as a [directed acyclic graph, or DAG](https://marimo.io/blog/dataflow). Each cell is a node in the graph. A connection from one cell to another shows that the second cell depends on a value defined by the first.
 
 ![A marimo notebook represented as a directed acyclic graph](../images/module-1/DAG_workflow.png)
 

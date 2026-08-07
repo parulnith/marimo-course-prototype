@@ -6,37 +6,39 @@ order: 2
 duration: 20 min
 ---
 
-There is a difference between running your code again and getting the same results across computers and over time. Reproducible work requires the code, data, and environment to stay consistent. This becomes more important as an experiment moves from a prototype into production. Other people and systems need to run the work without relying on details that exist only on the original computer.
+Running code again is not the same as reproducing a result. Reproducible work keeps the code, data, and environment consistent so that other people and systems can run it as an experiment moves from a prototype into production.
+
+In Module 1, we saw how hidden state and out-of-order execution can make notebook outputs difficult to trust. This module looks at the next question. Can the same notebook produce the same result in another environment or at a later time?
 
 ## The "It Works on My Machine" Problem
 
-Reproducibility helps people trust a result, but it must be part of the environment in which the code runs. The same notebook can behave differently when a package or Python version changes. Let's consider two scenarios that show how changes in the environment can affect the same Jupyter notebook.
+A notebook can behave differently when its package versions change, even when its code stays the same. The following two scenarios show how this happens.
 
 ### Scenario 1: A scikit-learn version changes
 
-The first notebook creates a small classification dataset and divides it into training and test data. It trains a logistic regression model, then uses `CalibratedClassifierCV` to adjust the model's predicted probabilities. Finally, it prints the scikit-learn version and the model's accuracy.
+The image below shows a Jupyter notebook that creates a small classification dataset and divides it into training and test data. The notebook then trains a logistic regression model, uses `CalibratedClassifierCV` to adjust the model's predicted probabilities and finally prints the scikit-learn version and the model's accuracy.
 
-The calibration step uses `method="temperature"`. Scikit-learn `1.8.0` supports this option, so the notebook can train and evaluate the model. Scikit-learn `1.7.2` does not support it, so the same code stops with an error before it can print the accuracy.
+The calibration step uses `method="temperature"`. Scikit-learn `1.8.0` supports this option, so the notebook runs successfully. On the other hand, scikit-learn `1.7.2` does not support it, so the same code raises an error.
 
 ![](../images/module-2/scikit-learn-env-drift.png)
 
 
 ### Scenario 2: A pandas API changes
 
-The second notebook creates a small table in which spaces separate the values. It then uses `pd.read_csv()` to read the data into a pandas DataFrame and print the result. The call includes `delim_whitespace=True` to tell pandas that the values are separated by spaces instead of commas.
+The next image shows a second Jupyter notebook. It creates a small table in which spaces separate the values, then uses `pd.read_csv()` to read the data into a pandas DataFrame and print the result. The call includes `delim_whitespace=True` to tell pandas that the values are separated by spaces instead of commas.
 
-In pandas 2.x, this code still reads the data, but pandas displays a warning that `delim_whitespace` will be removed. In pandas 3.x, the option is no longer available, so the same code raises an error instead of creating the DataFrame.
+In pandas `2.x`, this code runs with a warning that `delim_whitespace` will be removed. In pandas `3.x`, the option is no longer available, so the same code raises an error instead of creating the DataFrame.
 
 ![Pandas API drift](../images/module-2/pandas-api-drift.png)
 
 In both scenarios, the notebook code stays the same, but the result changes because the environment has changed. Saving the code alone is therefore not enough to reproduce a result.
 
-## The Hidden Culprits: Dependencies and Environments
+## What Causes Environment Drift
 
-When reproducibility breaks, the cause is often hidden in the environment. The environment includes the Python version, installed packages, and system configuration. Some common reasons as to why a notebook may not run the same way on different computers or at different times are:
+When reproducibility breaks, the cause is often hidden in the environment, which includes the Python version, installed packages and system configuration. A notebook may not run the same way in another environment or at a later time because of:
 
 
-- **Different Library versions.** Package updates can change APIs, default settings, and behaviour.
+- **Different library versions.** Package updates can change APIs, default settings and behaviour.
 - **Different Python versions.** Changes to the language and runtime can affect how code runs.
 - **Transitive dependencies.** A package that you did not install directly can still change when another package is updated.
 
@@ -44,33 +46,43 @@ When reproducibility breaks, the cause is often hidden in the environment. The e
 [Pimentel et al. (2019)](https://leomurta.github.io/papers/pimentel2019a.pdf) found that only 4% of Jupyter notebooks reproduced their original results. A major reason was environment drift.
 </Callout>
 
-Teams often use a `requirements.txt` file to record the packages that their work needs. This can help recreate an environment, but someone must keep the file up to date. A missing package or a broad version range can still produce a different environment. Everyone must also install the packages from the file before running the notebook.
+A common approach is to use a `requirements.txt` file. This can help recreate an environment, but someone must keep the file up to date. A missing package or a broad version range can still produce a different environment. Everyone must also install the packages before running the notebook.
 
-## How marimo helps
+## Reproducible Environments with marimo
 
-marimo has built-in package management. When a notebook imports a missing package, marimo can prompt you to install it with your package manager.
+marimo has built-in support for managing notebook dependencies. By default, it uses the Python environment in which it was started. If a notebook imports a missing package, marimo can prompt you to install it with your package manager.
 
-By default, marimo uses the Python environment in which you started it. Packages installed from the notebook are added to that active environment.
+<ImagePlaceholder
+  title="The Packages panel"
+  description="Add an image showing the Packages panel with humanize==4.14.0 in the add-package field and the Install button visible."
+/>
 
-Sandbox mode gives one notebook its own isolated Python environment. marimo uses `uv` to create this environment and install the dependencies recorded in the notebook file. The notebook does not have to rely on whichever package versions happen to be installed elsewhere on the computer. This also prevents its packages from changing the main project environment.
+### Sandbox mode
 
-You turn on sandbox mode when you open the notebook from a terminal. From the root of this course repository, run:
+Sandbox mode gives a notebook its own isolated Python environment. marimo uses `uv` to create the environment and install the dependencies recorded in the notebook. The notebook does not rely on packages installed elsewhere on the computer, and its packages do not change the main project environment.
+
+A marimo notebook is stored as a Python `.py` file. When the notebook uses sandbox mode, marimo can record its Python requirement and package dependencies in a metadata block at the top of that same file. The notebook code and the package versions needed to run it can therefore be kept together.
+
+<ImagePlaceholder
+  title="A marimo notebook with recorded dependencies"
+  description="Add a code image showing the top of a marimo Python file, including the script metadata block, Python requirement, exact pandas and scikit-learn versions, and the marimo import below it."
+/>
+
+<Callout title="When to use sandbox mode">
+Use sandbox mode when a notebook needs its own recorded dependencies. This makes it easier for another person to open the notebook with the same package versions.
+</Callout>
+
+Enable sandbox mode when you open the notebook from a terminal.
 
 <TryIt>
+Open a terminal in the folder that contains your notebook, then run:
 
 ```bash
-marimo edit --sandbox course/notebooks/module-2/2_2_sandboxed_environment.py
+marimo edit --sandbox your_notebook.py
 ```
 
-The first launch may take a little longer while `uv` creates the environment and installs the notebook's packages. When the editor opens, inspect the package versions printed by the notebook.
-
+Replace `your_notebook.py` with the name of your marimo notebook.
 </TryIt>
-
-For notebooks that are part of a Python project, marimo can use a shared environment defined in `pyproject.toml`. Teams can also use this file to share marimo settings and configure paths for project imports. This allows the project and its notebooks to use the same dependencies and configuration. You can learn more in the [marimo guide to notebooks in existing projects](https://docs.marimo.io/guides/package_management/notebooks_in_projects/).
-
-<Callout title="Sandbox mode">
-Use sandbox mode when a notebook needs its own recorded dependencies. Use a shared project environment when several notebooks need the same local package and configuration.
-</Callout>
 
 The notebook below records its Python requirement and exact versions of pandas and scikit-learn. It also reports the active Python executable and package versions when it runs.
 
@@ -80,24 +92,30 @@ The notebook below records its Python requirement and exact versions of pandas a
 />
 
 <TryIt>
-Run the notebook and inspect the active Python, scikit-learn, and pandas versions. Review the packages recorded for the notebook and compare them with the versions printed in the output.
+Run the notebook and inspect the active Python, scikit-learn, and pandas versions. Then follow the package manager activity at the bottom of the notebook. It shows how to install `humanize==4.14.0`, where `==4.14.0` selects the exact package version.
 </TryIt>
 
-## Version Control and Reviewable Experiments
+### Shared project environments
 
-Reproducibility also depends on a clear record of what changed. Version control helps a team review an experiment and return to an earlier version.
+Several notebooks in the same Python project may need to use one shared environment instead. marimo can use the project dependencies defined in `pyproject.toml`. Teams can also use this file to share marimo settings and configure paths for project imports. This keeps the notebooks and the rest of the project on the same dependencies and configuration.
+
+## Clean and Reviewable Git Diffs
+
+Reproducibility also depends on a clear record of what changed as part of the development process. Version control helps a team review an experiment and return to an earlier version.
 
 ![A post by Shreya Shankar that says ML pipelines should not be Jupyter notebooks](../images/module-2/ml-pipelines-tweet.png)
 
 <p className="figure-caption">
-An experiment becomes harder to maintain when its code, execution state, and outputs are stored together in a format that produces noisy changes.
+An experiment becomes harder to maintain when its code, execution state and outputs are stored together in a format that produces noisy changes.
 </p>
 
-Jupyter notebooks are JSON files. They can store code, notebook structure, execution counts, metadata, and output data. A one-line code edit can therefore produce a much larger Git diff after the notebook is run and saved.
+Jupyter notebooks are JSON files. They can store code, notebook structure, execution counts, metadata, and output data. A one-line code edit can therefore produce a much larger Git diff after the notebook is run and saved. This makes code review harder because the actual code change is mixed with changes to notebook structure, metadata, and outputs. 
 
-This makes review harder because the code change is mixed with changes to the notebook structure and outputs.
+Because a marimo notebook contains Python code rather than notebook JSON, Git can show changes to its cells as ordinary code changes. marimo does not save rendered outputs in the notebook file, so regenerating a plot does not add that output to the diff.
 
-A marimo notebook is a Python file. Each cell is stored as Python code, and marimo does not save rendered outputs in the notebook file. A small code edit therefore creates a small change that stays close to the line that was edited.
+<Callout title="What to inspect in a marimo diff">
+Review the code inside each changed cell. Also check changes to the cell's function parameters, which show the values it uses, and its return statement, which shows the values it provides to other cells.
+</Callout>
 
 <MarimoEmbed
   notebook="/notebooks/2_3_marimo_diff_demo.html"
@@ -105,12 +123,20 @@ A marimo notebook is a Python file. Each cell is stored as Python code, and mari
 />
 
 <TryIt>
-In the marimo notebook above, change `power = 3` to `power = 4` and run the cell. Notice that the plot updates while the notebook source remains a Python file.
+In the embedded notebook, change `power = 3` to `power = 4` and run the cell. Notice that the plot updates.
+
+To inspect the source change, open a local marimo notebook that is tracked by Git. Open the developer panel with `Cmd/Ctrl + J`, then select the **Terminal** tab. Change and save the value, then run:
+
+```bash
+git diff -- your_notebook.py
+```
+
+Replace `your_notebook.py` with the notebook's filename. The diff contains the changed Python line but not the regenerated plot. The embedded notebook has no Git history, so this part must be completed in a local Git project.
 </TryIt>
 
-## Working Locally, in VS Code, and in molab
+## Using One Notebook Across Environments
 
-The same marimo `.py` file can be used in the browser editor, a code editor, or a hosted workspace. This lets a team keep one notebook source file as work moves between environments.
+Once a notebook and its environment are reproducible, the same notebook can move easily between different development environments.
 
 ### VS Code
 
