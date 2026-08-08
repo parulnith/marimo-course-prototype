@@ -1,3 +1,5 @@
+# pyright: reportMissingImports=false
+
 import marimo
 
 __generated_with = "0.23.3"

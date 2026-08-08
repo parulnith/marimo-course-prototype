@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import ModuleOne from "../../course/modules/01-interactive-environments.mdx";
 import ModuleTwo from "../../course/modules/02-reproducibility.mdx";
@@ -51,7 +51,7 @@ const modules = {
 const futureModules = [
   "3. Interactivity and AI Discovery",
   "4. AI Coding Agents for AI and ML",
-  "5. From Interactive Work to Reusable Systems",
+  "5. From Prototype to Production",
 ];
 
 function moduleHref(number, section = "top") {
@@ -117,6 +117,39 @@ function ImagePlaceholder({ title, description }) {
       <strong>{title}</strong>
       <span>{description}</span>
       <small>Image placeholder</small>
+    </div>
+  );
+}
+
+function TweetEmbed({ url }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const renderTweet = () => window.twttr?.widgets?.load(containerRef.current);
+    if (window.twttr?.widgets) {
+      renderTweet();
+      return;
+    }
+
+    let script = document.getElementById("twitter-widgets");
+    if (!script) {
+      script = document.createElement("script");
+      script.id = "twitter-widgets";
+      script.src = "https://platform.twitter.com/widgets.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    script.addEventListener("load", renderTweet);
+    return () => script.removeEventListener("load", renderTweet);
+  }, [url]);
+
+  return (
+    <div className="tweet-embed" ref={containerRef}>
+      <blockquote className="twitter-tweet" data-theme="light" data-dnt="true" data-align="center">
+        <p>ML pipelines should not be Jupyter notebooks.</p>
+        <span>Shreya Shankar</span>
+        <a href={url} target="_blank" rel="noreferrer">View the original post on X</a>
+      </blockquote>
     </div>
   );
 }
@@ -211,15 +244,21 @@ function MarimoEmbed({ title, notebook, openUrl }) {
   const openNotebookUrl = requestedOpenUrl?.startsWith("/")
     ? `${import.meta.env.BASE_URL}${requestedOpenUrl.slice(1)}`
     : requestedOpenUrl;
+  const openLabel = openNotebookUrl?.includes("molab.marimo.io") ? "Open in molab" : "Open notebook";
   return (
     <div className={`notebook ${isEmbedded ? "notebook-embedded" : ""}`} data-notebook={notebook}>
       <div className="notebook-bar">
-        <div><i></i><i></i><i></i></div>
-        <span>{title || "marimo notebook"}</span>
-        {openUrl && <a href={openNotebookUrl} target="_blank" rel="noreferrer">Open notebook ↗</a>}
+        {openUrl && <a href={openNotebookUrl} target="_blank" rel="noreferrer">{openLabel} ↗</a>}
       </div>
       {isEmbedded
-        ? <iframe src={embedUrl} title={title || "Interactive marimo notebook"} loading="lazy" />
+        ? <iframe
+            src={embedUrl}
+            title={title || "Interactive marimo notebook"}
+            sandbox="allow-scripts allow-same-origin allow-downloads allow-popups allow-forms"
+            allow="microphone"
+            allowFullScreen
+            loading="lazy"
+          />
         : <div className="notebook-body"><span className="badge green">Interactive notebook</span><h3>{title}</h3><p>The live marimo notebook will appear here when its hosted URL is available.</p></div>}
     </div>
   );
@@ -242,6 +281,7 @@ const mdxComponents = {
   SetupTab,
   ImageComparison,
   ImagePlaceholder,
+  TweetEmbed,
   Quiz,
   DemoPlaceholder,
   MarimoEmbed,

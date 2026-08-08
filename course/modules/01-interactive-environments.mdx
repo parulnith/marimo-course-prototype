@@ -91,6 +91,7 @@ Below we have a reactive notebool and it uses the same hidden-state example from
 
 <MarimoEmbed
   notebook="/notebooks/marimo_baseline.html"
+  openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-1/marimo_baseline.py"
   title="Hidden state in marimo"
 />
 
@@ -107,6 +108,7 @@ The reactive notebook below connects `years` to the final balance, yearly table,
 
 <MarimoEmbed
   notebook="/notebooks/1_2_marimo_reactive_workflow.html"
+  openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-1/1_2_marimo_reactive_workflow.py"
   title="Reactive compound-interest notebook"
 />
 
@@ -125,7 +127,7 @@ marimo represents the relationships between cells as a [directed acyclic graph, 
 ![A marimo notebook represented as a directed acyclic graph](../images/module-1/DAG_workflow.png)
 
 <p className="figure-caption">
-  A marimo notebook is shown on the left, with its dataflow graph in the middle. On the right, the same graph is executed in three ways: as a reactive notebook, as a script, and as a web app. <a href="https://marimo.io/blog/dataflow">Source: marimo</a>
+  A marimo notebook is shown on the left, with its [dataflow graph](https://marimo.io/blog/dataflow) in the middle. On the right, the same graph is executed in three ways: as a reactive notebook, as a script, and as a web app. 
 </p>
 
 When `years` change, marimo follows the [DAG](https://marimo.io/blog/dataflow) and runs every affected cell in the correct order. The graph is acyclic because a cell cannot depend on itself, either directly or through other cells.
@@ -181,7 +183,9 @@ You can use the embedded notebooks in this course without installing anything. I
   </SetupTab>
 </SetupTabs>
 
-See the [marimo installation guide](https://docs.marimo.io/getting_started/installation/) if you use Windows or need help with installation.
+<Callout title>
+See the [marimo installation guide](https://docs.marimo.io/getting_started/installation/) for Windows instructions and help with installation problems.
+</Callout>
 
 This guided tutorial is included with marimo. It gives you a more detailed tour of the editor and explains how cells, outputs, dependencies, and notebook tools work.
 
@@ -235,6 +239,6 @@ marimo convert notebook.ipynb -o notebook.py
     "Module 2. Reproducibility and Trustworthy AI",
     "Module 3. Why Interactivity Accelerates AI Discovery",
     "Module 4. Using coding agents in marimo",
-    "Module 5. From Interactive Work to Reusable Systems"
+    "Module 5. From Prototype to Production"
   ]}
 />

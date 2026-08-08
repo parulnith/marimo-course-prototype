@@ -50,29 +50,53 @@ A common approach is to use a `requirements.txt` file. This can help recreate an
 
 ## Reproducible Environments with marimo
 
-marimo has built-in support for managing notebook dependencies. By default, it uses the Python environment in which it was started. If a notebook imports a missing package, marimo can prompt you to install it with your package manager.
+marimo provides several ways to manage the environment and dependencies used by a notebook. You can use an existing Python environment, give one notebook its own isolated environment, or use a shared environment across a project.
 
-<ImagePlaceholder
-  title="The Packages panel"
-  description="Add an image showing the Packages panel with humanize==4.14.0 in the add-package field and the Install button visible."
+In this section, we will try each approach and see when it is useful.
+
+### 1. Using your current Python environment
+
+When you start marimo normally, the notebook uses the Python environment from which marimo was launched. If you import a package that is missing, marimo can prompt you to install it with your selected package manager. The package is then installed in that active environment.
+
+![The marimo Packages panel showing packages installed in a sandbox environment](../images/module-2/package-manager-sandbox.png)
+
+<p className="figure-caption">
+The Packages panel shows which package versions are installed in the current sandbox environment.
+</p>
+
+
+<TryIt>
+Use the starter notebook below to add a package to the current environment.
+
+1. Replace the starter cell's contents with the following code:
+
+```python
+import pytorch
+print("pytorch version:", pytorch.__version__)
+```
+
+2. Run the cell. marimo detects that `pytorch` is missing and offers to install it.
+3. Accept the installation, then run the cell again.
+4. The cell should return the pytorch version.
+
+</TryIt>
+
+<MarimoEmbed
+  notebook="/notebooks/2_2_active_environment_starter.html"
+  openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-2/2_2_active_environment_starter.py"
+  title="Active environment starter notebook"
 />
 
-### Sandbox mode
+### 2. Sandbox mode
 
-Sandbox mode gives a notebook its own isolated Python environment. marimo uses `uv` to create the environment and install the dependencies recorded in the notebook. The notebook does not rely on packages installed elsewhere on the computer, and its packages do not change the main project environment.
+Sandbox mode gives a notebook its own isolated Python environment. marimo uses `uv` to create the environment and install the dependencies recorded in the notebook. 
+
 
 A marimo notebook is stored as a Python `.py` file. When the notebook uses sandbox mode, marimo can record its Python requirement and package dependencies in a metadata block at the top of that same file. The notebook code and the package versions needed to run it can therefore be kept together.
 
-<ImagePlaceholder
-  title="A marimo notebook with recorded dependencies"
-  description="Add a code image showing the top of a marimo Python file, including the script metadata block, Python requirement, exact pandas and scikit-learn versions, and the marimo import below it."
-/>
 
-<Callout title="When to use sandbox mode">
-Use sandbox mode when a notebook needs its own recorded dependencies. This makes it easier for another person to open the notebook with the same package versions.
-</Callout>
 
-Enable sandbox mode when you open the notebook from a terminal.
+You can enable sandbox mode when you open the notebook from a terminal.
 
 <TryIt>
 Open a terminal in the folder that contains your notebook, then run:
@@ -86,16 +110,28 @@ Replace `your_notebook.py` with the name of your marimo notebook.
 
 The notebook below records its Python requirement and exact versions of pandas and scikit-learn. It also reports the active Python executable and package versions when it runs.
 
+<Callout title="Installing an exact package version">
+In the Packages panel, enter the package name followed by `==` and the required version. For example, `pandas==2.3.3` installs pandas 2.3.3. In a local notebook opened with `--sandbox`, installing or removing a package from this panel also updates the dependencies recorded in the notebook file.
+</Callout>
+
+<TryIt>
+Use the notebook below to inspect its sandbox environment.
+
+1. Run the notebook and note the Python, scikit-learn, and pandas versions printed in the outputs.
+2. Open the **Packages** panel in the left sidebar.
+3. Find pandas and scikit-learn in the package list. Confirm that their installed versions match the versions printed by the notebook.
+4. Switch to the **Tree** view and expand a package to see the packages it depends on.
+
+The direct packages and their exact versions come from the dependency block stored in the notebook file. The Tree view also reveals transitive dependencies that those packages installed.
+</TryIt>
+
 <MarimoEmbed
   notebook="/notebooks/2_2_sandboxed_environment.html"
+  openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-2/2_2_sandboxed_environment.py"
   title="A sandboxed marimo environment"
 />
 
-<TryIt>
-Run the notebook and inspect the active Python, scikit-learn, and pandas versions. Then follow the package manager activity at the bottom of the notebook. It shows how to install `humanize==4.14.0`, where `==4.14.0` selects the exact package version.
-</TryIt>
-
-### Shared project environments
+### 3. Shared project environments
 
 Several notebooks in the same Python project may need to use one shared environment instead. marimo can use the project dependencies defined in `pyproject.toml`. Teams can also use this file to share marimo settings and configure paths for project imports. This keeps the notebooks and the rest of the project on the same dependencies and configuration.
 
@@ -103,11 +139,7 @@ Several notebooks in the same Python project may need to use one shared environm
 
 Reproducibility also depends on a clear record of what changed as part of the development process. Version control helps a team review an experiment and return to an earlier version.
 
-![A post by Shreya Shankar that says ML pipelines should not be Jupyter notebooks](../images/module-2/ml-pipelines-tweet.png)
-
-<p className="figure-caption">
-An experiment becomes harder to maintain when its code, execution state and outputs are stored together in a format that produces noisy changes.
-</p>
+<TweetEmbed url="https://x.com/sh_reya/status/1738361345362555259" />
 
 Jupyter notebooks are JSON files. They can store code, notebook structure, execution counts, metadata, and output data. A one-line code edit can therefore produce a much larger Git diff after the notebook is run and saved. This makes code review harder because the actual code change is mixed with changes to notebook structure, metadata, and outputs. 
 
@@ -119,6 +151,7 @@ Review the code inside each changed cell. Also check changes to the cell's funct
 
 <MarimoEmbed
   notebook="/notebooks/2_3_marimo_diff_demo.html"
+  openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-2/2_3_marimo_diff_demo.py"
   title="A reviewable marimo experiment"
 />
 
