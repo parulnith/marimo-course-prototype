@@ -39,7 +39,6 @@ def _(sklearn, sys):
     from sklearn.model_selection import train_test_split
     from sklearn.linear_model import LogisticRegression
 
-    print(f"python executable: {sys.executable}")
     print(f"python version: {sys.version.split()[0]}")
     print(f"sklearn version: {sklearn.__version__}")
 

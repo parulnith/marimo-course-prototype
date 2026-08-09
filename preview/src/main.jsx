@@ -54,6 +54,8 @@ const futureModules = [
   "5. From Prototype to Production",
 ];
 
+const devNotebookCacheKey = Date.now();
+
 function moduleHref(number, section = "top") {
   return `${window.location.pathname}?module=${number}#${section}`;
 }
@@ -235,11 +237,87 @@ function DemoPlaceholder({ title }) {
   return <div className="demo-card"><div className="demo-head"><div><span className="badge">Jupyter demo</span><h3>{title}</h3></div><span className="placeholder-pill">Visual placeholder</span></div><div className="steps"><div><span>1</span><p>Run with<br /><strong>b = 2</strong></p></div><i>→</i><div><span>2</span><p>Change to<br /><strong>b = 11</strong></p></div><i>→</i><div><span>3</span><p>Delete cell<br /><strong>b stays 11</strong></p></div><i>→</i><div className="warning"><span>4</span><p>Result<br /><strong>a + b = 12</strong></p></div></div></div>;
 }
 
+function GitDiffExercise() {
+  const [power, setPower] = useState("3");
+  const [savedPower, setSavedPower] = useState(null);
+  const [diffView, setDiffView] = useState("marimo");
+  const hasChange = power !== "3" && power.trim() !== "";
+
+  function showDiff() {
+    if (hasChange) setSavedPower(power);
+  }
+
+  function reset() {
+    setPower("3");
+    setSavedPower(null);
+    setDiffView("marimo");
+  }
+
+  return (
+    <div className="git-diff-exercise">
+      <div className="git-editor">
+        <div className="git-panel-label">Notebook source</div>
+        <label>
+          <span>power =</span>
+          <input
+            aria-label="Power value"
+            inputMode="numeric"
+            onChange={(event) => {
+              setPower(event.target.value);
+              setSavedPower(null);
+            }}
+            value={power}
+          />
+        </label>
+        <p>Changing this value regenerates the plot.</p>
+      </div>
+      <div className="git-actions">
+        <button disabled={!hasChange} onClick={showDiff} type="button">Save and compare diffs</button>
+        <button className="secondary" onClick={reset} type="button">Reset</button>
+      </div>
+      {savedPower !== null && (
+        <div className="git-result" role="status">
+          <div className="git-panel-label">Simplified Git diff comparison</div>
+          <div className="git-diff-tabs" role="tablist" aria-label="Choose a notebook format">
+            <button aria-selected={diffView === "marimo"} className={diffView === "marimo" ? "active" : ""} onClick={() => setDiffView("marimo")} role="tab" type="button">marimo</button>
+            <button aria-selected={diffView === "jupyter"} className={diffView === "jupyter" ? "active" : ""} onClick={() => setDiffView("jupyter")} role="tab" type="button">Jupyter</button>
+          </div>
+          {diffView === "marimo" ? (
+            <section className="git-diff-panel" role="tabpanel">
+              <h4>marimo notebook</h4>
+              <small>Python `.py` file</small>
+              <pre><span className="removed">- power = 3</span><span className="added">+ power = {savedPower}</span></pre>
+              <p>Only the changed Python line appears. The regenerated plot is not stored in the notebook file.</p>
+            </section>
+          ) : (
+            <section className="git-diff-panel" role="tabpanel">
+              <h4>Jupyter notebook</h4>
+              <small>JSON `.ipynb` file</small>
+              <pre>
+                <span className="removed">- "execution_count": 4</span>
+                <span className="added">+ "execution_count": 5</span>
+                <span className="removed">- "power = 3\n"</span>
+                <span className="added">+ "power = {savedPower}\n"</span>
+                <span className="removed">- "image/png": "old encoded plot..."</span>
+                <span className="added">+ "image/png": "new encoded plot..."</span>
+              </pre>
+              <p>The code change can appear alongside execution state and saved output data.</p>
+            </section>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MarimoEmbed({ title, notebook, openUrl }) {
-  const isEmbedded = notebook?.endsWith(".html") || /^https?:\/\//.test(notebook || "");
-  const embedUrl = notebook?.startsWith("/")
+  const isEmbedded = /\.html(?:[?#]|$)/.test(notebook || "") || /^https?:\/\//.test(notebook || "");
+  const resolvedEmbedUrl = notebook?.startsWith("/")
     ? `${import.meta.env.BASE_URL}${notebook.slice(1)}`
     : notebook;
+  const embedUrl = import.meta.env.DEV && notebook?.startsWith("/")
+    ? `${resolvedEmbedUrl}${resolvedEmbedUrl.includes("?") ? "&" : "?"}dev=${devNotebookCacheKey}`
+    : resolvedEmbedUrl;
   const requestedOpenUrl = openUrl || notebook;
   const openNotebookUrl = requestedOpenUrl?.startsWith("/")
     ? `${import.meta.env.BASE_URL}${requestedOpenUrl.slice(1)}`
@@ -283,6 +361,7 @@ const mdxComponents = {
   ImagePlaceholder,
   TweetEmbed,
   Quiz,
+  GitDiffExercise,
   DemoPlaceholder,
   MarimoEmbed,
 };

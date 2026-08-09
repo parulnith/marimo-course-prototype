@@ -6,40 +6,12 @@ __generated_with = "0.23.3"
 app = marimo.App()
 
 
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md("""
-    # Small code change, small diff
-
-    marimo notebooks are plain Python files — no JSON, no embedded outputs.
-    `git diff` shows only the lines you actually changed.
-    """)
-    return
-
-
 @app.cell
 def _():
-    import marimo as mo
     import matplotlib.pyplot as plt
     import numpy as np
 
-    return mo, np, plt
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md("""
-    **Try it in this embed:** change `power = 3` to `power = 4` and run the cell. The plot updates immediately.
-
-    To inspect the source change with Git, open a copy of this notebook locally inside a Git project. Open marimo's **Terminal** tab from the developer panel, change and save the value, then run:
-
-    ```bash
-    git diff -- your_notebook.py
-    ```
-
-    Replace `your_notebook.py` with the notebook's filename. The diff shows the changed Python line and does not include the regenerated plot. The course embed has no Git history, so run this part in a locally tracked notebook.
-    """)
-    return
+    return np, plt
 
 
 @app.cell
