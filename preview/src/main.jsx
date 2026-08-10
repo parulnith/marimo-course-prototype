@@ -197,7 +197,6 @@ function Quiz({ question, options, answer, insights = [], courseSections = [], c
   const isCorrect = selected === answer;
   return (
     <section className="quiz" aria-labelledby={questionId}>
-      <p className="quiz-label">Check your understanding</p>
       <h3 id={questionId}>{question}</h3>
       <div className="quiz-options">
         {options.map((option, index) => (

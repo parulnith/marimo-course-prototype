@@ -16,7 +16,7 @@ def _():
 
 @app.cell
 def _():
-    power = 3
+    power = 4
     return (power,)
 
 
