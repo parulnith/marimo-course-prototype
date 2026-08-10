@@ -138,13 +138,14 @@ Jupyter notebooks are JSON files that can store code, execution counts, metadata
 
 marimo notebooks, on the other hand, are stored as Python files and rendered outputs are not saved in the notebook. Git diffs therefore stay focused on the code that changed.
 
-<TryIt>
-Change `power` from `3` to `4`, then select **Save and compare diffs**.
+The image below will compare the actual Git diff produced by the same code change in a Jupyter notebook and a marimo notebook.
 
-<GitDiffExercise />
-</TryIt>
+<ImagePlaceholder
+  title="Jupyter and marimo Git diff comparison"
+  description="Replace this placeholder with an image of the actual Git diffs for the same one-line change."
+/>
 
-This is a simplified comparison. The exact Jupyter diff depends on which outputs and metadata were saved. When reviewing a marimo diff, also check changes to a cell's function parameters and return statement. These show which values the cell receives and which values it provides to other cells.
+When reviewing a marimo diff, also check changes to a cell's function parameters and return statement. These show which values the cell receives and which values it provides to other cells.
 
 ## Using One Notebook Across Environments
 
