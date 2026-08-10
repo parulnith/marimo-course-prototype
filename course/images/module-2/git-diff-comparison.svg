@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="930" viewBox="0 0 1400 930" role="img" aria-labelledby="title desc">
+  <title id="title">Git diff comparison for equivalent Jupyter and marimo notebooks</title>
+  <desc id="desc">Both notebooks change power from 3 to 4. The Jupyter diff also contains execution state and regenerated image data, while the marimo diff contains only the Python assignment.</desc>
+  <style>
+    .bg { fill: #fbfbf9; }
+    .card { fill: #fff; stroke: #deded9; stroke-width: 2; }
+    .header { fill: #f3f3ef; }
+    .title { fill: #20201e; font: 650 28px Inter, Arial, sans-serif; }
+    .body { fill: #353532; font: 20px Inter, Arial, sans-serif; }
+    .muted { fill: #70706b; font: 18px Inter, Arial, sans-serif; }
+    .code { fill: #292927; font: 19px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .delbg { fill: #ffebe9; }
+    .addbg { fill: #dafbe1; }
+    .del { fill: #9b2c2c; }
+    .add { fill: #176b36; }
+    .stat { fill: #20201e; font: 650 19px Inter, Arial, sans-serif; }
+  </style>
+  <rect class="bg" width="1400" height="930"/>
+
+  <g transform="translate(40 35)">
+    <rect class="card" width="1320" height="405" rx="12"/>
+    <path class="header" d="M12 0h1296a12 12 0 0 1 12 12v58H0V12A12 12 0 0 1 12 0z"/>
+    <text class="title" x="28" y="45">Jupyter notebook (.ipynb)</text>
+    <text class="muted" x="28" y="108">The code change, execution count, and regenerated plot are stored together in JSON.</text>
+
+    <rect class="delbg" x="28" y="137" width="1264" height="38" rx="4"/>
+    <text class="code del" x="43" y="163">-   "execution_count": 9,</text>
+    <rect class="addbg" x="28" y="179" width="1264" height="38" rx="4"/>
+    <text class="code add" x="43" y="205">+   "execution_count": 10,</text>
+
+    <rect class="delbg" x="28" y="225" width="1264" height="38" rx="4"/>
+    <text class="code del" x="43" y="251">-   "image/png": "iVBORw0KGgoAAAANSUhEUgAAA9... [regenerated PNG data]"</text>
+    <rect class="addbg" x="28" y="267" width="1264" height="38" rx="4"/>
+    <text class="code add" x="43" y="293">+   "image/png": "iVBORw0KGgoAAAANSUhEUgAAA8... [regenerated PNG data]"</text>
+
+    <rect class="delbg" x="28" y="313" width="610" height="38" rx="4"/>
+    <text class="code del" x="43" y="339">-   "power = 3\n",</text>
+    <rect class="addbg" x="654" y="313" width="638" height="38" rx="4"/>
+    <text class="code add" x="669" y="339">+   "power = 4\n",</text>
+    <text class="stat" x="28" y="383">Actual diff: 3 insertions, 3 deletions · 164,803 bytes</text>
+  </g>
+
+  <g transform="translate(40 475)">
+    <rect class="card" width="1320" height="405" rx="12"/>
+    <path class="header" d="M12 0h1296a12 12 0 0 1 12 12v58H0V12A12 12 0 0 1 12 0z"/>
+    <text class="title" x="28" y="45">marimo notebook (.py)</text>
+    <text class="muted" x="28" y="108">The rendered plot is not stored in the notebook file, so the diff stays focused on the code.</text>
+
+    <text class="code" x="43" y="164">@@ -16,7 +16,7 @@ def _():</text>
+    <text class="code" x="43" y="205"> @app.cell</text>
+    <text class="code" x="43" y="238"> def _():</text>
+    <rect class="delbg" x="28" y="254" width="1264" height="38" rx="4"/>
+    <text class="code del" x="43" y="280">-    power = 3</text>
+    <rect class="addbg" x="28" y="296" width="1264" height="38" rx="4"/>
+    <text class="code add" x="43" y="322">+    power = 4</text>
+    <text class="code" x="43" y="361">     return (power,)</text>
+    <text class="stat" x="28" y="393">Actual diff: 1 insertion, 1 deletion · 362 bytes</text>
+  </g>
+</svg>

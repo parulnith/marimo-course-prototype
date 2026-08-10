@@ -130,50 +130,60 @@ Sandbox mode is useful when a notebook needs its own environment. But if several
 
 ## Clean and Reviewable Git Diffs
 
-Reproducibility also depends on a clear record of what changed as part of the development process. Version control helps a team review an experiment and return to an earlier version.
+Version control records how an experiment changes. A useful Git diff makes the code change easy to find, so a reviewer can understand what changed and return to an earlier version if needed.
 
-Jupyter notebooks are JSON files that can store code, execution counts, metadata, notebook structure, and outputs. As a result, a small code edit can produce a much larger Git diff after the notebook is run and saved.
+Consider two equivalent notebooks that generate the same plot. One is a Jupyter notebook and the other is a marimo notebook. Both use the code below:
 
-<TweetEmbed url="https://x.com/sh_reya/status/1738361345362555259" />
+```python
+import matplotlib.pyplot as plt
+import numpy as np
 
-marimo notebooks, on the other hand, are stored as Python files and rendered outputs are not saved in the notebook. Git diffs therefore stay focused on the code that changed.
+power = 3
+rng = np.random.default_rng(7)
+x = np.linspace(-3, 3, 800)
+curve = x**power
+observations = curve + rng.normal(scale=0.8, size=x.size)
 
-The image below will compare the actual Git diff produced by the same code change in a Jupyter notebook and a marimo notebook.
+fig, ax = plt.subplots()
+ax.scatter(x, observations, s=8, alpha=0.35)
+ax.plot(x, curve, color="black", label=f"x^{power}")
+ax.set_title(f"Model curve: y = x^{power}")
+ax.legend()
+plt.show()
+```
 
-<ImagePlaceholder
-  title="Jupyter and marimo Git diff comparison"
-  description="Replace this placeholder with an image of the actual Git diffs for the same one-line change."
-/>
+We change only `power = 3` to `power = 4`in both notebooks, rerun the code and save each notebook. While the logic change is the same, the Git diffs look very different.
 
-When reviewing a marimo diff, also check changes to a cell's function parameters and return statement. These show which values the cell receives and which values it provides to other cells.
+![The actual Git diffs produced by the same one-line change in equivalent Jupyter and marimo notebooks](../images/module-2/git-diff-comparison.svg)
+
+The reason is that a Jupyter notebook is stored as a JSON file. It can contain code, execution counts, metadata, notebook structure, and outputs. Rerunning the notebook changes the parameter, the execution count, and the saved plot data. The plot is stored as a long encoded string, which is why the raw diff is much larger than the visible code change.
+
+A marimo notebook, on the other hand, is stored as a Python file. Its rendered plot is not saved in the notebook file, so the diff stays focused on the change from power = 3 to power = 4.
 
 ## Using One Notebook Across Environments
 
-Once a notebook and its environment are reproducible, the same notebook can move easily between different development environments.
+You can use the same marimo notebook in a browser, a code editor, or molab.
 
 ### VS Code
 
-Because marimo notebooks are Python files, you can open and review them in VS Code with standard Python and Git tools.
+Since a marimo notebook is a Python file, you can open it in VS Code and review it with standard Python and Git tools. Additionally, you can also install the [marimo extension for VS Code](https://marketplace.visualstudio.com/items?itemName=marimo-team.vscode-marimo) to open and edit the file as a notebook.
 
-For a notebook experience inside VS Code, install the [official marimo extension](https://marketplace.visualstudio.com/items?itemName=marimo-team.vscode-marimo).
+![A marimo notebook open in VS Code](../images/module-2/marimo_vscode.png)
 
-<TryIt>
-Open `course/notebooks/module-2/2_3_marimo_diff_demo.py` in VS Code. Review its cells as Python code, make the `power` change, and inspect the diff in the Source Control panel.
-</TryIt>
+<p className="figure-caption">Source: [marimo in VS Code](https://marimo.io/blog/vscode)</p>
 
 ### molab
 
-[molab](https://molab.marimo.io) is marimo's hosted workspace. It can open a notebook from a public GitHub repository in the browser. A notebook with inline dependencies can use those dependencies in its sandbox without requiring a local installation.
+[molab](https://molab.marimo.io) lets you open and edit a marimo notebook in your browser without installing marimo. It can also open a notebook directly from a public GitHub repository.
 
-The GitHub URL has this form:
+<video className="lesson-video" controls muted loop playsInline preload="metadata">
+  <source src="https://marimo.io/images/blog/53/molab-attach-gpu.mp4" type="video/mp4" />
+  Your browser does not support this video.
+</video>
 
-```text
-https://molab.marimo.io/github/<user>/<repo>/blob/main/<path-to-notebook>.py
-```
+<p className="figure-caption">Source: [molab, now with GPUs](https://marimo.io/blog/reintroducing-molab)</p>
 
-<TryIt>
-Open the [sandboxed environment notebook in molab](https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-2/2_2_sandboxed_environment.py). Inspect its package information and run the cells. Check that the recorded package versions match the versions printed in the notebook output.
-</TryIt>
+molab notebooks run in [CoreWeave sandboxes](https://www.coreweave.com/products/coreweave-sandboxes). By default, each notebook has 4 CPUs and 32 GB of RAM. This gives you more compute than a typical browser notebook without requiring you to configure a remote machine. For work that needs a GPU, you can attach an NVIDIA RTX Pro 6000 Blackwell GPU with 96 GB of VRAM and 125 TFLOPS to a notebook.
 
 Using the same source file and recorded environment makes it easier to move an experiment from a personal prototype into a reviewed project. Later modules will continue this path by turning interactive work into tools that other people can run.
 
