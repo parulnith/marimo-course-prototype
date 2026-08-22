@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import ModuleOne from "../../course/modules/01-interactive-environments.mdx";
 import ModuleTwo from "../../course/modules/02-reproducibility.mdx";
+import ModuleThree from "../../course/modules/03-interactivity.mdx";
 import "../styles.css";
 
 const courseImages = import.meta.glob("../../course/images/**/*", {
@@ -46,10 +47,22 @@ const modules = {
       ["check-your-understanding", "Quiz", null, 6],
     ],
   },
+  3: {
+    number: 3,
+    title: "Why Interactivity Accelerates AI Discovery",
+    duration: "15 min",
+    Content: ModuleThree,
+    lessons: [
+      ["31-interactive-computation-as-a-unified-system", "3.1 Interactive Computation as a Unified System", null, 1],
+      ["32-interactive-data-in-model-development", "3.2 Interactive Data in Model Development", null, 2],
+      ["33-visual-feedback-for-analysis-and-debugging", "3.3 Visual Feedback for Analysis and Debugging", null, 3],
+      ["what-you-learned", "What you learned", null, 4],
+      ["check-your-understanding", "Quiz", null, 5],
+    ],
+  },
 };
 
 const futureModules = [
-  "3. Interactivity and AI Discovery",
   "4. AI Coding Agents for AI and ML",
   "5. From Prototype to Production",
 ];

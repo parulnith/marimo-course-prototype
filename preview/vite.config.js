@@ -14,6 +14,7 @@ const notebookSources = [
   "course/notebooks/module-1/1_2_marimo_reactive_workflow.py",
   "course/notebooks/module-2/2_2_active_environment_starter.py",
   "course/notebooks/module-2/2_2_sandboxed_environment.py",
+  "course/notebooks/module-3/3_1_interactive_ml_workflow_starter.py",
 ].map((path) => join(repoRoot, path));
 
 function exportedNotebookPath(source) {
@@ -29,7 +30,7 @@ function exportNotebook(source, force = false) {
   mkdirSync(notebookOutputDir, { recursive: true });
   execFileSync(
     "uvx",
-    ["marimo", "export", "html-wasm", source, "-o", notebookOutputDir, "--mode", "edit", "-f"],
+    ["--from", "marimo==0.23.16", "marimo", "export", "html-wasm", source, "-o", notebookOutputDir, "--mode", "edit", "--no-sandbox", "-f"],
     { cwd: repoRoot, stdio: "inherit" },
   );
   const generated = join(notebookOutputDir, "index.html");

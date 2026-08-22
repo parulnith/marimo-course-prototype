@@ -1,12 +1,248 @@
 ---
-title: Interactivity and AI Discovery
+title: Why Interactivity Accelerates AI Discovery
 shortTitle: Interactivity and AI Discovery
-description: Learn how interactive controls support exploration and discovery in AI and ML work.
+description: Learn how connected data, controls, models, and plots make AI and ML exploration faster and easier to understand.
 order: 3
 duration: 15 min
-status: draft
 ---
 
-# Interactivity and AI Discovery
+# Why Interactivity Accelerates AI Discovery
 
-This module is a draft. Its full lesson content will be added later.
+We touched on this earlier, but interactivity deserves its own module because it changes how you develop and understand AI models. Imagine your data, models, visualizations, and user input all working together in a single system that updates automatically. This module shows you what that unified system looks like in practice and how it can accelerate AI development.
+
+Here is what that looks like in practice. You change one thing, such as the features going into a model. marimo runs the parts of the workflow affected by that change. The model results, plots, and error analysis update, so you can see what happened and decide what to try next.
+
+What makes this useful is the loop. You ask a question, change an input, and see the result while the question is still fresh in your mind.
+
+<Callout title="The main idea">
+Data exploration does not stop when modeling begins. Your controls, model, plots, and error analysis stay connected as you move through the workflow.
+</Callout>
+
+You can see that idea in the editable notebook below. It uses a small dataset included with scikit-learn, so it runs inside the course page. Change the controls and add your own cells as you work through the lesson.
+
+<MarimoEmbed
+  notebook="/notebooks/3_1_interactive_ml_workflow_starter.html?v=20260821"
+  title="Module 3 interactive starter notebook"
+/>
+
+<TryIt>
+Run the starter notebook and try each control. Change the selected features, sample size, and threshold. Then add a new cell containing `mo.ui.data_editor(df.head(20))`.
+</TryIt>
+
+<Callout title="Complete workflow">
+When you are ready to see the full workflow, open the complete example. It uses the Adult Income dataset to compare TabICL with Random Forest. [Open the complete workflow in Molab](https://molab.marimo.io/github/parulnith/marimo-oreilly-workshop/blob/main/Module_3/3_1_interactive_ml_workflow.py).
+</Callout>
+
+## 3.1 Interactive Computation as a Unified System
+
+Interactive computation becomes powerful when the notebook behaves like one live graph instead of a stack of disconnected steps. In that kind of workflow, user input is not separate from the computation. Tables, widgets, plots, and model outputs all become part of the same system.
+
+The key idea is continuity. Exploration does not end when modeling begins. The same notebook lets you move straight from inspecting data to changing model inputs, comparing results, and debugging errors.
+
+In Module 1, you saw how marimo tracks the variables defined and used by each cell. That is what allows the notebook to respond when something changes.
+
+Now bring a UI control into the same system. You define the control in one cell and read its `.value` in another. Any cell that uses that value becomes part of the update.
+
+The notebook defines controls for the selected features and sample size:
+
+```python
+selected_features_ui = mo.ui.multiselect(
+    options=feature_options,
+    value=feature_options,
+    label="Features to include in the model",
+)
+
+sample_size_ui = mo.ui.slider(
+    start=500,
+    stop=3000,
+    step=500,
+    value=1000,
+    label="Rows to sample for modeling",
+)
+```
+
+The next cell reads the selected values:
+
+```python
+selected_features = selected_features_ui.value
+sample_size = sample_size_ui.value
+```
+
+This is where the pieces come together. The selected values affect the data used for modeling. They also affect the fitted models and the results you see. marimo works out which cells depend on those values and runs them in the right order. You do not need to write a separate callback for every output.
+
+<TryIt>
+Find the feature selector and remove one feature. Watch what changes in the model summary and error table. Add the feature again and compare the results.
+</TryIt>
+
+The sample size control gives you another way to work. You can use fewer rows while you explore an idea. When the idea looks useful, increase the sample size and check it again.
+
+## 3.2 Interactive Data in Model Development
+
+That continuity becomes especially useful when you work with data. You can inspect a table, try a small change, and use the result in the next part of the computation.
+
+The starter uses a small breast cancer dataset included with scikit-learn. The complete workflow uses the Adult Income dataset. The same marimo tools let you work with both.
+
+### Inspect a dataframe
+
+Start by looking at the data. When a dataframe is the final expression in a cell, marimo gives you an interactive viewer. You can move through the rows, search, sort, and filter without writing extra display code.
+
+```python
+df[:1000]
+```
+
+If you want a basic static display, use `mo.plain`:
+
+```python
+mo.plain(df.head())
+```
+
+### Edit a small sample
+
+Sometimes looking at the data is not enough. You may want to change a few values and see whether that changes a later result. `mo.ui.data_editor` gives you an editable table for that kind of small test.
+
+```python
+data_editor = mo.ui.data_editor(df)
+data_editor
+```
+
+You can read the edited data from another cell:
+
+```python
+data_editor.value
+```
+
+You can also choose which columns can be edited:
+
+```python
+mo.ui.data_editor(
+    df,
+    editable_columns=["age", "education"],
+)
+```
+
+Use the editor for small experiments. When a change needs to be repeatable, write it as a data transformation in code.
+
+### Explore tables and charts
+
+You will not always know which relationship you want to examine. marimo gives you a few ways to explore:
+
+- `mo.ui.data_explorer(df)` lets you build a chart while you decide what to examine.
+
+- `mo.ui.dataframe(df)` lets you sort, filter, group, and transform a table view.
+
+- `mo.ui.data_editor(df)` lets you change values and read the edited data through `.value`.
+
+<TryIt>
+Add `mo.ui.data_explorer(df)` to the starter. Create a chart for `mean radius` and color it by `diagnosis`. Look for a pattern, then use the dataframe view to inspect the rows behind it.
+</TryIt>
+
+### Prepare the selected data
+
+Exploration becomes more useful when your choices can flow straight into the model. In the complete workflow, the controls decide which rows and columns are used. The code below keeps the target balance similar when it samples the data:
+
+```python
+sampled_df, _ = train_test_split(
+    df,
+    train_size=sample_size,
+    stratify=df["income"],
+    random_state=42,
+)
+```
+
+Most rows have income at or below $50K, so `stratify` keeps that balance similar in the sample. The notebook also converts text categories into numbers because the models expect numeric inputs.
+
+The notebook then divides the processed data into training and test sets. Both models use the same split, so you compare them with the same rows and features.
+
+## 3.3 Visual Feedback for Analysis and Debugging
+
+This is where interactivity starts to change how you understand a model. A score gives you a summary. It does not show you which examples the model got wrong.
+
+The starter uses Random Forest so it can run in the browser. The complete workflow compares Random Forest with TabICL, a pretrained model for tabular data.
+
+Both models return a probability for each class:
+
+```python
+tabicl_proba = tabicl.predict_proba(X_test)
+rf_proba = rf.predict_proba(X_test)
+```
+
+For each result, `proba[:, 1]` is the predicted probability that income is above $50K. These probabilities give you more to explore than a final class label.
+
+### Compare model rankings
+
+The notebook uses ROC AUC to show how well each model ranks positive examples above negative examples across different thresholds.
+
+- A score of `1.0` means perfect ranking.
+
+- A score of `0.5` means the ranking is no better than random guessing.
+
+Accuracy uses one fixed threshold, often `0.5`. ROC AUC looks across many thresholds, which helps when the classes are not balanced.
+
+First, look at the bar chart to compare the scores. Then look at the probability histograms. They show how confident each model is for the two true classes. Two models can have similar scores and still behave differently.
+
+### Inspect model errors
+
+Now move from the overall score to individual decisions. A probability becomes a class prediction when you choose a threshold. At a threshold of `0.5`, a probability of `0.73` produces a positive prediction. Move the threshold to `0.8`, and the same probability produces a negative prediction.
+
+The notebook connects three controls to the error analysis:
+
+```python
+model_source = mo.ui.radio(...)
+threshold_slider = mo.ui.slider(...)
+model_view = mo.ui.radio(...)
+```
+
+One control selects TabICL or Random Forest. Another changes the threshold. The last control lets you focus on all errors, false positives, or false negatives.
+
+<Callout title="Error types">
+A false positive means that the model predicted income above $50K when the true label was at or below $50K.
+
+A false negative means that the model predicted income at or below $50K when the true label was above $50K.
+</Callout>
+
+Move the threshold and the summary updates. Choose another model and the error rows update again. You can move from a score to the actual examples behind it without breaking your flow.
+
+<TryIt>
+In the starter, move the classification threshold from `0.5` to `0.8`. Watch how the false positive and false negative counts change. Then open the complete workflow, switch between TabICL and Random Forest, and inspect one error type.
+</TryIt>
+
+## Check your understanding
+
+<Quiz
+  question="What drives the automatic updates when a user changes a control such as mo.ui.multiselect(...)?"
+  options={[
+    "marimo reruns the entire notebook from top to bottom.",
+    "Only the cell containing the control reruns.",
+    "marimo tracks dependencies and reruns the affected downstream cells.",
+    "The browser updates every result without running Python."
+  ]}
+  answer={2}
+  correctFeedback="Correct. marimo follows the variable dependencies and reruns the cells affected by the new value."
+  incorrectFeedback="Not quite. Review how a control's .value becomes an input to downstream cells."
+/>
+
+<Quiz
+  question="What makes the error analysis different from a traditional notebook workflow?"
+  options={[
+    "The notebook displays errors as charts instead of text.",
+    "You can change the model or threshold and inspect the updated error rows in the same workflow.",
+    "marimo fixes every model error automatically.",
+    "The model retrains itself whenever it finds an error."
+  ]}
+  answer={1}
+  correctFeedback="Correct. The controls, predictions, summary, and error rows remain connected in one workflow."
+  incorrectFeedback="Not quite. The main difference is the connection between the controls and the error rows."
+/>
+
+<Quiz
+  question="What is the main difference between mo.ui.data_editor(df) and mo.ui.dataframe(df) in this lesson?"
+  options={[
+    "Both edit values, but only the dataframe supports sorting.",
+    "The data editor returns changed values for downstream computation, while the dataframe is used to inspect and transform a table view.",
+    "The dataframe updates downstream cells, but the data editor does not.",
+    "There is no difference between them."
+  ]}
+  answer={1}
+  correctFeedback="Correct. The data editor exposes changed values through .value. The dataframe supports interactive inspection and table transformations."
+  incorrectFeedback="Not quite. Review the purpose of each dataframe tool in section 3.2."
+/>

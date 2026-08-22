@@ -18,7 +18,8 @@ course/
 │   └── 05-reusable-systems.mdx
 └── notebooks/
     ├── module-1/
-    └── module-2/
+    ├── module-2/
+    └── module-3/
 ```
 
 ## What each folder contains
@@ -30,6 +31,8 @@ course/
 `notebooks/module-1/` contains the Jupyter and marimo notebook source files used to create the Module 1 examples.
 
 `notebooks/module-2/` contains the Jupyter and marimo notebook source files used for the environment and version control exercises.
+
+`notebooks/module-3/` contains the editable starter and the complete interactive ML workflow used for data exploration, model comparison, and error analysis.
 
 `components/placeholders.mdx` describes the custom MDX components used in the lessons. These names can be mapped to the components provided by the website.
 
@@ -51,6 +54,13 @@ The Module 2 notebook source files are:
 - `notebooks/module-2/2_3_jupyter_diff_demo.ipynb`
 - `notebooks/module-2/2_3_marimo_diff_demo.py`
 
+## Module 3 notebook
+
+The Module 3 notebook source files are:
+
+- `notebooks/module-3/3_1_interactive_ml_workflow_starter.py`
+- `notebooks/module-3/3_1_interactive_ml_workflow.py`
+
 ## Run a marimo notebook
 
 Install marimo if needed.
@@ -69,6 +79,18 @@ Open the Module 2 environment example in an isolated sandbox.
 
 ```bash
 marimo edit --sandbox course/notebooks/module-2/2_2_sandboxed_environment.py
+```
+
+Open the Module 3 interactive ML workflow in an isolated sandbox.
+
+```bash
+marimo edit --sandbox course/notebooks/module-3/3_1_interactive_ml_workflow.py
+```
+
+Open the Module 3 starter notebook in an isolated sandbox.
+
+```bash
+marimo edit --sandbox course/notebooks/module-3/3_1_interactive_ml_workflow_starter.py
 ```
 
 The `preview/` folder at the repository root is not part of this course package. It is only used to publish the standalone course preview.
