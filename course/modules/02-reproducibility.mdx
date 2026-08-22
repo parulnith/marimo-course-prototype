@@ -50,11 +50,11 @@ A common approach is to use a `requirements.txt` file. This can help recreate an
 
 ## Reproducible Environments with marimo
 
-marimo gives you several ways to control a notebook's environment. You can use your current Python environment. You can also create an isolated environment for one notebook or use one environment across a project.
+marimo gives you several ways to control a notebook's environment; you can use your current Python environment, create an isolated environment for one notebook or use one environment across a project.
 
 ### 1. Using your current Python environment
 
-When you start marimo normally, the notebook uses the Python environment from which marimo was launched. If you import a package that is missing, marimo can prompt you to install it with your selected package manager. The package is then added to the active environment.
+When you start marimo, the notebook uses the Python environment from which marimo was launched. If you import a package that is missing, marimo will prompt you to install it with your selected package manager. The package is then added to the active environment.
 
 <TryIt>
 Use the starter notebook below to add a package to the current environment.
@@ -156,13 +156,13 @@ We change only `power = 3` to `power = 4` in both notebooks. We then rerun the c
 
 Red lines show what was removed, and green lines show what was added. In both notebooks, the only code change is `power = 3` to `power = 4`.
 
-As you can see, even this single code change produces several changes in the Jupyter diff. A Jupyter `.ipynb` file is stored as JSON and includes code, execution information, and outputs. The diff therefore includes new execution counts and regenerated plot data. The marimo diff shows one removed line and one added line because the rendered plot is not stored in its `.py` file. This makes the code change easier to find.
+As you can see, even this single code change produces several changes in the Jupyter diff. A Jupyter `.ipynb` file is stored as JSON and includes code, execution information, and outputs. The diff therefore includes new execution counts and regenerated plot data. The marimo diff shows one removed line and one added line because the rendered plot is not stored in its `.py` file. This makes the code change easier to isolate.
 
 ## Using One Notebook Across Environments
 
 You can use the same marimo notebook in a browser, a code editor, or molab.
 
-### VS Code
+### VSCode
 
 Since a marimo notebook is a Python file, you can open it in VS Code and review it with standard Python and Git tools. Install the [marimo extension for VS Code](https://marketplace.visualstudio.com/items?itemName=marimo-team.vscode-marimo) to open and edit the file as a notebook.
 
