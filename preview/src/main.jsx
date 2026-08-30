@@ -50,14 +50,14 @@ const modules = {
   3: {
     number: 3,
     title: "Why Interactivity Accelerates AI Discovery",
-    duration: "15 min",
+    duration: "30 min",
     Content: ModuleThree,
     lessons: [
-      ["31-interactive-computation-as-a-unified-system", "3.1 Interactive Computation as a Unified System", null, 1],
-      ["32-interactive-data-in-model-development", "3.2 Interactive Data in Model Development", null, 2],
-      ["33-visual-feedback-for-analysis-and-debugging", "3.3 Visual Feedback for Analysis and Debugging", null, 3],
-      ["what-you-learned", "What you learned", null, 4],
-      ["check-your-understanding", "Quiz", null, 5],
+      ["inspect-and-edit-data", "Inspect and edit data", null, 1],
+      ["explore-data-visually", "Explore data visually", null, 2],
+      ["choose-model-inputs", "Choose model inputs", null, 3],
+      ["fit-and-compare-models", "Fit and compare models", null, 4],
+      ["debug-errors-interactively", "Debug errors interactively", null, 5],
     ],
   },
 };

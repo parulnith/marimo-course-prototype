@@ -14,7 +14,9 @@ const notebookSources = [
   "course/notebooks/module-1/1_2_marimo_reactive_workflow.py",
   "course/notebooks/module-2/2_2_active_environment_starter.py",
   "course/notebooks/module-2/2_2_sandboxed_environment.py",
-  "course/notebooks/module-3/3_1_interactive_ml_workflow_starter.py",
+  "course/notebooks/module-3/3_1_inspect_and_edit_data.py",
+  "course/notebooks/module-3/3_2_explore_data_visually.py",
+  "course/notebooks/module-3/3_3_choose_model_inputs.py",
 ].map((path) => join(repoRoot, path));
 
 function exportedNotebookPath(source) {

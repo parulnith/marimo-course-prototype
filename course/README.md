@@ -58,7 +58,14 @@ The Module 2 notebook source files are:
 
 The Module 3 notebook source files are:
 
-- `notebooks/module-3/3_1_interactive_ml_workflow_starter.py`
+- `notebooks/module-3/3_1_inspect_and_edit_data.py`
+- `notebooks/module-3/3_2_explore_data_visually.py`
+- `notebooks/module-3/3_3_choose_model_inputs.py`
+- `notebooks/module-3/3_4_fit_and_compare_models.py`
+- `notebooks/module-3/3_5_debug_errors_interactively.py`
+
+The original complete workflow is kept as a reference notebook:
+
 - `notebooks/module-3/3_1_interactive_ml_workflow.py`
 
 ## Run a marimo notebook
@@ -85,12 +92,6 @@ Open the Module 3 interactive ML workflow in an isolated sandbox.
 
 ```bash
 marimo edit --sandbox course/notebooks/module-3/3_1_interactive_ml_workflow.py
-```
-
-Open the Module 3 starter notebook in an isolated sandbox.
-
-```bash
-marimo edit --sandbox course/notebooks/module-3/3_1_interactive_ml_workflow_starter.py
 ```
 
 The `preview/` folder at the repository root is not part of this course package. It is only used to publish the standalone course preview.
