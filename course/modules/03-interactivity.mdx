@@ -6,49 +6,88 @@ order: 3
 duration: 30 min
 ---
 
+import inspectDataVideo from "../images/module-3/3.inspect_data.mp4";
+import dataEditorVideo from "../images/module-3/data_editor.mp4";
+import tableVideo from "../images/module-3/table.mp4";
+
 # Why Interactivity Accelerates AI Discovery
 
-We touched on interactivity in Module 1. It deserves a closer look because it changes how you develop and understand AI systems.
+We touched on interactivity in the module 1, but it deserves its own module because it changes how you develop and understand AI systems.
 
-In an interactive workflow, your data, model controls, and results stay connected. You can change an input, inspect the result, and decide what to try next. marimo runs the cells that depend on your change, so you do not need to run each step by hand.
+Imagine your data, models, visualisations, and user input working together in a single system that updates automatically. You can move from a question to an experiment, inspect the result, and then decide what to try next.
 
-## Data
+marimo supports this kind of interactive computation by connecting the parts of a notebook that work together. This pattern is valuable in modern AI and ML workflows because it speeds up experimentation and helps you understand the effect of each change.
 
-You will work through one complete AI workflow using the [Adult Income dataset](https://archive.ics.uci.edu/dataset/2/adult). The dataset comes from US Census data. The task is to predict whether a person earns more than $50K per year.
+In this module, we will see how interactivity brings data, model inputs, visualisations, and results together in one model-development workflow.
 
-This is a binary classification problem. The dataset contains numbers such as age and hours worked per week. It also contains categories such as occupation, education, and marital status.
+### Data
+
+You will work through one complete AI workflow using the [Adult Income dataset](https://archive.ics.uci.edu/dataset/2/adult). The dataset comes from US Census data. The task is to predict whether a person earns more than $50K per year. This is a binary classification problem. The dataset contains numbers such as age and hours worked per week. It also contains categories such as occupation, education, and marital status.
 
 Here is the path you will take:
 
 1. Look at the raw data and edit a small sample.
 2. Explore the data with charts and table transformations.
 3. Choose the features and sample size used for modeling.
-4. Fit TabICL and Random Forest, then compare their results.
+4. Fit TabICL and Random Forest models, then compare their results.
 5. Change the classification threshold and inspect model errors.
-
-<Callout title="About the Adult Income dataset">
-The UCI Machine Learning Repository provides this dataset. It was extracted from the 1994 Census database and contains 48,842 records. The input includes age, education, occupation, workclass, marital status, and hours worked per week. The model predicts one of two income groups: at or below $50K, or above $50K.
-</Callout>
 
 ## Inspect and edit data
 
-Before you train a model, you need to understand what the dataset contains. Begin by inspecting the data and comparing individual rows.
+marimo can display a dataframe as an interactive table so you can sort, filter, and inspect the data. You can also edit values in a small sample of the dataframe.
+
+```python
+df
+```
+
+<video className="lesson-video" autoPlay muted loop playsInline preload="metadata">
+  <source src={inspectDataVideo} type="video/mp4" />
+  Your browser does not support this video.
+</video>
+
+To change values, create a data editor. The data editor shows a small sample of the dataframe and lets you edit values in place. The edited values are then available in the notebook via `.value`.
+
+```python
+data_editor = mo.ui.data_editor(df.head(20))
+data_editor
+```
+
+
+<video className="lesson-video" autoPlay muted loop playsInline preload="metadata">
+  <source src={dataEditorVideo} type="video/mp4" />
+  Your browser does not support this video.
+</video>
+
+To select rows without changing them, create a selectable table and then read the selected rows via `.value`. The table shows a larger sample of the dataframe than the data editor.
+
+```python
+table = mo.ui.table(
+    df.head(100),
+    selection="multi",
+)
+table
+```
+
+<video className="lesson-video" autoPlay muted loop playsInline preload="metadata">
+  <source src={tableVideo} type="video/mp4" />
+  Your browser does not support this video.
+</video>
+
+<TryIt>
+Now use the notebook below to explore the data with the tools from this section. Try the following:
+
+1. Sort `age` from highest to lowest.
+2. Filter the dataframe to one occupation, then inspect the values in the `hours-per-week` column.
+3. Select two rows and compare their income labels.
+4. Change one value in the data editor and inspect the edited dataframe.
+
+</TryIt>
 
 <MarimoEmbed
   notebook="/notebooks/3_1_inspect_and_edit_data.html?v=20260830-2"
   openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-3/3_1_inspect_and_edit_data.py"
   title="Inspect and edit data"
 />
-
-<Callout title="GIF placeholder">
-A short GIF will show how to sort a dataframe, filter rows, and inspect a column with the Adult Income data.
-</Callout>
-
-<TryIt>
-Recreate the actions shown in the GIF. Sort `age` from highest to lowest. Filter the dataframe to one occupation, then inspect the values in the `hours-per-week` column. Select two rows and compare their income labels. Change one value in the data editor and inspect the edited dataframe.
-
-If you have your own dataframe, display it as the final expression in a cell and try the same search, sort, and filter controls.
-</TryIt>
 
 ## Explore data visually
 
