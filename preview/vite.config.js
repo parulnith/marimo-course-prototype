@@ -17,6 +17,8 @@ const notebookSources = [
   "course/notebooks/module-3/3_1_inspect_and_edit_data.py",
   "course/notebooks/module-3/3_2_explore_data_visually.py",
   "course/notebooks/module-3/3_3_choose_model_inputs.py",
+  "course/notebooks/module-3/3_4_fit_and_compare_models.py",
+  "course/notebooks/module-3/3_5_debug_errors_interactively.py",
 ].map((path) => join(repoRoot, path));
 
 function exportedNotebookPath(source) {

@@ -1,0 +1,100 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.24.0",
+    "script_metadata_hash": "ed082eb73991f39787d64684c51635d8"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "2b6f251c3e9aa2d046dad0395d9a123d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "12e417f229c444e2a375756f096fb613",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"example-1-scikit-learn-18-feature-change\">Example 1: scikit-learn 1.8 feature change</h2></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "1cb55daec54369dc9db16a81e042fb03",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "python version: 3.13.1\nsklearn version: 1.8.0\ntemperature calibration is available in this environment\naccuracy: 0.900\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "20f0b8e10e0b4f143c4a8fc3117e0be1",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"example-2-pandas-api-change\">Example 2: pandas API change</h2></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "d0ecc7af4187f2638636b7e23fa3a6ef",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "pandas version: 2.3.3\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "/var/folders/tl/wv0f4f7x35v2qmpcj9_8nv280000gn/T/marimo_22416/__marimo__cell_lEQa_.py:11: FutureWarning: The 'delim_whitespace' keyword in pd.read_csv is deprecated and will be removed in a future version. Use ``sep='\\s+'`` instead\n  df = pd.read_csv(StringIO(csv_data), delim_whitespace=True)\n",
+          "mimetype": "text/plain"
+        },
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "   feature_a  feature_b  label\n0          1         10      0\n1          2         20      1\n2          3         30      0\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    }
+  ]
+}

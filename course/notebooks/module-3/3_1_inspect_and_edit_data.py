@@ -30,6 +30,21 @@ def _():
     return mo, pd
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Load the dataset
+
+    Let's load the Adult Income data from a CSV file with `pd.read_csv()`.
+
+    - `na_values="?"` treats a question mark as a missing value.
+    - `skipinitialspace=True` removes spaces that appear after commas in the CSV file.
+    - The new `income` column uses `0` for income at or below $50K and `1` for income above $50K.
+    - The final line removes the original text label and rows with missing values.
+    """)
+    return
+
+
 @app.cell
 def _(pd):
     adult_csv_url = "https://www.openml.org/data/get_csv/1595261/phpMawTba"
@@ -44,7 +59,9 @@ def _(mo):
     mo.md(r"""
     ## Raw dataframe
 
-    The dataframe output gives you a first view of the dataset. marimo lets you page through rows, search for values, sort columns, and filter the data.
+    When a dataframe is the final expression in a cell, marimo displays it as an interactive table. You can page through rows, search for values, sort columns, and filter the data.
+
+    `df[:1000]` returns the first 1,000 rows. This keeps the interactive view quick while giving you enough rows to inspect.
     """)
     return
 
@@ -58,7 +75,11 @@ def _(df):
 @app.cell(hide_code=True)
 def _(mo):
     mo.callout(
-        mo.md("To display a dataframe without the interactive viewer, use `mo.plain()`."),
+        mo.md(
+            "`mo.plain()` turns off marimo's interactive dataframe viewer for one output. "
+            "Here, `df.head()` returns the first five rows and `mo.plain()` displays them "
+            "as a simple static preview."
+        ),
         kind="info",
     )
     return
@@ -75,7 +96,9 @@ def _(mo):
     mo.md(r"""
     ## Data editor
 
-    `mo.ui.data_editor()` makes a dataframe editable. Use it for small experiments where you want to change a few values and inspect the result.
+    `mo.ui.data_editor()` creates an editable table. Here, `df.head(20)` gives the editor the first 20 rows. Use the editor for small experiments where you want to change a value and inspect the result.
+
+    The variable `data_editor` refers to the widget. Writing it as the final expression displays the widget in the notebook.
     """)
     return
 
@@ -90,7 +113,7 @@ def _(df, mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    The edited dataframe is available through `.value`.
+    Every marimo UI element has a `.value`. For a data editor, `.value` is the dataframe with the current edits. When you change a value in the editor, marimo updates `edited_df` and reruns cells that use it.
     """)
     return
 
@@ -105,7 +128,7 @@ def _(data_editor):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    Let's restrict editing to the `age` and `education` columns.
+    The `editable_columns` argument controls which columns a learner can change. In this example, `age` and `education` are editable. The other columns remain visible but cannot be changed.
     """)
     return
 
@@ -124,7 +147,7 @@ def _(mo):
     mo.md(r"""
     ## Select rows with a table
 
-    Let's use `mo.ui.table()` to select rows without changing their values. The `selection="multi"` option lets you select more than one row.
+    `mo.ui.table()` creates an interactive table for selecting rows without changing their values. Here, `df.head(100)` supplies the first 100 rows. The `selection="multi"` option lets you select more than one row.
     """)
     return
 
@@ -139,7 +162,7 @@ def _(df, mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    The selected rows are available through `.value`.
+    For a table, `.value` is a dataframe containing the selected rows. When you change the selection, marimo updates `selected_rows` and reruns cells that use it.
     """)
     return
 

@@ -1,0 +1,178 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.16",
+    "script_metadata_hash": "87714704ccd3f2d52ebd02589c53a7af"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "aae9f4d3a326814a925867232e04526e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"debug-errors-interactively\">Debug errors interactively</h1>\n<span class=\"paragraph\">Choose the model and classification threshold. Then inspect the rows that the model classified incorrectly.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "02434266baa20f5825358c4af2bd14d2",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "8bd1185e887730f6c567f3c4b6c0c2b4",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "ce9486f8bed8693519374175e5f6825f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "85b1b43a1c49fca930275374b19cd49f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "d737ec8c7683414070524b49fed4f6cf",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"choose-a-model-and-threshold\">Choose a model and threshold</h2>\n<span class=\"paragraph\">The threshold converts a probability into a class prediction. A row is predicted to have income above $50K when its probability is at or above the threshold. Change the threshold and inspect the updated error counts.</span>\n<span class=\"paragraph\">A false positive is a person predicted to earn above $50K whose true label is at or below $50K. A false negative is a person predicted to earn at or below $50K whose true label is above $50K.</span>\n<span class=\"paragraph\">Raising the threshold usually reduces false positives and increases false negatives. The best threshold depends on which error has a larger cost for the problem you are solving.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "d431a1c28ee8a5770d0496c7092b22f7",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='Xref-0' random-id='a7c8bf16-2362-113f-b5b6-946dbdd85755'><marimo-radio data-initial-value='&quot;Decision Tree&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eModel to inspect&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;Decision Tree&quot;,&quot;Random Forest&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element><marimo-ui-element object-id='Xref-1' random-id='4a4cb3e4-ead9-5fd6-4bd3-359caf8bf6ba'><marimo-slider data-initial-value='0.5' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eClassification threshold&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='0.1' data-stop='0.9' data-step='0.05' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='true' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='Xref-2' random-id='e8e23da9-1d19-f1dd-3837-39881524b784'><marimo-radio data-initial-value='&quot;All errors&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eError type&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;All errors&quot;,&quot;False positives&quot;,&quot;False negatives&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "c87f884733475a93ef2d783ea6c09679",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "189de1f35bc1f8bbee0911758c8f65f4",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Model:</strong> <code>Decision Tree</code></span>\n<span class=\"paragraph\"><strong>Threshold:</strong> <code>0.5</code></span>\n<table>\n<thead>\n<tr>\n<th>Error type</th>\n<th style=\"text-align: right;\">Count</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>All errors</td>\n<td style=\"text-align: right;\"><code>33</code></td>\n</tr>\n<tr>\n<td>False positives</td>\n<td style=\"text-align: right;\"><code>6</code></td>\n</tr>\n<tr>\n<td>False negatives</td>\n<td style=\"text-align: right;\"><code>27</code></td>\n</tr>\n</tbody>\n</table></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "989d99b038288e432fc6dd18f5557cee",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"inspect-the-errors\">Inspect the errors</h2>\n<span class=\"paragraph\">Select a few rows and compare their features. This takes you from an overall score back to the data behind the score.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "23a690ccb18cf13a981d4a3a486c9fe5",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='Kclp-0' random-id='a9b7246b-85a4-f8f5-a3a4-55a1254bd0ed'><marimo-table data-initial-value='[]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eSelect errors to inspect&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-data='&quot;[{&#92;&quot;Index0&#92;&quot;:14543,&#92;&quot;_marimo_row_id&#92;&quot;:0,&#92;&quot;age&#92;&quot;:43,&#92;&quot;education&#92;&quot;:&#92;&quot;HS-grad&#92;&quot;,&#92;&quot;occupation&#92;&quot;:&#92;&quot;Tech-support&#92;&quot;,&#92;&quot;hours-per-week&#92;&quot;:40,&#92;&quot;capital-gain&#92;&quot;:0,&#92;&quot;probability_above_50k&#92;&quot;:0.202,&#92;&quot;true_label&#92;&quot;:1,&#92;&quot;predicted&#92;&quot;:0},{&#92;&quot;Index0&#92;&quot;:35668,&#92;&quot;_marimo_row_id&#92;&quot;:1,&#92;&quot;age&#92;&quot;:38,&#92;&quot;education&#92;&quot;:&#92;&quot;HS-grad&#92;&quot;,&#92;&quot;occupation&#92;&quot;:&#92;&quot;Craft-repair&#92;&quot;,&#92;&quot;hours-per-week&#92;&quot;:40,&#92;&quot;capital-gain&#92;&quot;:0,&#92;&quot;probability_above_50k&#92;&quot;:0.202,&#92;&quot;true_label&#92;&quot;:1,&#92;&quot;predicted&#92;&quot;:0},{&#92;&quot;Index0&#92;&quot;:35058,&#92;&quot;_marimo_row_id&#92;&quot;:2,&#92;&quot;age&#92;&quot;:54,&#92;&quot;education&#92;&quot;:&#92;&quot;11th&#92;&quot;,&#92;&quot;occupation&#92;&quot;:&#92;&quot;Craft-repair&#92;&quot;,&#92;&quot;hours-per-week&#92;&quot;:50,&#92;&quot;capital-gain&#92;&quot;:0,&#92;&quot;probability_above_50k&#92;&quot;:0.034,&#92;&quot;true_label&#92;&quot;:1,&#92;&quot;predicted&#92;&quot;:0},{&#92;&quot;Index0&#92;&quot;:5215,&#92;&quot;_marimo_row_id&#92;&quot;:3,&#92;&quot;age&#92;&quot;:36,&#92;&quot;education&#92;&quot;:&#92;&quot;Assoc-voc&#92;&quot;,&#92;&quot;occupation&#92;&quot;:&#92;&quot;Adm-clerical&#92;&quot;,&#92;&quot;hours-per-week&#92;&quot;:40,&#92;&quot;capital-gain&#92;&quot;:0,&#92;&quot;probability_above_50k&#92;&quot;:0.75,&#92;&quot;true_label&#92;&quot;:0,&#92;&quot;predicted&#92;&quot;:1},{&#92;&quot;Index0&#92;&quot;:9341,&#92;&quot;_marimo_row_id&#92;&quot;:4,&#92;&quot;age&#92;&quot;:33,&#92;&quot;education&#92;&quot;:&#92;&quot;Some-college&#92;&quot;,&#92;&quot;occupation&#92;&quot;:&#92;&quot;Craft-repair&#92;&quot;,&#92;&quot;hours-per-week&#92;&quot;:40,&#92;&quot;capital-gain&#92;&quot;:0,&#92;&quot;probability_above_50k&#92;&quot;:0.202,&#92;&quot;true_label&#92;&quot;:1,&#92;&quot;predicted&#92;&quot;:0},{&#92;&quot;Index0&#92;&quot;:12331,&#92;&quot;_marimo_row_id&#92;&quot;:5,&#92;&quot;age&#92;&quot;:42,&#92;&quot;education&#92;&quot;:&#92;&quot;Some-college&#92;&quot;,&#92;&quot;occupation&#92;&quot;:&#92;&quot;Machine-op-inspct&#92;&quot;,&#92;&quot;hours-per-week&#92;&quot;:48,&#92;&quot;capital-gain&#92;&quot;:0,&#92;&quot;probability_above_50k&#92;&quot;:0.25,&#92;&quot;true_label&#92;&quot;:1,&#92;&quot;predicted&#92;&quot;:0},{&#92;&quot;Index0&#92;&quot;:15268,&#92;&quot;_marimo_row_id&#92;&quot;:6,&#92;&quot;age&#92;&quot;:37,&#92;&quot;education&#92;&quot;:&#92;&quot;Prof-school&#92;&quot;,&#92;&quot;occupation&#92;&quot;:&#92;&quot;Prof-specialty&#92;&quot;,&#92;&quot;hours-per-week&#92;&quot;:55,&#92;&quot;capital-gain&#92;&quot;:0,&#92;&quot;probability_above_50k&#92;&quot;:0.264,&#92;&quot;true_label&#92;&quot;:1,&#92;&quot;predicted&#92;&quot;:0},{&#92;&quot;Index0&#92;&quot;:18789,&#92;&quot;_marimo_row_id&#92;&quot;:7,&#92;&quot;age&#92;&quot;:34,&#92;&quot;education&#92;&quot;:&#92;&quot;HS-grad&#92;&quot;,&#92;&quot;occupation&#92;&quot;:&#92;&quot;Craft-repair&#92;&quot;,&#92;&quot;hours-per-week&#92;&quot;:45,&#92;&quot;capital-gain&#92;&quot;:0,&#92;&quot;probability_above_50k&#92;&quot;:0.034,&#92;&quot;true_label&#92;&quot;:1,&#92;&quot;predicted&#92;&quot;:0},{&#92;&quot;Index0&#92;&quot;:13204,&#92;&quot;_marimo_row_id&#92;&quot;:8,&#92;&quot;age&#92;&quot;:40,&#92;&quot;education&#92;&quot;:&#92;&quot;HS-grad&#92;&quot;,&#92;&quot;occupation&#92;&quot;:&#92;&quot;Adm-clerical&#92;&quot;,&#92;&quot;hours-per-week&#92;&quot;:55,&#92;&quot;capital-gain&#92;&quot;:0,&#92;&quot;probability_above_50k&#92;&quot;:0.468,&#92;&quot;true_label&#92;&quot;:1,&#92;&quot;predicted&#92;&quot;:0},{&#92;&quot;Index0&#92;&quot;:3774,&#92;&quot;_marimo_row_id&#92;&quot;:9,&#92;&quot;age&#92;&quot;:33,&#92;&quot;education&#92;&quot;:&#92;&quot;HS-grad&#92;&quot;,&#92;&quot;occupation&#92;&quot;:&#92;&quot;Adm-clerical&#92;&quot;,&#92;&quot;hours-per-week&#92;&quot;:40,&#92;&quot;capital-gain&#92;&quot;:0,&#92;&quot;probability_above_50k&#92;&quot;:0.75,&#92;&quot;true_label&#92;&quot;:0,&#92;&quot;predicted&#92;&quot;:1}]&quot;' data-total-rows='20' data-total-columns='8' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;age&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;education&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;occupation&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;hours-per-week&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;capital-gain&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;probability_above_50k&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;true_label&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;predicted&quot;,[&quot;integer&quot;,&quot;int64&quot;]]]' data-selection='&quot;multi&quot;' data-show-filters='true' data-show-download='true' data-show-search='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[[&quot;Index0&quot;,[&quot;integer&quot;,&quot;int64&quot;]]]' data-hidden-columns='[]' data-has-stable-row-id='true' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "emfo",
+      "code_hash": "05137291cc54c70478249e73ab33e9d6",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='emfo-0' random-id='c5a3ea3f-796b-ef68-9529-f3b1c6d35d9b'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[]&quot;' data-total-rows='0' data-total-columns='8' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='false' data-page-size='10' data-field-types='[[&quot;age&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;education&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;occupation&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;hours-per-week&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;capital-gain&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;probability_above_50k&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;true_label&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;predicted&quot;,[&quot;integer&quot;,&quot;int64&quot;]]]' data-show-filters='true' data-show-download='true' data-show-search='true' data-show-column-summaries='false' data-show-data-types='true' data-show-page-size-selector='false' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[[&quot;Index0&quot;,[&quot;integer&quot;,&quot;int64&quot;]]]' data-hidden-columns='[]' data-has-stable-row-id='false' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Hstk",
+      "code_hash": "1118ed3baa330facd118164822c94576",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Use the selected errors to choose the next experiment. You can adjust the threshold here or return to the model comparison and change the features.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.24.0",
+    "script_metadata_hash": "4e276d673aef366bc932e9e929e886de"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "7f069288614a8b3ab9ef9ac2ecd3de3d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"module-3-starter-connect-data-controls-and-a-model\">Module 3 starter: connect data, controls, and a model</h1>\n<span class=\"paragraph\">This notebook uses a small classification dataset included with\nscikit-learn. Change the controls and watch the model summary and error\ntable update.</span>\n<span class=\"paragraph\">You can also add cells while you work through the lesson. Try the\ndataframe editor and data explorer when the lesson introduces them.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "682e08d66b482c05eca06c1846f804f0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "148d426b3099937732d9c63dea57f530",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "a27a074e5433bbed34e1c49f824c4ea3",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"1-inspect-the-data\">1. Inspect the data</h2>\n<span class=\"paragraph\">Use the table below to sort and filter the rows. Add a new cell and enter\n<code>mo.ui.data_editor(df.head(20))</code> when you reach the data editor activity.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "876b1fb85b12607b75d52a7dd0e75bb8",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='lEQa-0' random-id='404d1145-4641-2710-53c3-9440999e4066'><marimo-dataframe data-initial-value='{&quot;transforms&quot;:[]}' data-label='null' data-columns='[[&quot;mean radius&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;mean texture&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;mean perimeter&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;mean area&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;mean smoothness&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;mean compactness&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;mean concavity&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;mean concave points&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;mean symmetry&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;mean fractal dimension&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;radius error&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;texture error&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;perimeter error&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;area error&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;smoothness error&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;compactness error&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;concavity error&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;concave points error&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;symmetry error&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;fractal dimension error&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;worst radius&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;worst texture&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;worst perimeter&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;worst area&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;worst smoothness&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;worst compactness&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;worst concavity&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;worst concave points&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;worst symmetry&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;worst fractal dimension&quot;,&quot;number&quot;,&quot;float64&quot;],[&quot;target&quot;,&quot;integer&quot;,&quot;int64&quot;],[&quot;diagnosis&quot;,&quot;string&quot;,&quot;str&quot;]]' data-dataframe-name='&quot;df&quot;' data-total='569' data-page-size='5' data-show-download='true' data-download-json-ensure-ascii='true' data-lazy='false'></marimo-dataframe></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "691a5ee82ff7bf799c079d5a27efea3f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Add another cell containing <code>mo.ui.data_explorer(df)</code> during the visual\nexploration activity. Use <code>diagnosis</code> to compare the two classes.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "471723f86da2baacacad4ded9daf8505",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"2-control-the-model\">2. Control the model</h2>\n<span class=\"paragraph\">The feature selector and sample size are inputs to the model cell. The\nthreshold becomes an input to the error analysis.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "e89cf6519405ccb9b4bc43101ebd6dbf",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='SFPL-0' random-id='f234d24e-b810-5810-9ee8-490c546400e3'><marimo-multiselect data-initial-value='[&quot;mean radius&quot;,&quot;mean texture&quot;,&quot;mean perimeter&quot;,&quot;mean area&quot;,&quot;mean smoothness&quot;,&quot;mean compactness&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eFeatures to include&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;mean radius&quot;,&quot;mean texture&quot;,&quot;mean perimeter&quot;,&quot;mean area&quot;,&quot;mean smoothness&quot;,&quot;mean compactness&quot;,&quot;mean concavity&quot;,&quot;mean concave points&quot;,&quot;mean symmetry&quot;,&quot;mean fractal dimension&quot;,&quot;radius error&quot;,&quot;texture error&quot;,&quot;perimeter error&quot;,&quot;area error&quot;,&quot;smoothness error&quot;,&quot;compactness error&quot;,&quot;concavity error&quot;,&quot;concave points error&quot;,&quot;symmetry error&quot;,&quot;fractal dimension error&quot;,&quot;worst radius&quot;,&quot;worst texture&quot;,&quot;worst perimeter&quot;,&quot;worst area&quot;,&quot;worst smoothness&quot;,&quot;worst compactness&quot;,&quot;worst concavity&quot;,&quot;worst concave points&quot;,&quot;worst symmetry&quot;,&quot;worst fractal dimension&quot;]' data-full-width='false' data-disabled='false'></marimo-multiselect></marimo-ui-element><marimo-ui-element object-id='SFPL-1' random-id='663f75cd-f5d7-a22a-9b6d-d979d4f14839'><marimo-slider data-initial-value='300' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eRows to use&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='200' data-stop='500' data-step='100' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='true' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='SFPL-2' random-id='5cdb94c2-6829-ce02-dfb5-053b7755c284'><marimo-slider data-initial-value='0.5' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eClassification threshold&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='0.1' data-stop='0.9' data-step='0.05' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='true' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "5a825f2d5a7536409802e013bf76efac",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "266b05b8446b1dadd9b8df2f18e8919a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Model summary</strong></span>\n<table>\n<thead>\n<tr>\n<th></th>\n<th></th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Rows sampled</td>\n<td><code>300</code></td>\n</tr>\n<tr>\n<td>Features selected</td>\n<td><code>6</code></td>\n</tr>\n<tr>\n<td>Test rows</td>\n<td><code>75</code></td>\n</tr>\n<tr>\n<td>ROC AUC</td>\n<td><code>0.970</code></td>\n</tr>\n</tbody>\n</table></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "7018d14ab662031b23c445ca2591950b",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"3-inspect-errors\">3. Inspect errors</h2>\n<span class=\"paragraph\">Move the threshold and compare the error counts. The model probabilities\nstay the same, while the predicted classes and error table update.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "emfo",
+      "code_hash": "345b30abaa4be373a89219340bd18e8f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Threshold:</strong> <code>0.5</code></span>\n<table>\n<thead>\n<tr>\n<th>Error type</th>\n<th style=\"text-align: right;\">Count</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>False positives</td>\n<td style=\"text-align: right;\"><code>5</code></td>\n</tr>\n<tr>\n<td>False negatives</td>\n<td style=\"text-align: right;\"><code>3</code></td>\n</tr>\n</tbody>\n</table></span><marimo-ui-element object-id='emfo-0' random-id='a61b6b09-1d09-9e7a-134f-d0ebd65c9987'><marimo-table data-initial-value='[]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eMisclassified rows&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-data='&quot;[{&#92;&quot;Index0&#92;&quot;:255,&#92;&quot;_marimo_row_id&#92;&quot;:0,&#92;&quot;mean radius&#92;&quot;:13.96,&#92;&quot;mean texture&#92;&quot;:17.05,&#92;&quot;mean perimeter&#92;&quot;:91.43,&#92;&quot;mean area&#92;&quot;:602.4,&#92;&quot;mean smoothness&#92;&quot;:0.1096,&#92;&quot;mean compactness&#92;&quot;:0.1279,&#92;&quot;true_label&#92;&quot;:&#92;&quot;malignant&#92;&quot;,&#92;&quot;predicted_label&#92;&quot;:&#92;&quot;benign&#92;&quot;,&#92;&quot;probability_benign&#92;&quot;:0.63,&#92;&quot;error_type&#92;&quot;:&#92;&quot;false positive&#92;&quot;},{&#92;&quot;Index0&#92;&quot;:215,&#92;&quot;_marimo_row_id&#92;&quot;:1,&#92;&quot;mean radius&#92;&quot;:13.86,&#92;&quot;mean texture&#92;&quot;:16.93,&#92;&quot;mean perimeter&#92;&quot;:90.96,&#92;&quot;mean area&#92;&quot;:578.9,&#92;&quot;mean smoothness&#92;&quot;:0.1026,&#92;&quot;mean compactness&#92;&quot;:0.1517,&#92;&quot;true_label&#92;&quot;:&#92;&quot;malignant&#92;&quot;,&#92;&quot;predicted_label&#92;&quot;:&#92;&quot;benign&#92;&quot;,&#92;&quot;probability_benign&#92;&quot;:0.57,&#92;&quot;error_type&#92;&quot;:&#92;&quot;false positive&#92;&quot;},{&#92;&quot;Index0&#92;&quot;:169,&#92;&quot;_marimo_row_id&#92;&quot;:2,&#92;&quot;mean radius&#92;&quot;:14.97,&#92;&quot;mean texture&#92;&quot;:16.95,&#92;&quot;mean perimeter&#92;&quot;:96.22,&#92;&quot;mean area&#92;&quot;:685.9,&#92;&quot;mean smoothness&#92;&quot;:0.09855,&#92;&quot;mean compactness&#92;&quot;:0.07885,&#92;&quot;true_label&#92;&quot;:&#92;&quot;benign&#92;&quot;,&#92;&quot;predicted_label&#92;&quot;:&#92;&quot;malignant&#92;&quot;,&#92;&quot;probability_benign&#92;&quot;:0.43,&#92;&quot;error_type&#92;&quot;:&#92;&quot;false negative&#92;&quot;},{&#92;&quot;Index0&#92;&quot;:263,&#92;&quot;_marimo_row_id&#92;&quot;:3,&#92;&quot;mean radius&#92;&quot;:15.61,&#92;&quot;mean texture&#92;&quot;:19.38,&#92;&quot;mean perimeter&#92;&quot;:100.0,&#92;&quot;mean area&#92;&quot;:758.6,&#92;&quot;mean smoothness&#92;&quot;:0.0784,&#92;&quot;mean compactness&#92;&quot;:0.05616,&#92;&quot;true_label&#92;&quot;:&#92;&quot;malignant&#92;&quot;,&#92;&quot;predicted_label&#92;&quot;:&#92;&quot;benign&#92;&quot;,&#92;&quot;probability_benign&#92;&quot;:0.62,&#92;&quot;error_type&#92;&quot;:&#92;&quot;false positive&#92;&quot;},{&#92;&quot;Index0&#92;&quot;:133,&#92;&quot;_marimo_row_id&#92;&quot;:4,&#92;&quot;mean radius&#92;&quot;:15.71,&#92;&quot;mean texture&#92;&quot;:13.93,&#92;&quot;mean perimeter&#92;&quot;:102.0,&#92;&quot;mean area&#92;&quot;:761.7,&#92;&quot;mean smoothness&#92;&quot;:0.09462,&#92;&quot;mean compactness&#92;&quot;:0.09462,&#92;&quot;true_label&#92;&quot;:&#92;&quot;benign&#92;&quot;,&#92;&quot;predicted_label&#92;&quot;:&#92;&quot;malignant&#92;&quot;,&#92;&quot;probability_benign&#92;&quot;:0.13,&#92;&quot;error_type&#92;&quot;:&#92;&quot;false negative&#92;&quot;},{&#92;&quot;Index0&#92;&quot;:491,&#92;&quot;_marimo_row_id&#92;&quot;:5,&#92;&quot;mean radius&#92;&quot;:17.85,&#92;&quot;mean texture&#92;&quot;:13.23,&#92;&quot;mean perimeter&#92;&quot;:114.6,&#92;&quot;mean area&#92;&quot;:992.1,&#92;&quot;mean smoothness&#92;&quot;:0.07838,&#92;&quot;mean compactness&#92;&quot;:0.06217,&#92;&quot;true_label&#92;&quot;:&#92;&quot;benign&#92;&quot;,&#92;&quot;predicted_label&#92;&quot;:&#92;&quot;malignant&#92;&quot;,&#92;&quot;probability_benign&#92;&quot;:0.41,&#92;&quot;error_type&#92;&quot;:&#92;&quot;false negative&#92;&quot;},{&#92;&quot;Index0&#92;&quot;:135,&#92;&quot;_marimo_row_id&#92;&quot;:6,&#92;&quot;mean radius&#92;&quot;:12.77,&#92;&quot;mean texture&#92;&quot;:22.47,&#92;&quot;mean perimeter&#92;&quot;:81.72,&#92;&quot;mean area&#92;&quot;:506.3,&#92;&quot;mean smoothness&#92;&quot;:0.09055,&#92;&quot;mean compactness&#92;&quot;:0.05761,&#92;&quot;true_label&#92;&quot;:&#92;&quot;malignant&#92;&quot;,&#92;&quot;predicted_label&#92;&quot;:&#92;&quot;benign&#92;&quot;,&#92;&quot;probability_benign&#92;&quot;:0.99,&#92;&quot;error_type&#92;&quot;:&#92;&quot;false positive&#92;&quot;},{&#92;&quot;Index0&#92;&quot;:146,&#92;&quot;_marimo_row_id&#92;&quot;:7,&#92;&quot;mean radius&#92;&quot;:11.8,&#92;&quot;mean texture&#92;&quot;:16.58,&#92;&quot;mean perimeter&#92;&quot;:78.99,&#92;&quot;mean area&#92;&quot;:432.0,&#92;&quot;mean smoothness&#92;&quot;:0.1091,&#92;&quot;mean compactness&#92;&quot;:0.17,&#92;&quot;true_label&#92;&quot;:&#92;&quot;malignant&#92;&quot;,&#92;&quot;predicted_label&#92;&quot;:&#92;&quot;benign&#92;&quot;,&#92;&quot;probability_benign&#92;&quot;:0.54,&#92;&quot;error_type&#92;&quot;:&#92;&quot;false positive&#92;&quot;}]&quot;' data-total-rows='8' data-total-columns='10' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='false' data-page-size='10' data-field-types='[[&quot;mean radius&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;mean texture&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;mean perimeter&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;mean area&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;mean smoothness&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;mean compactness&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;true_label&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;predicted_label&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;probability_benign&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;error_type&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-selection='&quot;multi&quot;' data-show-filters='true' data-show-download='true' data-show-search='true' data-show-column-summaries='false' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[[&quot;Index0&quot;,[&quot;integer&quot;,&quot;int64&quot;]]]' data-hidden-columns='[]' data-has-stable-row-id='true' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Hstk",
+      "code_hash": "5209f889dd3669d937cb05bcc8fd46eb",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"continue-the-exercise\">Continue the exercise</h2>\n<span class=\"paragraph\">Add a cell below and try one of these changes:</span>\n<ul>\n<li>Display <code>feature_selector.value</code>.</li>\n<li>Replace Random Forest with another scikit-learn classifier.</li>\n<li>Create a chart from the error table.</li>\n</ul></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}

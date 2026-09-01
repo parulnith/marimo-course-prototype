@@ -53,11 +53,11 @@ const modules = {
     duration: "30 min",
     Content: ModuleThree,
     lessons: [
-      ["inspect-and-edit-data", "Inspect and edit data", null, 1],
-      ["explore-data-visually", "Explore data visually", null, 2],
-      ["choose-model-inputs", "Choose model inputs", null, 3],
-      ["fit-and-compare-models", "Fit and compare models", null, 4],
-      ["debug-errors-interactively", "Debug errors interactively", null, 5],
+      ["1-inspect-and-edit-data", "Inspect and edit data", null, 1],
+      ["2-explore-data-visually", "Explore data visually", null, 2],
+      ["3-train-and-evaluate-models", "Train and evaluate models", null, 3],
+      ["4-debug-errors-interactively", "Debug errors interactively", null, 4],
+      ["check-your-understanding", "Quiz", null, 5],
     ],
   },
 };
@@ -104,7 +104,7 @@ function Callout({ title, children }) {
 }
 
 function TryIt({ children }) {
-  return <aside className="try-it"><div className="try-label"><span>✦</span> Try it</div><div>{children}</div></aside>;
+  return <aside className="try-it"><div className="try-label"><span>✦</span> Try it</div><div className="try-content">{children}</div></aside>;
 }
 
 function SetupTab({ children }) {

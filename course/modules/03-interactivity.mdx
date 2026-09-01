@@ -9,6 +9,7 @@ duration: 30 min
 import inspectDataVideo from "../images/module-3/3.inspect_data.mp4";
 import dataEditorVideo from "../images/module-3/data_editor.mp4";
 import tableVideo from "../images/module-3/table.mp4";
+import reactiveModelFlow from "../images/module-3/reactive-model-experiment-flow.png";
 
 # Why Interactivity Accelerates AI Discovery
 
@@ -26,47 +27,36 @@ You will work through one complete AI workflow using the [Adult Income dataset](
 
 Here is the path you will take:
 
-1. Look at the raw data and edit a small sample.
-2. Explore the data with charts and table transformations.
-3. Choose the features and sample size used for modeling.
-4. Fit TabICL and Random Forest models, then compare their results.
-5. Change the classification threshold and inspect model errors.
+1. Inspect and edit the data.
+2. Explore the data visually.
+3. Fit and compare two models.
+4. Debug model errors interactively.
 
-## Inspect and edit data
+Each section includes an embedded marimo notebook. First, explore the notebook and try its controls for yourself. Then complete the questions in the "Try it" block. You can open any notebook in a new tab by clicking the link in its top right corner.
 
-marimo can display a dataframe as an interactive table so you can sort, filter, and inspect the data. You can also edit values in a small sample of the dataframe.
+## 1. Inspect and edit data
 
-```python
-df
-```
+<div className="widget-label">Raw dataframe</div>
+
+It is always helpful to start with an overview of the data to understand its structure and content. marimo displays a raw dataframe as an interactive table, so you can search, sort, and filter the rows without adding more code.
 
 <video className="lesson-video" autoPlay muted loop playsInline preload="metadata">
   <source src={inspectDataVideo} type="video/mp4" />
   Your browser does not support this video.
 </video>
 
-To change values, create a data editor. The data editor shows a small sample of the dataframe and lets you edit values in place. The edited values are then available in the notebook via `.value`.
+<div className="widget-label">Data editor</div>
 
-```python
-data_editor = mo.ui.data_editor(df.head(20))
-data_editor
-```
-
+marimo also provides a data editor for small experiments. You can change a value and inspect the edited dataframe in another cell.
 
 <video className="lesson-video" autoPlay muted loop playsInline preload="metadata">
   <source src={dataEditorVideo} type="video/mp4" />
   Your browser does not support this video.
 </video>
 
-To select rows without changing them, create a selectable table and then read the selected rows via `.value`. The table shows a larger sample of the dataframe than the data editor.
+<div className="widget-label">Selectable table</div>
 
-```python
-table = mo.ui.table(
-    df.head(100),
-    selection="multi",
-)
-table
-```
+There is also a table option when you want to select a subset of rows to be made available to other cells in the notebook or by simply selecting them. The selected rows are available to other cells in the notebook.
 
 <video className="lesson-video" autoPlay muted loop playsInline preload="metadata">
   <source src={tableVideo} type="video/mp4" />
@@ -74,111 +64,159 @@ table
 </video>
 
 <TryIt>
-Now use the notebook below to explore the data with the tools from this section. Try the following:
-
-1. Sort `age` from highest to lowest.
-2. Filter the dataframe to one occupation, then inspect the values in the `hours-per-week` column.
-3. Select two rows and compare their income labels.
-4. Change one value in the data editor and inspect the edited dataframe.
+1. Filter `occupation` to `Sales`. First, keep rows where `hours-per-week` is 20 or less and note the income labels. Then change the filter to 50 or more hours. Which group contains the income label `1` more often?
+2. Select one row with an income label of `0`, which means at or below $50K. Select another row with a label of `1`, which means above $50K. Compare their `age`, `education`, `occupation`, and `hours-per-week` values. Note which differences stand out.
+3. In the data editor, change one person's `age` to `60`. Check that the new value appears in the edited dataframe and that the original dataframe remains unchanged.
 
 </TryIt>
 
 <MarimoEmbed
-  notebook="/notebooks/3_1_inspect_and_edit_data.html?v=20260830-2"
+  notebook="/notebooks/3_1_inspect_and_edit_data.html?v=20260831-1"
   openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-3/3_1_inspect_and_edit_data.py"
   title="Inspect and edit data"
 />
 
-## Explore data visually
+## 2. Explore data visually
 
-Individual rows can help you form a question. Charts and dataframe transformations help you check whether the same pattern appears across more people.
+After looking at the raw dataframe, it's time to move into marimo's built-in visual exploration tools. Data visualisation can help you find patterns that are difficult to see by reading rows one at a time.
 
-The next notebook includes the work from section 3.1. Use the data explorer to build a chart. Then use the dataframe transformer to filter or group the data.
+<div className="widget-label">Data explorer</div>
+
+marimo's data explorer offers a chart-first approach.You can use it to explore distributions and relationships visually before deciding which features are worth selecting. The chart updates when you change the selected columns or filter the data.
+
+<Callout title="Video placeholder">
+A short video will show how to choose fields and update a chart in the data explorer.
+</Callout>
+
+<div className="widget-label">Transform a dataframe</div>
+
+In the previous section, you displayed `df` directly to inspect the data. Here, `mo.ui.dataframe(df)` serves a different purpose. It lets you build a set of transformations, such as sorting or filtering the rows. You can then use the transformed dataframe in later cells.
+
+<Callout title="Video placeholder">
+A short video will show how to transform the dataframe and use the result in another cell.
+</Callout>
+
+<TryIt>
+1. Use the data explorer to create a chart that compares `age` with `income`.
+2. Use the dataframe view to keep people who work more than 40 hours per week.
+3. Inspect the filtered rows. Write down one pattern that you would like to test with a model.
+</TryIt>
 
 <MarimoEmbed
-  notebook="/notebooks/3_2_explore_data_visually.html?v=20260830-2"
+  notebook="/notebooks/3_2_explore_data_visually.html?v=20260831-1"
   openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-3/3_2_explore_data_visually.py"
   title="Explore data visually"
 />
 
-`mo.ui.data_explorer()` lets you choose fields and build a chart without writing plotting code first. Use it while deciding which relationship you want to study.
+## 3. Train and evaluate models
 
-`mo.ui.dataframe()` lets you build a sequence of table transformations. You can filter, sort, group, and select columns while keeping the result available in the notebook.
+Once you have explored the data, the next step is to train models. You will train a [Decision Tree](https://scikit-learn.org/1.8/modules/generated/sklearn.tree.DecisionTreeClassifier.html) and a [Random Forest](https://scikit-learn.org/1.8/modules/generated/sklearn.ensemble.RandomForestClassifier.html) on the Adult Income data. Both models use the same selected rows, features, and train and test split.
 
-<TryIt>
-Use the data explorer to compare age with income. Then use the dataframe transformer to keep people who work more than 40 hours per week. Check how the income values are distributed in that result.
-</TryIt>
+You will evaluate their scores and predicted probabilities to understand how they behave. This comparison will help you decide which model to investigate further.
 
-## Choose model inputs
+<div className="widget-label">Choose the features</div>
 
-The questions you form during exploration affect what you send to a model. In this section, you will choose the features and the number of rows used for training.
+Different features provide different information to a model. Testing several feature combinations helps you see which columns affect the results. It can also reveal features that add little useful information. marimo provides a [multiselect control](https://docs.marimo.io/api/inputs/multiselect/) for this choice. You can add or remove features without editing the model code. The selected columns are used to prepare one feature table for both models.
 
-The next notebook includes the data tools from the previous sections. Change either control and inspect the updated dataset summary.
+When the selection changes, marimo prepares the feature table again, retrains both models, and updates their scores and probability plots.
 
-<MarimoEmbed
-  notebook="/notebooks/3_3_choose_model_inputs.html?v=20260830-2"
-  openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-3/3_3_choose_model_inputs.py"
-  title="Choose model inputs"
-/>
-
-The feature selector controls the columns used for modeling. The sample size slider controls how many rows are sampled. The next cell reads both `.value` properties and prepares the training and test data.
-
-Text categories must be converted into numbers before these models can use them. The notebook lists the encoded columns in the dataset summary.
-
-<TryIt>
-Remove `occupation` from the selected features. Then change the sample size from 1,000 rows to 2,000 rows. Check which parts of the dataset summary change after each action.
-</TryIt>
-
-## Fit and compare models
-
-Now use the selected data to train TabICL and Random Forest. Both models receive the same training and test rows, so their results can be compared directly.
-
-TabICL is a pretrained model for tabular classification. Random Forest learns a collection of decision trees from the training data. Both models return a probability that a person's income is above $50K.
-
-<Callout title="Run this notebook in Molab">
-TabICL cannot run in the browser runtime used by the first three notebooks. The notebook below runs in Molab, which provides a full Python environment. It may take longer to start and train the models.
+<Callout title="Video placeholder">
+A short video will show one feature being removed and both model scores updating.
 </Callout>
 
+<div className="widget-label">Change the sample size</div>
+
+The amount of training data can affect model performance and training time. Testing several sample sizes helps you see whether the results remain similar as more data is added.
+
+marimo provides a slider for changing the sample size. Both models receive the same selected rows, so the comparison remains fair. When the slider changes, marimo creates a new training sample, retrains both models, and updates the evaluation results.
+
+The slider is included to help you study the effect of training data size. In a real project, you would usually use all available training data unless there is a reason not to.
+
+<Callout title="Video placeholder">
+A short video will show the sample size changing and the model results updating.
+</Callout>
+
+<div className="widget-label">One connected experiment</div>
+
+The feature selection and sample size controls both affect the same prepared dataset which is then passed to the Decision Tree and Random Forest. marimo tracks these dependencies, so changing either control reruns the data preparation and model cells while leaving unrelated cells unchanged.
+
+<img
+  src={reactiveModelFlow}
+  alt="A feature selection control leads to data preparation, model training, and updated scores. A return arrow shows that another selection starts the update again."
+/>
+
+Let's now see this in action in the notebook below.
+
 <MarimoEmbed
-  notebook="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-3/3_4_fit_and_compare_models.py"
+  notebook="/notebooks/3_4_fit_and_compare_models.html?v=20260831-1"
   openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-3/3_4_fit_and_compare_models.py"
-  title="Fit and compare models"
+  title="Train and evaluate models"
 />
 
-The notebook uses ROC AUC to compare how well the models rank the two income groups. A score of `1.0` is perfect. A score of `0.5` is no better than random ranking.
-
-The probability plots show how each model distributes its predictions. Two models can have similar ROC AUC scores and still assign different probabilities to the same test rows.
-
 <TryIt>
-Start with 1,000 rows and all features. Record both ROC AUC scores. Remove one feature and compare the scores again. Then inspect how the probability plots change.
+1. Start with 1,000 rows. Select `age`, `education-num`, `capital-gain`, `capital-loss`, and `hours-per-week`. Record both ROC AUC scores.
+2. Add `occupation` while keeping the sample size unchanged. Which model's score changes more?
+3. Increase the sample size to 2,500 rows while keeping the same features. Compare the scores and probability plots with your earlier results.
+4. Choose which model you would investigate further. Write down the result that supports your choice.
 </TryIt>
 
-## Debug errors interactively
 
-A model score does not show which examples the model got wrong. The next notebook focuses on the rows that TabICL and Random Forest classify incorrectly.
+## 4. Debug errors interactively
 
-Choose TabICL or Random Forest. Then change the probability threshold used to convert probabilities into class predictions. The error counts and table will update.
+A model score gives you an overall measure of performance, but it does not show which rows the model misclassified. In the final notebook, you will choose one of the two models and explore its errors interactively.
+You will change the classification threshold and see how the false positive and false negative counts change. You will also select individual misclassified rows and inspect their features. marimo keeps the threshold control, error counts, and selected rows connected.
+This helps you understand how the model behaves and decide what to change in the next experiment.
 
-<Callout title="Run this notebook in Molab">
-This notebook also uses TabICL, so it runs in Molab. It may take longer to start and train the models.
-</Callout>
+
+<TryIt>
+Compare both models at a threshold of `0.5`. Raise the threshold to `0.7` and compare the false positive and false negative counts. Select two errors. What would you change in the next experiment?
+</TryIt>
 
 <MarimoEmbed
-  notebook="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-3/3_5_debug_errors_interactively.py"
+  notebook="/notebooks/3_5_debug_errors_interactively.html?v=20260831-1"
   openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-3/3_5_debug_errors_interactively.py"
   title="Debug errors interactively"
 />
 
-<Callout title="Error types">
-A false positive is a person predicted to earn above $50K whose true label is at or below $50K.
+You began with individual rows and ended with individual errors. Throughout the experiment, marimo kept each stage connected to the next. You can move from one question to the next without rebuilding the workflow each time.
 
-A false negative is a person predicted to earn at or below $50K whose true label is above $50K.
-</Callout>
+## Check your understanding
 
-The threshold controls the balance between these errors. Raising the threshold usually reduces false positives and increases false negatives. The best threshold depends on which error has a larger cost for the problem you are solving.
+<Quiz
+  question="In a marimo notebook, what causes downstream cells to update when a user changes the multiselect control?"
+  options={[
+    "marimo reruns the entire notebook from top to bottom.",
+    "Only the cell containing the control runs again.",
+    "marimo tracks dependencies and reruns only the affected downstream cells.",
+    "The browser handles every update without running Python."
+  ]}
+  answer={2}
+  correctFeedback="Correct. marimo tracks which cells depend on the control and reruns only the affected downstream cells."
+  incorrectFeedback="Not quite. Think about how marimo uses the relationships between cells."
+/>
 
-Select a few errors in the table and compare their features. This takes you from an overall score back to the data behind the score. You can use what you find to choose the next feature, sample, or threshold to test.
+<Quiz
+  question="What makes the debugging workflow in a marimo notebook different from a traditional notebook workflow?"
+  options={[
+    "Errors are shown as charts instead of text.",
+    "You can select misclassified rows and analyse them immediately in the same workflow.",
+    "marimo finds and fixes every model error automatically.",
+    "The model retrains itself whenever an error is detected."
+  ]}
+  answer={1}
+  correctFeedback="Correct. You can move from an error summary to the underlying rows and analyse them without leaving the notebook workflow."
+  incorrectFeedback="Not quite. marimo keeps the controls, results, and selected rows connected, but it does not debug the model automatically."
+/>
 
-<TryIt>
-Compare both models at a threshold of `0.5`. Then raise the threshold to `0.7`. Record how the false positive and false negative counts change. Select two errors and decide what you would try next.
-</TryIt>
+<Quiz
+  question="What is the main difference between mo.ui.data_editor(df) and mo.ui.dataframe(df) in this workflow?"
+  options={[
+    "The data editor changes individual values, while the dataframe widget builds transformations such as sorting and filtering.",
+    "Both edit individual values, but only the dataframe widget can update downstream cells.",
+    "The dataframe widget changes individual values, while the data editor is only for inspection.",
+    "There is no functional difference between them."
+  ]}
+  answer={0}
+  correctFeedback="Correct. The data editor changes individual values. The dataframe widget builds transformations. Both can make their current result available to downstream cells through .value."
+  incorrectFeedback="Not quite. Think about whether you are changing a value or building a dataframe transformation."
+/>

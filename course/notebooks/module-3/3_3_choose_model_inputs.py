@@ -18,9 +18,9 @@ app = marimo.App(width="medium")
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # Choose model inputs
+    # Set up the model comparison
 
-    This notebook includes the data tools from sections 3.1 and 3.2. It adds controls for the features and rows used for modeling.
+    Use the controls below to choose the features and number of rows for the experiment. marimo will prepare the data again whenever you change either input.
     """)
     return
 
@@ -48,71 +48,9 @@ def _(pd):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Inspect and edit data
-    """)
-    return
-
-
-@app.cell
-def _(df):
-    df[:1000]
-    return
-
-
-@app.cell
-def _(df, mo):
-    data_editor = mo.ui.data_editor(data=df.head(20))
-    data_editor
-    return (data_editor,)
-
-
-@app.cell
-def _(data_editor):
-    edited_df = data_editor.value
-    edited_df
-    return
-
-
-@app.cell
-def _(df, mo):
-    table = mo.ui.table(data=df.head(100), selection="multi")
-    table
-    return (table,)
-
-
-@app.cell
-def _(table):
-    selected_rows = table.value
-    selected_rows
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""
-    ## Explore data visually
-    """)
-    return
-
-
-@app.cell
-def _(df, mo):
-    data_explorer = mo.ui.data_explorer(df)
-    data_explorer
-    return
-
-
-@app.cell
-def _(df, mo):
-    dataframe = mo.ui.dataframe(df)
-    dataframe
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""
     ## Select features
+
+    A feature is a column that a model uses as an input, such as `age` or `occupation`. The feature selector controls which columns both models will use. As you add or remove features, the summary updates to show what will be used in the experiment.
     """)
     return
 
@@ -131,7 +69,9 @@ def _(feature_options, mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Choose a sample size
+    ## Keep the experiment responsive
+
+    During an interactive experiment, you want each update to finish quickly enough to continue exploring. The sample size slider controls how many rows are used in this course example. You can begin with a small sample and then increase it to see how the prepared data changes.
     """)
     return
 
@@ -143,11 +83,21 @@ def _(mo):
         stop=3000,
         step=500,
         value=1000,
-        label="Rows to sample for modeling",
+        label="Rows to use in this experiment",
         show_value=True,
     )
     sample_size_ui
     return (sample_size_ui,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Prepare the training and test data
+
+    Let's prepare the data for the comparison. Text columns, such as `occupation`, are converted into numbers that the models can use. The rows are then divided into a training set and a test set. The models learn from the training set and are evaluated on the separate test set. Both models will use the same sets, so their results can be compared fairly.
+    """)
+    return
 
 
 @app.cell
@@ -169,7 +119,7 @@ def _(
 
     X = sampled_df[selected_features].copy()
     encoder_map = {}
-    for column in X.select_dtypes(include=["object", "category"]).columns:
+    for column in X.select_dtypes(include=["object", "string", "category"]).columns:
         encoder = LabelEncoder()
         X[column] = encoder.fit_transform(X[column].astype(str))
         encoder_map[column] = encoder
@@ -183,6 +133,12 @@ def _(
         stratify=y,
     )
     return X_test, X_train, encoder_map, sample_size, selected_features, y_test, y_train
+
+
+@app.cell
+def _(selected_features):
+    selected_features
+    return
 
 
 @app.cell(hide_code=True)

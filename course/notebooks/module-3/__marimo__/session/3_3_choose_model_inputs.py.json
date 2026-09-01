@@ -1,0 +1,152 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.16",
+    "script_metadata_hash": "9a940a069a62e3a422d8bacbd80a8c61"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "75fa084d56c80903b14561c2651995f8",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"set-up-the-model-comparison\">Set up the model comparison</h1>\n<span class=\"paragraph\">Use the controls below to choose the features and number of rows for the experiment. marimo will prepare the data again whenever you change either input.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "13f1dbb578b9aa203224ea0fc0b25cb8",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "3dac60d24d614bc659db0922ed2e1038",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "1156e5cd450c9ebb8860cb9533ef2d39",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"select-features\">Select features</h2>\n<span class=\"paragraph\">A feature is a column that a model uses as an input, such as <code>age</code> or <code>occupation</code>. The feature selector controls which columns both models will use. As you add or remove features, the summary updates to show what will be used in the experiment.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "25cb8a6025c9a310b401d9c5b017c6ae",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='lEQa-0' random-id='3efef274-384a-1138-915e-4ba536f6b53b'><marimo-multiselect data-initial-value='[&quot;age&quot;,&quot;workclass&quot;,&quot;fnlwgt&quot;,&quot;education&quot;,&quot;education-num&quot;,&quot;marital-status&quot;,&quot;occupation&quot;,&quot;relationship&quot;,&quot;race&quot;,&quot;sex&quot;,&quot;capital-gain&quot;,&quot;capital-loss&quot;,&quot;hours-per-week&quot;,&quot;native-country&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eFeatures to include in the model&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;age&quot;,&quot;workclass&quot;,&quot;fnlwgt&quot;,&quot;education&quot;,&quot;education-num&quot;,&quot;marital-status&quot;,&quot;occupation&quot;,&quot;relationship&quot;,&quot;race&quot;,&quot;sex&quot;,&quot;capital-gain&quot;,&quot;capital-loss&quot;,&quot;hours-per-week&quot;,&quot;native-country&quot;]' data-full-width='false' data-disabled='false'></marimo-multiselect></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "9caadd6869d693b6a4388e07e807599f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"keep-the-experiment-responsive\">Keep the experiment responsive</h2>\n<span class=\"paragraph\">During an interactive experiment, you want each update to finish quickly enough to continue exploring. The sample size slider controls how many rows are used in this course example. You can begin with a small sample and then increase it to see how the prepared data changes.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "016d69c3d912cd73bbc10a55212c2efc",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='Xref-0' random-id='c8d54e30-ac59-9c1b-1f78-2c2b2f607396'><marimo-slider data-initial-value='1000' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eRows to use in this experiment&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-start='500' data-stop='3000' data-step='500' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='true' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "9754e3ddb1e8cfce861640c6808c9ca8",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"prepare-the-training-and-test-data\">Prepare the training and test data</h2>\n<span class=\"paragraph\">Let's prepare the data for the comparison. Text columns, such as <code>occupation</code>, are converted into numbers that the models can use. The rows are then divided into a training set and a test set. The models learn from the training set and are evaluated on the separate test set. Both models will use the same sets, so their results can be compared fairly.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "066c0f96a25b114616ac5cb17be35c08",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "e9d15c3eec761a379782686cb6729cb5",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/json": "[\"age\", \"workclass\", \"fnlwgt\", \"education\", \"education-num\", \"marital-status\", \"occupation\", \"relationship\", \"race\", \"sex\", \"capital-gain\", \"capital-loss\", \"hours-per-week\", \"native-country\"]"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "b155d34f427b8762883c074dfa12b6ce",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Dataset ready</strong></span>\n<table>\n<thead>\n<tr>\n<th></th>\n<th></th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Sampled rows</td>\n<td><code>1,000</code></td>\n</tr>\n<tr>\n<td>Selected features</td>\n<td><code>14</code></td>\n</tr>\n<tr>\n<td>Encoded columns</td>\n<td><code>['workclass', 'education', 'marital-status', 'occupation', 'relationship', 'race', 'sex', 'native-country']</code></td>\n</tr>\n<tr>\n<td>Training rows</td>\n<td><code>800</code></td>\n</tr>\n<tr>\n<td>Test rows</td>\n<td><code>200</code></td>\n</tr>\n<tr>\n<td>Test rows above $50K</td>\n<td><code>25.0%</code></td>\n</tr>\n</tbody>\n</table></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}

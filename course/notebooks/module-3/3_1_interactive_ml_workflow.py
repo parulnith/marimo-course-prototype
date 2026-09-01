@@ -278,7 +278,7 @@ def _(
 
     X = sampled_df[selected_features].copy()
     encoder_map = {}
-    for col in X.select_dtypes(include=["object", "category"]).columns:
+    for col in X.select_dtypes(include=["object", "string", "category"]).columns:
         enc = LabelEncoder()
         X[col] = enc.fit_transform(X[col].astype(str))
         encoder_map[col] = enc
