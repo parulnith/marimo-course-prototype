@@ -49,19 +49,62 @@ def _(pd):
     df = pd.read_csv(adult_csv_url, na_values="?", skipinitialspace=True)
     df["income"] = (df["class"].str.strip() == ">50K").astype(int)
     df = df.drop(columns=["class"]).dropna()
-    return (df,)
+    feature_options = [column for column in df.columns if column != "income"]
+    return df, feature_options
 
 
 @app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Set up the experiment
+
+    Choose the features and sample size used to train both models. These are the same types of controls used in the previous notebook. They are included here so you can change the experiment and inspect how its errors change.
+
+    The feature control changes the columns used by both models. The sample size control changes the number of rows used before creating the training and test split.
+    """)
+    return
+
+
+@app.cell
+def _(feature_options, mo):
+    selected_features_ui = mo.ui.multiselect(
+        options=feature_options,
+        value=feature_options,
+        label="Features to include",
+    )
+    sample_size_ui = mo.ui.slider(
+        start=500,
+        stop=3000,
+        step=500,
+        value=1000,
+        label="Rows to sample",
+        show_value=True,
+    )
+    mo.vstack([selected_features_ui, sample_size_ui])
+    return sample_size_ui, selected_features_ui
+
+
+@app.cell
 def _(
     LabelEncoder,
     df,
+    mo,
+    sample_size_ui,
+    selected_features_ui,
     train_test_split,
 ):
-    selected_features = [column for column in df.columns if column != "income"]
+    selected_features = selected_features_ui.value
+    mo.stop(
+        not selected_features,
+        mo.callout(
+            mo.md("Select at least one feature before training the models."),
+            kind="warn",
+        ),
+    )
+
     sampled_df, _ = train_test_split(
         df,
-        train_size=1000,
+        train_size=sample_size_ui.value,
         stratify=df["income"],
         random_state=42,
     )
@@ -79,11 +122,11 @@ def _(
         random_state=42,
         stratify=y,
     )
-    test_rows = sampled_df.loc[X_test.index, selected_features].copy()
-    return X_test, X_train, test_rows, y_test, y_train
+    test_rows = sampled_df.loc[X_test.index].drop(columns=["income"]).copy()
+    return X_test, X_train, selected_features, test_rows, y_test, y_train
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _(DecisionTreeClassifier, RandomForestClassifier, X_test, X_train, y_train):
     decision_tree = DecisionTreeClassifier(max_depth=5, random_state=42)
     decision_tree.fit(X_train, y_train)
@@ -129,8 +172,16 @@ def _(mo):
         value="All errors",
         label="Error type",
     )
-    mo.vstack([model_source, threshold_slider, error_type])
-    return error_type, model_source, threshold_slider
+    preview_rows = mo.ui.slider(
+        start=5,
+        stop=25,
+        step=5,
+        value=10,
+        label="Rows to show in the error table",
+        show_value=True,
+    )
+    mo.vstack([model_source, threshold_slider, error_type, preview_rows])
+    return error_type, model_source, preview_rows, threshold_slider
 
 
 @app.cell
@@ -150,6 +201,13 @@ def _(
     results["true_label"] = y_test.to_numpy()
     results["predicted"] = predictions
     results["probability_above_50k"] = probabilities[:, 1].round(3)
+    results["true_income"] = results["true_label"].map(
+        {0: "At or below $50K", 1: "Above $50K"}
+    )
+    results["predicted_income"] = results["predicted"].map(
+        {0: "At or below $50K", 1: "Above $50K"}
+    )
+    results["correct"] = results["true_label"] == results["predicted"]
 
     false_positives = results[
         (results["true_label"] == 0) & (results["predicted"] == 1)
@@ -167,6 +225,8 @@ def _(
         displayed_errors = errors
 
     error_counts = {
+        "total": len(results),
+        "correct": int(results["correct"].sum()),
         "all": len(errors),
         "false_positives": len(false_positives),
         "false_negatives": len(false_negatives),
@@ -175,14 +235,24 @@ def _(
 
 
 @app.cell
-def _(error_counts, mo, model_source, threshold_slider):
+def _(
+    error_counts,
+    mo,
+    model_source,
+    sample_size_ui,
+    selected_features,
+    threshold_slider,
+):
     mo.md(f"""
     **Model:** `{model_source.value}`
 
     **Threshold:** `{threshold_slider.value}`
 
+    **Experiment:** `{sample_size_ui.value:,}` sampled rows and `{len(selected_features)}` selected features
+
     | Error type | Count |
     |---|---:|
+    | Correct predictions | `{error_counts['correct']}` / `{error_counts['total']}` (`{error_counts['correct'] / error_counts['total']:.1%}`) |
     | All errors | `{error_counts['all']}` |
     | False positives | `{error_counts['false_positives']}` |
     | False negatives | `{error_counts['false_negatives']}` |
@@ -201,7 +271,7 @@ def _(mo):
 
 
 @app.cell
-def _(displayed_errors, mo):
+def _(displayed_errors, mo, preview_rows):
     display_columns = [
         column
         for column in [
@@ -211,13 +281,13 @@ def _(displayed_errors, mo):
             "hours-per-week",
             "capital-gain",
             "probability_above_50k",
-            "true_label",
-            "predicted",
+            "true_income",
+            "predicted_income",
         ]
         if column in displayed_errors.columns
     ]
     error_table = mo.ui.table(
-        data=displayed_errors[display_columns].head(20),
+        data=displayed_errors[display_columns].head(preview_rows.value),
         selection="multi",
         label="Select errors to inspect",
     )

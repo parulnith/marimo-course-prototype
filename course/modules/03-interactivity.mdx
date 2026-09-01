@@ -10,6 +10,9 @@ import inspectDataVideo from "../images/module-3/3.inspect_data.mp4";
 import dataEditorVideo from "../images/module-3/data_editor.mp4";
 import tableVideo from "../images/module-3/table.mp4";
 import reactiveModelFlow from "../images/module-3/reactive-model-experiment-flow.png";
+import modelErrorControls from "../images/module-3/model-error-controls.png";
+import thresholdErrorCounts from "../images/module-3/threshold-error-counts.gif";
+import selectedErrorRows from "../images/module-3/selected-error-rows.gif";
 
 # Why Interactivity Accelerates AI Discovery
 
@@ -164,19 +167,53 @@ Let's now see this in action in the notebook below.
 ## 4. Debug errors interactively
 
 A model score gives you an overall measure of performance, but it does not show which rows the model misclassified. In the final notebook, you will choose one of the two models and explore its errors interactively.
-You will change the classification threshold and see how the false positive and false negative counts change. You will also select individual misclassified rows and inspect their features. marimo keeps the threshold control, error counts, and selected rows connected.
-This helps you understand how the model behaves and decide what to change in the next experiment.
+
+<div className="widget-label">Choose what to inspect</div>
+
+The model selector chooses which model to analyse. The threshold slider converts predicted probabilities into class predictions. The error type control lets you view all errors, false positives, or false negatives.
+
+<img
+  src={modelErrorControls}
+  alt="Controls for choosing the model, setting the classification threshold, and filtering the error type."
+  style={{ width: "100%", maxWidth: "420px", display: "block", margin: "0 auto" }}
+/>
 
 
-<TryIt>
-Compare both models at a threshold of `0.5`. Raise the threshold to `0.7` and compare the false positive and false negative counts. Select two errors. What would you change in the next experiment?
-</TryIt>
+<div className="widget-label">Change the threshold</div>
+
+Changing the classification threshold affects the balance between false positives and false negatives.
+
+<img
+  src={thresholdErrorCounts}
+  alt="The classification threshold changes while the false positive and false negative counts update."
+/>
+
+<div className="widget-label">Inspect individual errors</div>
+
+Select individual misclassified rows to inspect their features, predicted probabilities, true income labels, and predicted income labels.
+
+<img
+  src={selectedErrorRows}
+  alt="Rows are selected from the error table and appear in a separate dataframe for closer inspection."
+/>
+
+<p className="figure-caption">Select an error to inspect its features and prediction more closely.</p>
+
+marimo keeps the controls, error counts, and selected rows connected. This helps you understand how the model behaves and decide what to change in the next experiment.
+
+Let's now explore these controls in the notebook below.
 
 <MarimoEmbed
   notebook="/notebooks/3_5_debug_errors_interactively.html?v=20260831-1"
   openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-3/3_5_debug_errors_interactively.py"
   title="Debug errors interactively"
 />
+
+<TryIt>
+1. Compare both models at a threshold of `0.5`.
+2. Raise the threshold to `0.7` and compare the false positive and false negative counts.
+3. Select two errors and inspect their features. What would you change in the next experiment?
+</TryIt>
 
 You began with individual rows and ended with individual errors. Throughout the experiment, marimo kept each stage connected to the next. You can move from one question to the next without rebuilding the workflow each time.
 
