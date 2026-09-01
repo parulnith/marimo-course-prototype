@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import ModuleOne from "../../course/modules/01-interactive-environments.mdx";
 import ModuleTwo from "../../course/modules/02-reproducibility.mdx";
 import ModuleThree from "../../course/modules/03-interactivity.mdx";
+import ModuleFour from "../../course/modules/04-ai-coding-agents.mdx";
 import "../styles.css";
 
 const courseImages = import.meta.glob("../../course/images/**/*", {
@@ -50,20 +51,32 @@ const modules = {
   3: {
     number: 3,
     title: "Why Interactivity Accelerates AI Discovery",
-    duration: "30 min",
+    duration: "20 min",
     Content: ModuleThree,
     lessons: [
-      ["1-inspect-and-edit-data", "Inspect and edit data", null, 1],
+      ["1-inspect-and-edit-data", "Inspect the data", null, 1],
       ["2-explore-data-visually", "Explore data visually", null, 2],
       ["3-train-and-evaluate-models", "Train and evaluate models", null, 3],
       ["4-debug-errors-interactively", "Debug errors interactively", null, 4],
       ["check-your-understanding", "Quiz", null, 5],
     ],
   },
+  4: {
+    number: 4,
+    title: "AI Coding Agents for AI and ML",
+    duration: "15 min",
+    Content: ModuleFour,
+    lessons: [
+      ["1-give-the-assistant-the-right-context", "Give the assistant context", null, 1],
+      ["2-pair-an-agent-with-a-running-notebook", "Pair an agent", null, 2],
+      ["3-work-with-the-agent-in-stages", "Work with the agent", null, 3],
+      ["4-review-the-agents-work", "Review the agent's work", null, 4],
+      ["check-your-understanding", "Quiz", null, 5],
+    ],
+  },
 };
 
 const futureModules = [
-  "4. AI Coding Agents for AI and ML",
   "5. From Prototype to Production",
 ];
 

@@ -19,7 +19,8 @@ course/
 └── notebooks/
     ├── module-1/
     ├── module-2/
-    └── module-3/
+    ├── module-3/
+    └── module-4/
 ```
 
 ## What each folder contains
@@ -33,6 +34,8 @@ course/
 `notebooks/module-2/` contains the Jupyter and marimo notebook source files used for the environment and version control exercises.
 
 `notebooks/module-3/` contains the editable starter and the complete interactive ML workflow used for data exploration, model comparison, and error analysis.
+
+`notebooks/module-4/` contains the notebook used to practise giving an AI assistant context and pairing a coding agent with marimo.
 
 `components/placeholders.mdx` describes the custom MDX components used in the lessons. These names can be mapped to the components provided by the website.
 
@@ -68,6 +71,12 @@ The original complete workflow is kept as a reference notebook:
 
 - `notebooks/module-3/3_1_interactive_ml_workflow.py`
 
+## Module 4 notebook
+
+The Module 4 notebook is:
+
+- `notebooks/module-4/4_1_ai_features_demo.py`
+
 ## Run a marimo notebook
 
 Install marimo if needed.
@@ -92,6 +101,12 @@ Open the Module 3 interactive ML workflow in an isolated sandbox.
 
 ```bash
 marimo edit --sandbox course/notebooks/module-3/3_1_interactive_ml_workflow.py
+```
+
+Open the Module 4 AI features notebook in an isolated sandbox.
+
+```bash
+marimo edit --sandbox course/notebooks/module-4/4_1_ai_features_demo.py
 ```
 
 The `preview/` folder at the repository root is not part of this course package. It is only used to publish the standalone course preview.

@@ -87,6 +87,7 @@ def _(mo):
 
 @app.cell
 def _(df, mo):
+    # Display the first five rows without the interactive dataframe viewer.
     mo.plain(df.head())
     return
 

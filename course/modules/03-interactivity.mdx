@@ -3,7 +3,7 @@ title: Why Interactivity Accelerates AI Discovery
 shortTitle: Interactivity and AI Discovery
 description: Build an interactive ML workflow in which data, controls, models, and results stay connected.
 order: 3
-duration: 30 min
+duration: 20 min
 ---
 
 import inspectDataVideo from "../images/module-3/3.inspect_data.mp4";
@@ -13,31 +13,30 @@ import reactiveModelFlow from "../images/module-3/reactive-model-experiment-flow
 import modelErrorControls from "../images/module-3/model-error-controls.png";
 import thresholdErrorCounts from "../images/module-3/threshold-error-counts.gif";
 import selectedErrorRows from "../images/module-3/selected-error-rows.gif";
+import dataExplorerGif from "../images/module-3/data-explorer.gif";
+import dataframeTransformationsGif from "../images/module-3/dataframe-transformations.gif";
+import modelInputControlsGif from "../images/module-3/model-input-controls.gif";
 
 # Why Interactivity Accelerates AI Discovery
 
-We touched on interactivity in the module 1, but it deserves its own module because it changes how you develop and understand AI systems.
+Interactivity changes how you develop and understand AI systems. Imagine your data, models, visualisations, and user input working together in a single system that updates automatically. You can seamlessly move from a question to an experiment to an answer without having to leave the system. This not only saves you time, but it also helps you understand the effect of each change instantly.
 
-Imagine your data, models, visualisations, and user input working together in a single system that updates automatically. You can move from a question to an experiment, inspect the result, and then decide what to try next.
-
-marimo supports this kind of interactive computation by connecting the parts of a notebook that work together. This pattern is valuable in modern AI and ML workflows because it speeds up experimentation and helps you understand the effect of each change.
-
-In this module, we will see how interactivity brings data, model inputs, visualisations, and results together in one model-development workflow.
+marimo supports this kind of interactive computation by connecting the parts of a notebook that work together and in this section, you will see how it works in practice. You will explore a dataset, select features, train models, and debug errors interactively in one workflow. You will see how interactivity helps you understand the data, models, and results more quickly than a traditional notebook workflow.
 
 ### Data
 
-You will work through one complete AI workflow using the [Adult Income dataset](https://archive.ics.uci.edu/dataset/2/adult). The dataset comes from US Census data. The task is to predict whether a person earns more than $50K per year. This is a binary classification problem. The dataset contains numbers such as age and hours worked per week. It also contains categories such as occupation, education, and marital status.
+You will work through one complete AI workflow using the [Adult Income dataset](https://archive.ics.uci.edu/dataset/2/adult). The dataset comes from US Census data where the task is to predict whether a person earns more than $50K per year based on their demographic information. 
 
 Here is the path you will take:
 
-1. Inspect and edit the data.
+1. Inspect and preview the data.
 2. Explore the data visually.
 3. Fit and compare two models.
 4. Debug model errors interactively.
 
 Each section includes an embedded marimo notebook. First, explore the notebook and try its controls for yourself. Then complete the questions in the "Try it" block. You can open any notebook in a new tab by clicking the link in its top right corner.
 
-## 1. Inspect and edit data
+## 1. Inspect the data
 
 <div className="widget-label">Raw dataframe</div>
 
@@ -59,7 +58,7 @@ marimo also provides a data editor for small experiments. You can change a value
 
 <div className="widget-label">Selectable table</div>
 
-There is also a table option when you want to select a subset of rows to be made available to other cells in the notebook or by simply selecting them. The selected rows are available to other cells in the notebook.
+There is also a table option when you want to select a subset of rows to be made available to other cells in the notebook.
 
 <video className="lesson-video" autoPlay muted loop playsInline preload="metadata">
   <source src={tableVideo} type="video/mp4" />
@@ -87,17 +86,23 @@ After looking at the raw dataframe, it's time to move into marimo's built-in vis
 
 marimo's data explorer offers a chart-first approach.You can use it to explore distributions and relationships visually before deciding which features are worth selecting. The chart updates when you change the selected columns or filter the data.
 
-<Callout title="Video placeholder">
-A short video will show how to choose fields and update a chart in the data explorer.
-</Callout>
+<img
+  src={dataExplorerGif}
+  alt="The data explorer creates a chart after age and income are selected."
+/>
+
+<p className="figure-caption">Choose fields in the data explorer and see the chart update.</p>
 
 <div className="widget-label">Transform a dataframe</div>
 
-In the previous section, you displayed `df` directly to inspect the data. Here, `mo.ui.dataframe(df)` serves a different purpose. It lets you build a set of transformations, such as sorting or filtering the rows. You can then use the transformed dataframe in later cells.
+You can also use the dataframe view to build transformations such as filtering, sorting, groupby, aggregations etc just by selecting options.
+As you apply these transformations, marimo generates the matching Python code. You can view this code in the **Code** tab and copy it into your notebook. You can also use the transformed dataframe in later cells.
 
-<Callout title="Video placeholder">
-A short video will show how to transform the dataframe and use the result in another cell.
-</Callout>
+<img
+  src={dataframeTransformationsGif}
+  alt="A filter is added in the dataframe interface and the matching Python code is shown."
+/>
+
 
 <TryIt>
 1. Use the data explorer to create a chart that compares `age` with `income`.
@@ -113,35 +118,29 @@ A short video will show how to transform the dataframe and use the result in ano
 
 ## 3. Train and evaluate models
 
-Once you have explored the data, the next step is to train models. You will train a [Decision Tree](https://scikit-learn.org/1.8/modules/generated/sklearn.tree.DecisionTreeClassifier.html) and a [Random Forest](https://scikit-learn.org/1.8/modules/generated/sklearn.ensemble.RandomForestClassifier.html) on the Adult Income data. Both models use the same selected rows, features, and train and test split.
-
-You will evaluate their scores and predicted probabilities to understand how they behave. This comparison will help you decide which model to investigate further.
+Once you have explored the data, the next step is to train models. You will train a [Decision Tree](https://scikit-learn.org/1.8/modules/generated/sklearn.tree.DecisionTreeClassifier.html) and a [Random Forest](https://scikit-learn.org/1.8/modules/generated/sklearn.ensemble.RandomForestClassifier.html) on the Adult Income data. Additionally, you will evaluate their performance to see how well they separate the two income classes. This comparison will help you decide which model to investigate further.
 
 <div className="widget-label">Choose the features</div>
 
-Different features provide different information to a model. Testing several feature combinations helps you see which columns affect the results. It can also reveal features that add little useful information. marimo provides a [multiselect control](https://docs.marimo.io/api/inputs/multiselect/) for this choice. You can add or remove features without editing the model code. The selected columns are used to prepare one feature table for both models.
-
+Different features provide different information to a model. Testing several feature combinations helps you see how a column affect the results. It can also reveal features that add little useful information. marimo provides a [multiselect control](https://docs.marimo.io/api/inputs/multiselect/) for this choice. You can add or remove features without editing the model code. 
 When the selection changes, marimo prepares the feature table again, retrains both models, and updates their scores and probability plots.
 
-<Callout title="Video placeholder">
-A short video will show one feature being removed and both model scores updating.
-</Callout>
+<img
+  src={modelInputControlsGif}
+  alt="The feature selector and sample size slider update the data prepared for model training."
+/>
+
+<p className="figure-caption">Change a model input and marimo prepares the training and test data again.</p>
 
 <div className="widget-label">Change the sample size</div>
 
 The amount of training data can affect model performance and training time. Testing several sample sizes helps you see whether the results remain similar as more data is added.
 
-marimo provides a slider for changing the sample size. Both models receive the same selected rows, so the comparison remains fair. When the slider changes, marimo creates a new training sample, retrains both models, and updates the evaluation results.
-
-The slider is included to help you study the effect of training data size. In a real project, you would usually use all available training data unless there is a reason not to.
-
-<Callout title="Video placeholder">
-A short video will show the sample size changing and the model results updating.
-</Callout>
+We can use a marimo slider again for this choice. Moving the slider changes the number of rows in the training sample. marimo then retrains both models and updates the evaluation results.
 
 <div className="widget-label">One connected experiment</div>
 
-The feature selection and sample size controls both affect the same prepared dataset which is then passed to the Decision Tree and Random Forest. marimo tracks these dependencies, so changing either control reruns the data preparation and model cells while leaving unrelated cells unchanged.
+The feature selector and sample size slider affect the same prepared dataset which is then passed on to the models. marimo tracks these dependencies, so changing either control reruns the data preparation and model cells while leaving unrelated cells unchanged.
 
 <img
   src={reactiveModelFlow}
@@ -233,16 +232,16 @@ You began with individual rows and ended with individual errors. Throughout the 
 />
 
 <Quiz
-  question="What makes the debugging workflow in a marimo notebook different from a traditional notebook workflow?"
+  question="In marimo, how can rows selected in mo.ui.table() be used in another cell?"
   options={[
-    "Errors are shown as charts instead of text.",
-    "You can select misclassified rows and analyse them immediately in the same workflow.",
-    "marimo finds and fixes every model error automatically.",
-    "The model retrains itself whenever an error is detected."
+    "The selection only changes how the rows look in the table.",
+    "The table's .value contains the selected rows as a dataframe.",
+    "The selected rows must be exported and loaded again.",
+    "marimo adds the selected rows to every cell automatically."
   ]}
   answer={1}
-  correctFeedback="Correct. You can move from an error summary to the underlying rows and analyse them without leaving the notebook workflow."
-  incorrectFeedback="Not quite. marimo keeps the controls, results, and selected rows connected, but it does not debug the model automatically."
+  correctFeedback="Correct. The table's .value contains the selected rows, so later cells can use them as a dataframe."
+  incorrectFeedback="Not quite. Think about how marimo UI controls make their current value available to other cells."
 />
 
 <Quiz

@@ -83,7 +83,7 @@ def _(mo):
 
     `mo.ui.multiselect()` creates marimo's multiselect control. It lets you choose several features from one list. Its `options` contain every available feature, and its `value` sets the initial selection.
 
-    `mo.ui.slider()` creates a control for the sample size. The `start`, `stop`, and `step` arguments define the available values. `show_value=True` displays the current value beside the slider.
+    We can use `mo.ui.slider()` again, this time to control the sample size. The `start`, `stop`, and `step` arguments define the available values. `show_value=True` displays the current value beside the slider.
 
     `mo.vstack()` places both controls in one vertical layout. Both controls are connected to the data preparation and model results below.
     """)
