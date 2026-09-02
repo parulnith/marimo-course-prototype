@@ -4,6 +4,7 @@ out
 dist
 deliverables/
 tmp/
+references/
 .DS_Store
 *.log
 .jupyterlite.doit.db
