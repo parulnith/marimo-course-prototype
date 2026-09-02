@@ -16,16 +16,19 @@ import selectedErrorRows from "../images/module-3/selected-error-rows.gif";
 import dataExplorerGif from "../images/module-3/data-explorer.gif";
 import dataframeTransformationsGif from "../images/module-3/dataframe-transformations.gif";
 import modelInputControlsGif from "../images/module-3/model-input-controls.gif";
+import sampleSizeSliderGif from "../images/module-3/sample-size-slider.gif";
 
 # Why Interactivity Accelerates AI Discovery
 
-Interactivity changes how you develop and understand AI systems. Imagine your data, models, visualisations, and user input working together in a single system that updates automatically. You can seamlessly move from a question to an experiment to an answer without having to leave the system. This not only saves you time, but it also helps you understand the effect of each change instantly.
+Interactivity changes how you develop and understand AI systems. Imagine your data, models, visualisations and user input working together in a single system that updates automatically. You can seamlessly move from a question to an experiment to an answer without having to leave the system. This not only saves you time, but also helps you understand the effect of each change instantly.
 
-marimo supports this kind of interactive computation by connecting the parts of a notebook that work together and in this section, you will see how it works in practice. You will explore a dataset, select features, train models, and debug errors interactively in one workflow. You will see how interactivity helps you understand the data, models, and results more quickly than a traditional notebook workflow.
+marimo supports this kind of interactive computation by connecting the parts of a notebook that work together and in this section, you will see how it works in practice. You'll explore a dataset, select features, train models, and debug errors interactively in a single workflow. You will see how interactivity helps you understand the data, models, and results more quickly than a traditional notebook workflow.
+
+Throughout this module, you will use marimo's [interactive UI elements](https://docs.marimo.io/api/inputs/). These are controls such as radio buttons and sliders. Each control has a current value that other cells can use. When you change the value, marimo updates the cells that depend on it. We will use the word "control" for these UI elements throughout the lesson.
 
 ### Data
 
-You will work through one complete AI workflow using the [Adult Income dataset](https://archive.ics.uci.edu/dataset/2/adult). The dataset comes from US Census data where the task is to predict whether a person earns more than $50K per year based on their demographic information. 
+You will work through an end-to-end AI workflow using the [Adult Income dataset](https://archive.ics.uci.edu/dataset/2/adult). The dataset comes from US Census data where the task is to predict whether a person earns more than $50K per year based on their demographic information. 
 
 Here is the path you will take:
 
@@ -34,13 +37,13 @@ Here is the path you will take:
 3. Fit and compare two models.
 4. Debug model errors interactively.
 
-Each section includes an embedded marimo notebook. First, explore the notebook and try its controls for yourself. Then complete the questions in the "Try it" block. You can open any notebook in a new tab by clicking the link in its top right corner.
+Each section includes an embedded marimo notebook. First, explore the notebook and try its controls for yourself. Then complete the questions in the "Try it" block. 
 
 ## 1. Inspect the data
 
 <div className="widget-label">Raw dataframe</div>
 
-It is always helpful to start with an overview of the data to understand its structure and content. marimo displays a raw dataframe as an interactive table, so you can search, sort, and filter the rows without adding more code.
+It is always helpful to start with an overview of the data to understand its structure and content. marimo displays a raw dataframe as an interactive table as shown below, so you can search, sort, and filter the rows easily. You can also inspect the data types and summary statistics for each column.
 
 <video className="lesson-video" autoPlay muted loop playsInline preload="metadata">
   <source src={inspectDataVideo} type="video/mp4" />
@@ -65,6 +68,8 @@ There is also a table option when you want to select a subset of rows to be made
   Your browser does not support this video.
 </video>
 
+All these features enable you to inspect and explore data in detail without writing extra code. 
+
 <TryIt>
 1. Filter `occupation` to `Sales`. First, keep rows where `hours-per-week` is 20 or less and note the income labels. Then change the filter to 50 or more hours. Which group contains the income label `1` more often?
 2. Select one row with an income label of `0`, which means at or below $50K. Select another row with a label of `1`, which means above $50K. Compare their `age`, `education`, `occupation`, and `hours-per-week` values. Note which differences stand out.
@@ -80,11 +85,11 @@ There is also a table option when you want to select a subset of rows to be made
 
 ## 2. Explore data visually
 
-After looking at the raw dataframe, it's time to move into marimo's built-in visual exploration tools. Data visualisation can help you find patterns that are difficult to see by reading rows one at a time.
+After looking at the raw dataframe, it's time to move into marimo's built-in visual exploration tools. Data visualisation can help you find patterns that are otherwise difficult to see just by looking at the raw data. 
 
 <div className="widget-label">Data explorer</div>
 
-marimo's data explorer offers a chart-first approach.You can use it to explore distributions and relationships visually before deciding which features are worth selecting. The chart updates when you change the selected columns or filter the data.
+marimo's data explorer offers a chart-first approach. You can use it to explore distributions and relationships visually before deciding which features are worth selecting. The chart updates when you change the selected columns or filter the data.
 
 <img
   src={dataExplorerGif}
@@ -118,11 +123,12 @@ As you apply these transformations, marimo generates the matching Python code. Y
 
 ## 3. Train and evaluate models
 
-Once you have explored the data, the next step is to train models. You will train a [Decision Tree](https://scikit-learn.org/1.8/modules/generated/sklearn.tree.DecisionTreeClassifier.html) and a [Random Forest](https://scikit-learn.org/1.8/modules/generated/sklearn.ensemble.RandomForestClassifier.html) on the Adult Income data. Additionally, you will evaluate their performance to see how well they separate the two income classes. This comparison will help you decide which model to investigate further.
+Once you have explored the data, the next step is to train models. In this section, you will train a [Decision Tree](https://scikit-learn.org/1.8/modules/generated/sklearn.tree.DecisionTreeClassifier.html) and a [Random Forest](https://scikit-learn.org/1.8/modules/generated/sklearn.ensemble.RandomForestClassifier.html) on the Adult Income data. Additionally, you will evaluate their performance to see how well they separate the two income classes. This comparison will help you decide which model to investigate further.
 
 <div className="widget-label">Choose the features</div>
 
-Different features provide different information to a model. Testing several feature combinations helps you see how a column affect the results. It can also reveal features that add little useful information. marimo provides a [multiselect control](https://docs.marimo.io/api/inputs/multiselect/) for this choice. You can add or remove features without editing the model code. 
+Different features provide different information to a model. Testing several feature combinations helps you see how a column affect the results. It can also reveal features that add little useful information. marimo provides a [multiselect control](https://docs.marimo.io/api/inputs/multiselect/) for this choice. You can simply add or remove features just by selecting them without editing any model code. 
+
 When the selection changes, marimo prepares the feature table again, retrains both models, and updates their scores and probability plots.
 
 <img
@@ -136,7 +142,14 @@ When the selection changes, marimo prepares the feature table again, retrains bo
 
 The amount of training data can affect model performance and training time. Testing several sample sizes helps you see whether the results remain similar as more data is added.
 
-We can use a marimo slider again for this choice. Moving the slider changes the number of rows in the training sample. marimo then retrains both models and updates the evaluation results.
+We can use a marimo slider again for this choice. Moving the slider changes the number of rows in the training sample being fed to the models and thanks to reactivity, the choice is then propagated throughout the notebook. 
+
+<img
+  src={sampleSizeSliderGif}
+  alt="The sample size slider changes the number of rows in the sampled dataframe."
+/>
+
+<p className="figure-caption">Move the slider and check that the sampled dataframe contains the selected number of rows.</p>
 
 <div className="widget-label">One connected experiment</div>
 
@@ -169,7 +182,7 @@ A model score gives you an overall measure of performance, but it does not show 
 
 <div className="widget-label">Choose what to inspect</div>
 
-The model selector chooses which model to analyse. The threshold slider converts predicted probabilities into class predictions. The error type control lets you view all errors, false positives, or false negatives.
+Here, we use marimo UI elements again to control the analysis. The model selector is a [`mo.ui.radio()`](https://docs.marimo.io/api/inputs/radio/) control that lets you choose one model. The error type control uses another radio group to show all errors, false positives, or false negatives. The [`mo.ui.slider()`](https://docs.marimo.io/api/inputs/slider/) control sets the classification threshold that converts predicted probabilities into class predictions.
 
 <img
   src={modelErrorControls}
