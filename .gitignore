@@ -2,6 +2,7 @@ node_modules
 .next
 out
 dist
+deliverables/
 .DS_Store
 *.log
 .jupyterlite.doit.db
