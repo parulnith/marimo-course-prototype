@@ -19,9 +19,9 @@ import modelInputControlsGif from "../images/module-3/model-input-controls.gif";
 import sampleSizeSliderGif from "../images/module-3/sample-size-slider.gif";
 import wigglystuffGalleryGif from "../images/module-3/wigglystuff-gallery.gif";
 
-# Why Interactivity Accelerates AI Discovery
+# Interactivity Accelerates AI Discovery
 
-Interactivity changes how you develop and understand AI systems. Imagine your data, models, visualisations and user input working together in a single system that updates automatically. You can seamlessly move from a question to an experiment to an answer without having to leave the system. This not only saves you time, but also helps you understand the effect of each change instantly.
+Imagine your data, models, visualisations and user input working together in a single system that updates automatically. This enables you to seamlessly move from a question to an experiment, and then to an answer without having to leave the system. This not only saves you time, but also helps you understand the effect of each change instantly. This is why interactivity changes how you develop and understand AI systems. 
 
 marimo supports this kind of interactive computation by connecting the parts of a notebook that work together and in this section, you will see how it works in practice. You'll explore a dataset, select features, train models, and debug errors interactively in a single workflow. You will see how interactivity helps you understand the data, models, and results more quickly than a traditional notebook workflow.
 
@@ -90,7 +90,7 @@ After looking at the raw dataframe, it's time to move into marimo's built-in vis
 
 <div className="widget-label">Data explorer</div>
 
-marimo's data explorer offers a chart-first approach. You can use it to explore distributions and relationships visually before deciding which features are worth selecting. The chart updates when you change the selected columns or filter the data.
+marimo's data explorer offers a chart-first approach. You can use it to explore distributions and relationships visually before deciding which features are worth keeping. The chart updates when you change the selected columns or filter the data.
 <img
   src={dataExplorerGif}
   alt="The data explorer creates a chart after age and income are selected."
@@ -100,8 +100,8 @@ marimo's data explorer offers a chart-first approach. You can use it to explore 
 
 <div className="widget-label">Transform a dataframe</div>
 
-You can also use the dataframe view to build transformations such as filtering, sorting, groupby, aggregations etc just by selecting options.
-As you apply these transformations, marimo generates the matching Python code. You can view this code in the **Code** tab and copy it into your notebook. You can also use the transformed dataframe in later cells.
+You can also use the dataframe view to build transformations such as filtering, sorting, groupby, aggregations etc merely by selecting options.
+As you apply these transformations, marimo generates the matching Python code which you can view in the **Code** tab. You can also use the transformed dataframe in later cells.
 
 <img
   src={dataframeTransformationsGif}
@@ -123,7 +123,7 @@ As you apply these transformations, marimo generates the matching Python code. Y
 
 ## 3. Train and evaluate models
 
-Once you have explored the data, the next step is to train models. In this section, you will train a [Decision Tree](https://scikit-learn.org/1.8/modules/generated/sklearn.tree.DecisionTreeClassifier.html) and a [Random Forest](https://scikit-learn.org/1.8/modules/generated/sklearn.ensemble.RandomForestClassifier.html) on the Adult Income data. Additionally, you will evaluate their performance to see how well they separate the two income classes. This comparison will help you decide which model to investigate further.
+Once you have explored the data, the next step is model training. In this section, you will train not one but two models, a [Decision Tree](https://scikit-learn.org/1.8/modules/generated/sklearn.tree.DecisionTreeClassifier.html) and a [Random Forest](https://scikit-learn.org/1.8/modules/generated/sklearn.ensemble.RandomForestClassifier.html) on the Adult Income data. Additionally, you will evaluate their performance to see how well they separate the two income classes. This comparison will help you decide which model to investigate further.
 
 <div className="widget-label">Choose the features</div>
 
