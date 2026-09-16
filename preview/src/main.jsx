@@ -58,7 +58,8 @@ const modules = {
       ["2-explore-data-visually", "Explore data visually", null, 2],
       ["3-train-and-evaluate-models", "Train and evaluate models", null, 3],
       ["4-debug-errors-interactively", "Debug errors interactively", null, 4],
-      ["check-your-understanding", "Quiz", null, 5],
+      ["5-create-your-own-widgets", "Create your own widgets", null, 5],
+      ["check-your-understanding", "Quiz", null, 6],
     ],
   },
   4: {
@@ -67,11 +68,10 @@ const modules = {
     duration: "15 min",
     Content: ModuleFour,
     lessons: [
-      ["1-give-the-assistant-the-right-context", "Give the assistant context", null, 1],
-      ["2-pair-an-agent-with-a-running-notebook", "Pair an agent", null, 2],
-      ["3-work-with-the-agent-in-stages", "Work with the agent", null, 3],
-      ["4-review-the-agents-work", "Review the agent's work", null, 4],
-      ["check-your-understanding", "Quiz", null, 5],
+      ["1-when-to-let-ai-agents-write-code", "Use AI in the editor", null, 1],
+      ["2-give-ai-agents-the-context-they-need", "Give agents context", null, 2],
+      ["3-choose-the-right-ai-agent-setup", "Choose a setup", null, 3],
+      ["check-your-understanding", "Quiz", null, 4],
     ],
   },
 };

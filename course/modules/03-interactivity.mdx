@@ -17,6 +17,7 @@ import dataExplorerGif from "../images/module-3/data-explorer.gif";
 import dataframeTransformationsGif from "../images/module-3/dataframe-transformations.gif";
 import modelInputControlsGif from "../images/module-3/model-input-controls.gif";
 import sampleSizeSliderGif from "../images/module-3/sample-size-slider.gif";
+import wigglystuffGalleryGif from "../images/module-3/wigglystuff-gallery.gif";
 
 # Why Interactivity Accelerates AI Discovery
 
@@ -90,7 +91,6 @@ After looking at the raw dataframe, it's time to move into marimo's built-in vis
 <div className="widget-label">Data explorer</div>
 
 marimo's data explorer offers a chart-first approach. You can use it to explore distributions and relationships visually before deciding which features are worth selecting. The chart updates when you change the selected columns or filter the data.
-
 <img
   src={dataExplorerGif}
   alt="The data explorer creates a chart after age and income are selected."
@@ -228,6 +228,21 @@ Let's now explore these controls in the notebook below.
 </TryIt>
 
 You began with individual rows and ended with individual errors. Throughout the experiment, marimo kept each stage connected to the next. You can move from one question to the next without rebuilding the workflow each time.
+
+## 5. Create your own widgets
+
+We have seen how marimo's built-in controls let us explore data and investigate model errors. When we change a control, the cells that depend on it update automatically. You can also create your own widgets and use their values in other cells.
+
+You can build these widgets with [anywidget](https://anywidget.dev/en/getting-started/) using Python and JavaScript. Use [`mo.ui.anywidget()`](https://docs.marimo.io/api/inputs/anywidget/) to add your widget to marimo so other cells can update when its value changes. For inspiration, explore Vincent Warmerdam's [wigglystuff](https://koaning.github.io/wigglystuff/), which is a collection of creative AnyWidgets for Python notebook environments.
+
+you can find a lot of useful widgets in the wigglystuff gallery.Each widget has a **molab** button that opens an example notebook. You can try the widget and read the code to see how to use it in your own notebook.
+
+<a href="https://koaning.github.io/wigglystuff/" target="_blank" rel="noopener noreferrer">
+  <img
+    src={wigglystuffGalleryGif}
+    alt="The wigglystuff gallery showing interactive widgets with molab buttons for opening their example notebooks."
+  />
+</a>
 
 ## Check your understanding
 
