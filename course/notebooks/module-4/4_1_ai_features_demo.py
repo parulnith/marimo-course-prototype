@@ -23,7 +23,7 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    # AI features and agent context
+    ## AI-assisted sales analysis
     """)
     return
 

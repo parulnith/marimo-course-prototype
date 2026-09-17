@@ -68,8 +68,8 @@ const modules = {
     duration: "15 min",
     Content: ModuleFour,
     lessons: [
-      ["1-build-an-analysis-with-ai", "Build an analysis with AI", null, 1],
-      ["2-give-the-assistant-the-context-it-needs", "Give the assistant context", null, 2],
+      ["1-generate-and-edit-with-the-ai-assistant", "Generate and edit with the AI assistant", null, 1],
+      ["2-using-the-chat-panel", "Using the Chat panel", null, 2],
       ["3-work-with-a-coding-agent-using-marimo-pair", "Work with marimo pair", null, 3],
       ["4-review-ai-generated-work", "Review AI-generated work", null, 4],
       ["check-your-understanding", "Quiz", null, 5],
