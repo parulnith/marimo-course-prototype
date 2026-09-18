@@ -20,17 +20,17 @@ import codexBootVideo from "../images/module-4/codex-boot.webm";
 
 # AI Coding Agents in marimo
 
-AI coding agents work best when they are part of your working environment from the start. marimo's built-in assistant does exactly that as it can generate or edit a single cell, while [`marimo pair`](https://docs.marimo.io/guides/generate_with_ai/marimo_pair/) connects a coding agent to a running notebook so it can inspect and change several cells. In this module you'll look at multiple ways to use AI coding agents in marimo, and how to give them the context they need to work effectively.
+AI coding agents work best when they are part of your working environment from the start. This module shows how to use AI assistance in marimo to create, extend, and review notebook work.
 
 ## 1. Generate and edit with the AI assistant
 
-The quickest way to use AI in marimo is to generate a new cell or modify an existing one. We will use these features to build a small sales analysis dataset.
+The quickest way to use AI in marimo is to generate a new cell or modify an existing one. We will use these features to build a small sales analysis dataset and then use it throughout this module. 
 
 ### Enable AI features
 
-If you are running marimo locally, first connect an AI provider:
+First connect an AI provider to your notebook:
 
-1. Open the notebook settings. You can also click **Generate with AI** in the notebook to open the AI settings.
+1. Open the notebook settings from the notebook's UI. Alternatively, you can also click **Generate with AI** in the notebook to open the AI settings.
 2. Select **Optional Dependencies** and check that the AI features are installed.
 3. Next, open the **AI** tab. Choose a model provider and model. For a hosted provider, add its API key. You can also use an open model through Ollama. Follow the [provider setup instructions](https://docs.marimo.io/guides/configuration/llm_providers/) for your choice.
 
@@ -46,7 +46,7 @@ Now that the AI features are enabled, let's see things in action. Go to the empt
 ```text
 Create a small synthetic sales dataframe named df consisting of 100 rows. Include region, segment, channel, revenue, cost, satisfaction, and converted columns. Use whole-number values for revenue, cost, and profit.
 ```
-
+This should create a new cell with code that generates a synthetic sales dataset. Run the cell to create the dataframe.
 <img
   src={generatePromptScreenshot}
   alt="The Generate with AI panel in marimo with a prompt for a synthetic sales dataframe."
@@ -62,7 +62,7 @@ Create a small synthetic sales dataframe named df consisting of 100 rows. Includ
   alt="The first five rows of one synthetic sales dataset, showing region, segment, channel, revenue, cost, satisfaction, conversion status, profit, and margin."
 />
 
-Read the generated code before running it. Then inspect the dataframe and check two calculations:
+Always make sure to read the generated code before running it. Then inspect the dataframe and check a calculation:
 
 - `profit` should equal revenue minus cost.
 
@@ -81,7 +81,7 @@ This tells you whether the generated code is correct. If it is not, edit the cel
 
 
 <Callout title="Using molab">
-In molab, you can generate an entire notebook with AI. From the home page, select New notebook, then Generate with AI. You can also generate a notebook from the command line by running marimo new with an LLM prompt.
+In molab, you can generate an entire notebook with AI. From the home page, select New notebook, then `Generate with AI`. You can also generate a notebook from the command line by running `marimo new` with an LLM prompt.
 
 
 <img
@@ -93,13 +93,13 @@ In molab, you can generate an entire notebook with AI. From the home page, selec
 
 ### Extend the analysis
 
-Now ask AI to turn the dataframe into a chart. In an AI prompt, `@df` gives the assistant the current dataframe, including its columns and values. Generate another cell with this prompt:
+Now let's create some visualizations. In an AI prompt, `@df` gives the assistant the current dataframe, including its columns and values. Let's give the coding agent context about the dataframe and ask it to create a bar chart of total profit by channel. Use this prompt:
 
 ```text
 Using @df, add a bar chart showing total profit by channel. Sort the bars from highest to lowest profit and name the chart channel_profit_chart.
 ```
 
-Run the cell and inspect `channel_profit_chart`. Confirm that each bar shows the total profit for one channel, rather than an average. Check the bar values against the interactive dataframe. Treat this as a short exercise.
+Run the cell and inspect `channel_profit_chart`. Confirm that each bar shows the total profit for one channel, rather than an average. Check the bar values against the interactive dataframe itself. Treat this as a short exercise.
 
 ### Edit the generated cell
 
@@ -113,16 +113,13 @@ Run the edited cell. The line should show the average of the channel-profit tota
 
 
 ## 2. Using the Chat panel
+You can also use the Chat panel to ask questions about your notebook or ask the assistant to make changes. The Chat panel is a great way to get help with your notebook without leaving the editor. It has several modes that give the assistant different levels of access to your notebook.
 
-Use marimo's Chat panel to ask questions about your notebook or ask the assistant to make changes. In this section, you will extend the sales analysis and see how each mode changes what the assistant can inspect, run, or change.
+Let’s now extend the analysis and analyse sales performance. Open the Chat panel from the left sidebar, then choose a Chat mode. 
 
-Let’s now extend the analysis and analyse sales performance. Open the Chat panel from the left sidebar, then choose a Chat mode. Each mode gives the assistant a different level of access.
+### Manual
 
-### Choose a Chat mode
-
-#### Manual
-
-In **Manual** mode, the assistant is pure chat with no tool access. It uses only the context you add. Review its answer in Chat, then choose whether to copy its code or add it to the notebook. Use this prompt in **Manual** mode:
+In the **Manual** mode, the assistant is pure chat with no tool access. It uses only the context you add. You can review its answer in Chat, then add it to the notebook. Use this prompt in **Manual** mode:
 
 ```text
 Using @df, analyze sales performance by region and segment. For each region and segment combination, calculate total revenue, total profit, conversion rate, and average satisfaction. Identify the combination with the highest profit, the one with the lowest satisfaction, and one combination to prioritize. Explain your recommendation. Do not change the notebook.
@@ -133,9 +130,9 @@ Using @df, analyze sales performance by region and segment. For each region and 
   alt="A response in marimo Manual mode with Copy and Add to Notebook buttons."
 />
 
-#### Ask
+### Ask
 
-In **Ask** mode, the assistant can use read-only tools to gather context. For example, it can inspect the notebook or search documentation, but it cannot change the notebook. Use it when you want the assistant to analyse the work you have already done and explain its findings.
+In the **Ask** mode, the assistant can use read-only tools to gather context. For example, it can inspect the notebook or search documentation, but it cannot change the notebook. 
 
 Use this prompt in **Ask** mode:
 
@@ -148,9 +145,9 @@ Inspect the notebook and analyze channel_profit_chart. Explain which channel is 
   alt="A detailed read-only analysis of a chart in marimo Ask mode."
 />
 
-#### Agent
+### Agent
 
-In **Agent** mode, the assistant can use the same read-only tools as Ask mode. In addition, it can also add, update, or remove notebook cells and run stale cells. Use it when you want the assistant to make a focused change to the notebook.
+In the **Agent** mode, the assistant can use the same read-only tools as `Ask` mode. In addition, it can also add, update, or remove notebook cells and run stale cells. Use it when you want the assistant to make a focused change to the notebook.
 
 Use this prompt in **Agent** mode:
 
@@ -165,7 +162,7 @@ Add a Markdown cell below channel_profit_chart that explains what the chart show
 
 #### Code mode
 
-In **Code mode**, the assistant works directly with the live [notebook kernel](https://docs.marimo.io/guides/editor_features/tools/#code-mode). It can use the notebook's current runtime state and carry out more involved notebook tasks.
+In the **Code mode**, the assistant works directly with the live [notebook kernel](https://docs.marimo.io/guides/editor_features/tools/#code-mode). It can use the notebook's current runtime state and carry out more involved notebook tasks.
 
 Use this prompt in **Code mode**:
 
@@ -187,7 +184,7 @@ The Chat panel is great for focused tasks. For deeper computational or data work
 
 ### Start pairing
 
-To start pairing, first choose an AI coding agent. This example uses Codex, although marimo pair supports other agents.
+To start pairing, first choose an AI coding agent. This example uses Codex, although marimo pair supports other agents as well. If you have not already installed the Codex CLI, follow the [Codex installation instructions](https://docs.codex.io/docs/installation) for your operating system.
 
 ```bash
 # Install the Codex plugin:
@@ -223,17 +220,21 @@ You can also ask Codex to start a fresh notebook and begin the pairing session.
 ```
 
 <TryIt>
-1. Pair Codex with the notebook you created in Section 1.
-2. Ask: `Inspect the running notebook. Explain what df and channel_profit_chart contain. Do not edit the notebook yet.` Check the response against the dataframe and chart.
-3. Then ask: `Using the existing df, add a region performance section. Create a table with total revenue, total profit, and conversion rate by region. Add a bar chart of profit by region. Run the new cells and check for errors.`
+1. Pair Codex with the notebook you already created in this module.
+2. Next use the prompt: *Inspect the running notebook. Explain what df and channel_profit_chart contain. Do not edit the notebook yet.*
+
+3. Then ask: *Using the existing df, add a region performance section. Create a table with total revenue, total profit, and conversion rate by region. Add a bar chart of profit by region. Run the new cells and check for errors.*
+
 4. Check that the table totals and chart bars agree with the values in `df`.
 </TryIt>
 
+Working with a paired agent is like pair programming with a human. You can ask questions, inspect the notebook, and make changes together. The agent can also run cells and check for errors, but you should always review its work before keeping it.
+
 ## 4. Review AI-generated work
 
-AI-generated code still needs review. Check that it answers the request, that its output agrees with the data, and that it follows marimo's notebook rules.
+AI-generated code still needs review. You should always check that the AI generated code answers the request, that its output agrees with the data, and that it follows marimo's notebook rules. Sometimes AI-generated code can have subtle errors, such as using the wrong variable or miscalculating a value or it can also create circular dependencies or other issues that prevent a marimo notebook from running cleanly.
 
-[`marimo check`](https://marimo.io/blog/marimo-check) is a notebook linter for humans and coding agents. It finds marimo-specific problems that can prevent a notebook from running cleanly, such as variables defined in multiple cells or circular dependencies.
+[`marimo check`](https://marimo.io/blog/marimo-check) is a notebook linter for humans and coding agents. It finds marimo-specific problems. Once those problems are listed, you can manually fix them or ask the coding agent to fix them. You can also use `marimo check` to confirm that a notebook is ready for sharing or publishing.
 
 After an assistant or agent changes a notebook, run it from the repository root:
 
