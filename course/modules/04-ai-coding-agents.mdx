@@ -17,6 +17,7 @@ import askModeScreenshot from "../images/module-4/ask-mode-response.png";
 import agentModeVideo from "../images/module-4/agent-mode.mp4";
 import codeModeScreenshot from "../images/module-4/code-mode-response.png";
 import codexBootVideo from "../images/module-4/codex-boot.webm";
+import molabPairGif from "../images/module-4/molab-pair.gif";
 
 AI coding agents work best when they are part of your working environment from the start. This module shows how to use AI assistance in marimo to create, extend, and review notebook work.
 
@@ -78,8 +79,10 @@ checks
 This tells you whether the generated code is correct. If it is not, edit the cell or ask the assistant to fix it. Checks like this are important whenever AI writes code for you.
 
 
-<Callout title="Using molab">
-In molab, you can generate an entire notebook with AI. From the home page, select New notebook, then `Generate with AI`. You can also generate a notebook from the command line by running `marimo new` with an LLM prompt.
+<Callout title="Using AI in molab">
+In molab, the editor AI has free access to fast open-source models. You do not need to add an API key to generate or edit code.
+
+To create an entire notebook from a prompt, go to the molab home page, select **New notebook**, then select **Generate with AI**.
 
 
 <img
@@ -216,6 +219,15 @@ You can also ask Codex to start a fresh notebook and begin the pairing session.
 ```text
 /marimo-pair with me on notebook.py
 ```
+
+<Callout title="Using marimo pair in molab">
+In molab, open the **Actions** panel and select **Pair with an agent**. Copy the prompt it provides into your coding agent after you install the [marimo pair skill](https://docs.marimo.io/guides/molab/#work-with-ai). The agent then connects to the running molab notebook.
+
+<img
+  src={molabPairGif}
+  alt="A molab notebook with the Actions panel available in the left sidebar."
+/>
+</Callout>
 
 <TryIt>
 1. Pair Codex with the notebook you already created in this module.

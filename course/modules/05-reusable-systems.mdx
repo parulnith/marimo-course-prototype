@@ -1,12 +1,238 @@
 ---
 title: From Interactive Work to Reusable Systems
-shortTitle: From Interactive Work to Reusable Systems
-description: Learn how to turn interactive AI and ML work into systems that other people can reuse.
+shortTitle: Reusable Systems
+description: Turn one marimo notebook into a script, web app, shareable artifact, and reusable Python module.
 order: 5
-duration: 15 min
-status: draft
+duration: 20 min
 ---
 
-# From Interactive Work to Reusable Systems
 
-This module is a draft. Its full lesson content will be added later.
+You can use the same marimo notebook in several ways. In this module, you will use a small LLM evaluation harness as a notebook, a script, a web app, a published artifact, and a Python module.
+
+The notebook compares two local Ollama models on product reviews. It keeps the model output in a dataframe, so you can inspect results in the notebook and reuse the same workflow elsewhere.
+
+| Mode | Command |
+| --- | --- |
+| Notebook | `marimo edit sentiment_classifier.py` |
+| Web app | `marimo run sentiment_classifier.py` |
+| Script | `uv run python sentiment_classifier.py -- --model-a gemma3:1b --model-b qwen2.5:0.5b --output results.csv` |
+| Python module | `from sentiment_classifier import get_client` |
+
+## 1. Run interactive work as a script
+
+Start with the classifier notebook. From `course/notebooks/module-5`, run:
+
+```bash
+marimo edit sentiment_classifier.py
+```
+
+The notebook sends each product review to two local Ollama models. It shows the label, confidence, and reason from each model. You can mark a classification as correct or incorrect and compare the models in the accuracy dashboard.
+
+Before opening the notebook, start Ollama and download the default models:
+
+```bash
+ollama serve
+ollama pull gemma3:1b
+ollama pull qwen2.5:0.5b
+```
+
+<MarimoEmbed
+  notebook="/notebooks/sentiment_classifier.html"
+  title="LLM sentiment classifier"
+/>
+
+The notebook has model inputs, a text area for reviews, a button that runs both models, and a results dataframe. This is an evaluation workflow. You can inspect the answers, compare the models, and keep the output for later work.
+
+### Use the same workflow from the terminal
+
+Near the end of `sentiment_classifier.py`, `run_headless()` reads command-line arguments and calls the same `compare_two_models()` function used by the notebook.
+
+```python
+@app.function
+def run_headless(argv):
+    # Read CLI arguments, run both models, and optionally write a CSV.
+    ...
+```
+
+The file checks for arguments after `--`. If it finds them, it runs the command-line workflow. Otherwise, it opens as a normal marimo notebook.
+
+Run the evaluation and write its results to a CSV file:
+
+```bash
+uv run python sentiment_classifier.py -- \
+  --model-a gemma3:1b \
+  --model-b qwen2.5:0.5b \
+  --output results.csv
+```
+
+Open `results.csv`. Each review should have one row for each model. The output includes `text`, `model`, `label`, `confidence`, and `reason`.
+
+<TryIt>
+1. Run the command with the default models.
+2. Open `results.csv` and count the rows. There should be two rows for every review.
+3. Change one model name and write the output to a second CSV file.
+4. Compare the two files to see how changing a model changes the results.
+</TryIt>
+
+## 2. Publish the notebook as a web app
+
+The classifier already has the controls needed for an app. Run the same file in app mode:
+
+```bash
+marimo run sentiment_classifier.py
+```
+
+People using the app can choose models, add reviews, run the evaluation, and inspect the results. They do not need to work in code cells.
+
+The controls are Python objects created with `mo.ui`. Their current values are available through `.value`.
+
+```python
+model_a_input = mo.ui.text(value=args.model_a, label="Model A")
+reviews_input = mo.ui.text_area(label="Reviews to classify")
+run_btn = mo.ui.run_button(label="Classify with both models")
+
+results_df = compare_two_models(
+    client,
+    reviews_input.value.splitlines(),
+    model_a_input.value,
+    model_b_input.value,
+)
+```
+
+You used controls in Module 3. Here, the same controls let someone use your work as an app. marimo updates the results table and accuracy dashboard when a person runs a new evaluation.
+
+<Callout title="Share on your network">
+To make the app available on your local network, run `marimo run sentiment_classifier.py --host 0.0.0.0 --port 8080`.
+</Callout>
+
+<TryIt>
+1. Run the classifier as an app.
+2. Replace one review with a product review of your own.
+3. Run both models and inspect where they agree or disagree.
+4. Mark the classifications that you think are correct and inspect the accuracy dashboard.
+</TryIt>
+
+## 3. Export and share your work
+
+An app is useful when people can open it. An export is useful when people need a file they can keep or publish.
+
+Start with an HTML report:
+
+```bash
+marimo export html sentiment_classifier.py -o report.html
+```
+
+Open `report.html` in a browser. It is a portable snapshot of the notebook output that you can attach to documentation or share with a teammate.
+
+You can also export a PDF for a fixed report:
+
+```bash
+marimo export pdf sentiment_classifier.py -o report.pdf
+```
+
+For a browser-based interactive export, use WASM:
+
+```bash
+marimo export html-wasm sentiment_classifier.py -o wasm_output --mode run
+```
+
+You can share the notebook source through GitHub or molab when you want someone to inspect the code or make changes themselves.
+
+<TryIt>
+1. Export the classifier as HTML.
+2. Open the file and check that the title and controls are present. If you ran the evaluation first, check that the current results are included.
+3. Choose either PDF or WASM for a second export.
+4. Decide which format you would send to a teammate who only needs the results.
+</TryIt>
+
+## 4. Import notebook functions into another notebook
+
+The classifier also works as a Python module. Its reusable functions use `@app.function`, which makes them available to another Python file.
+
+```python
+@app.function
+def get_client(base_url="http://localhost:11434/v1", api_key="ollama"):
+    return OpenAI(base_url=base_url, api_key=api_key)
+
+
+@app.function
+def compare_two_models(client, texts, model_a, model_b):
+    ...
+```
+
+The imports, constants, and shared configuration live in `app.setup` near the top of the classifier. This gives the reusable functions access to the code they need when another file imports them.
+
+Open the pipeline notebook:
+
+```bash
+marimo edit eval_pipeline.py
+```
+
+It imports and uses the functions from the classifier:
+
+```python
+from sentiment_classifier import compare_two_models, get_client
+
+client = get_client()
+results = compare_two_models(
+    client,
+    texts,
+    model_a="gemma3:1b",
+    model_b="qwen2.5:0.5b",
+)
+```
+
+<MarimoEmbed
+  notebook="/notebooks/eval_pipeline.html"
+  title="Evaluation pipeline"
+/>
+
+The pipeline does not copy the model connection or comparison logic. It imports the same functions that the classifier uses. When you improve the comparison function, both notebooks use the update.
+
+<TryIt>
+1. Open `eval_pipeline.py`.
+2. Replace the three sample reviews with reviews from your own task.
+3. Run the notebook and inspect the summary statistics.
+4. Change one function in `sentiment_classifier.py`, then rerun the pipeline to confirm it uses the update.
+</TryIt>
+
+## Check your understanding
+
+<Quiz
+  question="Why does the classifier use the same compare_two_models function in its notebook and command-line workflow?"
+  options={[
+    "Both interfaces run the same evaluation logic and produce comparable results.",
+    "A command-line script cannot use a dataframe.",
+    "The notebook must be open before a script can run.",
+    "A web app cannot call Python functions."
+  ]}
+  answer={0}
+  correctFeedback="Correct. One function keeps the notebook and script workflows consistent."
+  incorrectFeedback="Think about why keeping the evaluation logic in one function is useful."
+/>
+
+<Quiz
+  question="Which command opens the classifier as an app for people who do not need to edit code?"
+  options={[
+    "marimo run sentiment_classifier.py",
+    "marimo edit sentiment_classifier.py",
+    "python eval_pipeline.py",
+    "marimo export pdf sentiment_classifier.py"
+  ]}
+  answer={0}
+  correctFeedback="Correct. marimo run opens the notebook as an app."
+  incorrectFeedback="Look for the command that runs the notebook without opening its editor."
+/>
+
+<Quiz
+  question="What does @app.function allow eval_pipeline.py to do?"
+  options={[
+    "Import and reuse functions from sentiment_classifier.py.",
+    "Export the notebook as a PDF.",
+    "Run Ollama without a client.",
+    "Turn every cell into a user interface control."
+  ]}
+  answer={0}
+  correctFeedback="Correct. The pipeline imports the classifier's reusable functions."
+  incorrectFeedback="Think about how the pipeline accesses get_client and compare_two_models."
+/>

@@ -4,6 +4,7 @@ import ModuleOne from "../../course/modules/01-interactive-environments.mdx";
 import ModuleTwo from "../../course/modules/02-reproducibility.mdx";
 import ModuleThree from "../../course/modules/03-interactivity.mdx";
 import ModuleFour from "../../course/modules/04-ai-coding-agents.mdx";
+import ModuleFive from "../../course/modules/05-reusable-systems.mdx";
 import "../styles.css";
 
 const courseImages = import.meta.glob("../../course/images/**/*", {
@@ -75,11 +76,22 @@ const modules = {
       ["check-your-understanding", "Quiz", null, 5],
     ],
   },
+  5: {
+    number: 5,
+    title: "From Interactive Work to Reusable Systems",
+    duration: "20 min",
+    Content: ModuleFive,
+    lessons: [
+      ["1-run-interactive-work-as-a-script", "Run interactive work as a script", null, 1],
+      ["2-publish-the-notebook-as-a-web-app", "Publish the notebook as a web app", null, 2],
+      ["3-export-and-share-your-work", "Export and share your work", null, 3],
+      ["4-import-notebook-functions-into-another-notebook", "Import notebook functions", null, 4],
+      ["check-your-understanding", "Quiz", null, 5],
+    ],
+  },
 };
 
-const futureModules = [
-  "5. From Prototype to Production",
-];
+const futureModules = [];
 
 const devNotebookCacheKey = Date.now();
 
