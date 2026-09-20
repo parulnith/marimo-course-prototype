@@ -1,34 +1,30 @@
 ---
-title: From Interactive Work to Reusable Systems
-shortTitle: Reusable Systems
+title: From Prototype to Production
+shortTitle: Prototype to Production
 description: Turn one marimo notebook into a script, web app, shareable artifact, and reusable Python module.
 order: 5
 duration: 20 min
 ---
 
 
-You can use the same marimo notebook in several ways. In this module, you will use a small LLM evaluation harness as a notebook, a script, a web app, a published artifact, and a Python module.
+An interactive notebook is a useful place to begin an AI or ML project because it lets you experiment and test ideas quickly. However, the requirements may differ when you need to share your work with others or integrate it into a larger system. This module shows how to turn one notebook into a script, a web app, a shareable artifact, and a reusable Python module. 
 
-The notebook compares two local Ollama models on product reviews. It keeps the model output in a dataframe, so you can inspect results in the notebook and reuse the same workflow elsewhere.
 
-| Mode | Command |
-| --- | --- |
-| Notebook | `marimo edit sentiment_classifier.py` |
-| Web app | `marimo run sentiment_classifier.py` |
-| Script | `uv run python sentiment_classifier.py -- --model-a gemma3:1b --model-b qwen2.5:0.5b --output results.csv` |
-| Python module | `from sentiment_classifier import get_client` |
+## 1. Run a marimo notebook as a script
 
-## 1. Run interactive work as a script
+Suppose you have a set of product reviews and need to classify their sentiment. You want to compare two models to see which one gives the more accurate labels. The sentiment classifier sends each review to both models and records a sentiment label, confidence score, and explanation for each answer.
 
-Start with the classifier notebook. From `course/notebooks/module-5`, run:
+The classifier begins as a marimo notebook because you can inspect the answers before you use the evaluation in another setting. You will work directly in the embedded notebook, then run the same notebook as a script and save its results to a CSV file.
 
-```bash
-marimo edit sentiment_classifier.py
-```
+<Callout title="The reviews and models">
 
-The notebook sends each product review to two local Ollama models. It shows the label, confidence, and reason from each model. You can mark a classification as correct or incorrect and compare the models in the accuracy dashboard.
+- The notebook includes twelve product reviews. They include clear opinions, sarcasm, and mixed experiences, so you can see where a simple sentiment label may be difficult.
+- It has fields for two model names, a text area where each line is one review, and a **Classify with both models** button.
+- It shows the models' answers side by side. You can mark each answer as correct or incorrect, then compare the accuracy scores and charts.
 
-Before opening the notebook, start Ollama and download the default models:
+</Callout>
+
+Before you run the embedded notebook, start Ollama and download the two default models:
 
 ```bash
 ollama serve
@@ -41,11 +37,24 @@ ollama pull qwen2.5:0.5b
   title="LLM sentiment classifier"
 />
 
-The notebook has model inputs, a text area for reviews, a button that runs both models, and a results dataframe. This is an evaluation workflow. You can inspect the answers, compare the models, and keep the output for later work.
+### Classify the reviews
 
-### Use the same workflow from the terminal
+Work in the embedded notebook above. You do not need to open a separate notebook.
 
-Near the end of `sentiment_classifier.py`, `run_headless()` reads command-line arguments and calls the same `compare_two_models()` function used by the notebook.
+1. Keep the default model names, or replace one with a model that is available in your local Ollama server.
+2. Read the reviews in the text area. Add or replace a review if there is a case that you want to test.
+3. Select **Classify with both models** and inspect the two answers for each review.
+4. Mark the classifications that you think are correct. The accuracy dashboard and charts update from your choices.
+
+<Callout title="The evaluation data">
+
+The results dataframe has one row for every review and model combination. It contains the review text, model name, sentiment label, confidence score, and a short explanation. The script will save this same data to a CSV file.
+
+</Callout>
+
+### Run the notebook from the terminal
+
+Once you have inspected the results in the notebook, you can run the same file as a standard Python script from the terminal. Near the end of `sentiment_classifier.py`, `run_headless()` reads command-line arguments and calls the same `compare_two_models()` function that the notebook uses. This repeats the evaluation without requiring you to use the notebook interface.
 
 ```python
 @app.function

@@ -78,11 +78,11 @@ const modules = {
   },
   5: {
     number: 5,
-    title: "From Interactive Work to Reusable Systems",
+    title: "From Prototype to Production",
     duration: "20 min",
     Content: ModuleFive,
     lessons: [
-      ["1-run-interactive-work-as-a-script", "Run interactive work as a script", null, 1],
+      ["1-run-a-marimo-notebook-as-a-script", "Run a marimo notebook as a script", null, 1],
       ["2-publish-the-notebook-as-a-web-app", "Publish the notebook as a web app", null, 2],
       ["3-export-and-share-your-work", "Export and share your work", null, 3],
       ["4-import-notebook-functions-into-another-notebook", "Import notebook functions", null, 4],
@@ -331,7 +331,10 @@ const mdxComponents = {
 };
 
 function Sidebar({ module, open, setOpen }) {
+  const sidebarParams = new URLSearchParams(window.location.search);
   const [active, setActive] = useState(module.lessons[0]?.[0] || "top");
+  const [outlineOpen, setOutlineOpen] = useState(() => sidebarParams.get("outline") === "1");
+  const [expandedModule, setExpandedModule] = useState(() => Number(sidebarParams.get("expanded")) || null);
   useEffect(() => {
     setActive(module.lessons[0]?.[0] || "top");
     const targets = module.lessons.map(([id]) => document.getElementById(id)).filter(Boolean);
@@ -342,17 +345,40 @@ function Sidebar({ module, open, setOpen }) {
     targets.forEach((target) => observer.observe(target));
     return () => observer.disconnect();
   }, [module]);
-  return <aside className={`sidebar ${open ? "open" : ""}`} id="courseSidebar"><div className="sidebar-inner"><p className="overline">The Modern AI and ML Development Stack</p><div className="progress"><span style={{ width: `${module.number * 20}%` }} /></div><p className="progress-label">{module.number} of 5 modules</p><nav className="course-outline" aria-label="Course lessons">{Object.values(modules).map((item) => <div className={`module-group ${item.number === module.number ? "" : "collapsed-group"}`} key={item.number}><p><a className="module-link" href={moduleHref(item.number)}>{item.number}. {item.title}</a></p>{item.number === module.number && <ol>{item.lessons.map(([id, title, level, number]) => <li className={level === "nested" ? "nested-lesson" : ""} key={id}><a className={active === id ? "current" : ""} href={`#${id}`} onClick={() => setOpen(false)}><span>{level === "nested" ? "↳" : number}</span>{title}</a></li>)}</ol>}</div>)}{futureModules.map((title) => <div className="module-group future-group" key={title}><p>{title}</p></div>)}</nav></div></aside>;
+  return <aside className={`sidebar ${open ? "open" : ""}`} id="courseSidebar"><div className="sidebar-inner"><div className="course-title"><a href={window.location.pathname}>marimo for AI and ML Development</a><button type="button" onClick={() => setOutlineOpen(!outlineOpen)} aria-label={outlineOpen ? "Collapse course contents" : "Expand course contents"} aria-expanded={outlineOpen} aria-controls="courseOutline">{outlineOpen ? "−" : "+"}</button></div>{outlineOpen && <><div className="progress"><span style={{ width: `${module.number * 20}%` }} /></div><p className="progress-label">{module.number} of 5 modules</p><nav className="course-outline" id="courseOutline" aria-label="Course lessons">{Object.values(modules).map((item) => <div className={`module-group ${expandedModule === item.number ? "" : "collapsed-group"}`} key={item.number}><p><a className="module-link" href={`${window.location.pathname}?module=${item.number}&outline=1&expanded=${item.number}`} onClick={() => setExpandedModule(item.number)}>{item.number}. {item.title}</a></p>{expandedModule === item.number && item.number === module.number && <ol>{item.lessons.map(([id, title, level, number]) => <li className={level === "nested" ? "nested-lesson" : ""} key={id}><a className={active === id ? "current" : ""} href={`#${id}`} onClick={() => setOpen(false)}><span>{level === "nested" ? "↳" : number}</span>{title}</a></li>)}</ol>}</div>)}{futureModules.map((title) => <div className="module-group future-group" key={title}><p>{title}</p></div>)}</nav></>}</div></aside>;
+}
+
+function CourseHome() {
+  return <article className="course-home" id="course">
+    <p className="course-kicker">marimo course</p>
+    <h1>marimo for AI and ML Development</h1>
+    <p className="course-subtitle">Enable reactive execution and predictable AI workflows.</p>
+    <p className="course-author">Parul Pandey</p>
+    <div className="course-actions">
+      <a className="course-start" href={`${window.location.pathname}?module=1&outline=1&expanded=1`}>Start the course</a>
+    </div>
+    <section className="course-outcomes">
+      <h2>What you will learn and how you can apply it</h2>
+      <ul>
+        <li>See how reactive execution and clear dependencies prevent common reproducibility problems in notebooks.</li>
+        <li>Build and share AI and ML experiments that use the same environment and dependencies.</li>
+        <li>Explore data and evaluate models with interactive controls and visualizations.</li>
+        <li>Use AI coding agents while you prototype, debug models, and improve an ML workflow.</li>
+        <li>Turn one marimo notebook into a script, web app, shareable artifact, or Python module without rewriting the code.</li>
+      </ul>
+    </section>
+  </article>;
 }
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const requestedModule = Number(new URLSearchParams(window.location.search).get("module")) || 1;
+  const requestedModule = Number(new URLSearchParams(window.location.search).get("module"));
+  const isCourseHome = !requestedModule || !modules[requestedModule];
   const module = modules[requestedModule] || modules[1];
   const Content = module.Content;
   const previous = modules[module.number - 1];
   const next = modules[module.number + 1];
-  return <><header className="site-header"><a className="brand" href={moduleHref(1)} aria-label="marimo course preview"><img src="https://marimo.io/logotype-wide.svg" alt="marimo" /></a><nav><a className="active" href={moduleHref(module.number)}>Learn</a><a href="https://docs.marimo.io" target="_blank" rel="noreferrer">Docs ↗</a></nav></header><div className="mobile-course-bar"><button onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="courseSidebar"><span>Module {module.number} of 5</span><span>{menuOpen ? "×" : "☰"}</span></button></div><div className="page-shell"><Sidebar module={module} open={menuOpen} setOpen={setMenuOpen} /><main><article className="mdx-content" id="course"><div className="lesson-meta"><span>Module {String(module.number).padStart(2, "0")}</span><span>{module.duration}</span></div><Content components={mdxComponents} /><nav className={`lesson-nav ${previous ? "has-previous" : ""}`}>{previous ? <a className="previous" href={moduleHref(previous.number)}><small>Previous module</small><strong>← {previous.title}</strong></a> : <span />}{next && <a className="next" href={moduleHref(next.number)}><small>Next module</small><strong>{next.title} →</strong></a>}</nav></article></main></div></>;
+  return <><header className="site-header"><a className="brand" href="https://marimo.io" target="_blank" rel="noreferrer" aria-label="Visit marimo"><img src="https://marimo.io/logotype-wide.svg" alt="marimo" /></a><nav><a href="https://docs.marimo.io" target="_blank" rel="noreferrer">Docs ↗</a></nav></header><div className="mobile-course-bar"><button onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="courseSidebar"><span>{isCourseHome ? "Course contents" : `Module ${module.number} of 5`}</span><span>{menuOpen ? "×" : "☰"}</span></button></div><div className="page-shell"><Sidebar module={module} open={menuOpen} setOpen={setMenuOpen} /><main>{isCourseHome ? <CourseHome /> : <article className="mdx-content" id="course"><div className="lesson-meta"><span>Module {String(module.number).padStart(2, "0")}</span><span>{module.duration}</span></div><Content components={mdxComponents} /><nav className={`lesson-nav ${previous ? "has-previous" : ""}`}>{previous ? <a className="previous" href={moduleHref(previous.number)}><small>Previous module</small><strong>← {previous.title}</strong></a> : <span />}{next && <a className="next" href={moduleHref(next.number)}><small>Next module</small><strong>{next.title} →</strong></a>}</nav></article>}</main></div></>;
 }
 
 createRoot(document.getElementById("root")).render(<App />);
