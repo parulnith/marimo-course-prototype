@@ -6,19 +6,38 @@ order: 5
 duration: 20 min
 ---
 
+import notebookToSystem from "../images/module-5/notebook-to-system.png";
+
 An interactive notebook is a useful place to begin an AI or ML project because it lets you experiment and test ideas quickly. However, the requirements may differ when you need to share your work with others or integrate it into a larger production system. marimo makes it possible to seamlessly transition from a notebook to a script, web app, shareable artifact, and reusable Python module without having to rewrite your code and in this module you'll see how to do that with a sentiment classifier.
 
-<ImagePlaceholder
-  title="From notebook to reusable system"
-  description="Diagram placeholder: sentiment classifier notebook → script → web app → shareable artifact → Python module."
-/>
+<img src={notebookToSystem} alt="A sentiment classifier notebook branching into a script and reusable module, then into a web app and shareable report." />
 
 ### Create a sentiment classifier
-Imagine that you work for a company that wants to understand the sentiment of customer feedback. You begin in a notebook because it gives you room to experiment with the reviews and inspect each answer. The starter notebook includes twelve product reviews. You will create a sentiment classifier, then compare how two open-source models classify the same feedback.
+Imagine you work for a company that wants to understand the sentiment in customer feedback. In this exercise, you will use an LLM to classify twelve product reviews as positive, negative, or neutral using zero-shot classification. You will run two open-weight models locally with Ollama, then compare how they label the same reviews.
 
-You compare two models because a model can be good at clear feedback but struggle with sarcasm or mixed opinions. Looking at the same reviews side by side gives you evidence for choosing a model instead of relying on a single answer. We use open-source models because you can run them locally through Ollama, try the workflow without an API key, and replace either model with another one that is available on your computer.
+## Using open-weight models with marimo
 
-This module uses open-source models through Ollama. In [Module 4](/?module=4), you connected a model provider before using AI features. Here, Ollama is the model provider. In one terminal, run `ollama serve`. In another terminal, download the two models with `ollama pull gemma3:1b` and `ollama pull qwen2.5:0.5b`.
+These examples use local models through Ollama. If you set up Ollama in Module 4, you can continue to the notebook.
+
+<details className="setup-details">
+  <summary>Need to set up Ollama?</summary>
+
+  1. Download and install [Ollama](https://ollama.com/download).
+  2. In a terminal, start the local server:
+
+  ```bash
+  ollama serve
+  ```
+
+  3. In a second terminal, download the two models for this module:
+
+  ```bash
+  ollama pull gemma3:1b
+  ollama pull qwen2.5:0.5b
+  ```
+
+  You do not need an API key for these local models.
+</details>
 
 
 

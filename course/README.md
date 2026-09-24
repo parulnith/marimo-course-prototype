@@ -8,6 +8,7 @@ This folder contains the portable course files for website integration.
 course/
 ├── components/
 │   └── placeholders.mdx
+├── Ollama-Setup.md
 ├── images/
 │   └── module-1/
 ├── modules/
@@ -38,6 +39,8 @@ course/
 `notebooks/module-4/` contains the notebook used to practise giving an AI assistant context and pairing a coding agent with marimo.
 
 `components/placeholders.mdx` describes the custom MDX components used in the lessons. These names can be mapped to the components provided by the website.
+
+`Ollama-Setup.md` explains how to install Ollama and use local models with marimo.
 
 ## Module 1 notebooks
 
