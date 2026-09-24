@@ -58,7 +58,7 @@ def _():
 
 @app.cell
 def _(client, compare_two_models, texts):
-    results = compare_two_models(client, texts, model_a="gemma3:1b", model_b="qwen2.5:0.5b")
+    results = compare_two_models(client, texts, model_a="gemma3:1b", model_b="qwen3:1.7b")
     # print(results[["model", "text", "label", "confidence"]].to_string(index=False))
     results
     return (results,)

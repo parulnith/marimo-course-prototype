@@ -7,23 +7,26 @@ duration: 20 min
 ---
 
 import notebookToSystem from "../images/module-5/notebook-to-system.png";
+import sentimentClassifierFlow from "../images/module-5/sentiment-classifier-flow.png";
 
-An interactive notebook is a useful place to begin an AI or ML project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work or integrate it into a larger production system.
+An interactive notebook is a great place to begin an AI or ML project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work or integrate it into a larger production system.
 
-marimo lets you move from a notebook to a script, web app, shareable artifact, or reusable Python module without rewriting your code. In this module, you will see how to do this with a sentiment classifier.
+marimo lets you move from a notebook to a script, web app, shareable artifact, or reusable Python module without rewriting your code and in this module, you will see exactly how to do this.
 
 <img src={notebookToSystem} alt="A sentiment classifier notebook branching into a script and reusable module, then into a web app and shareable report." />
 
-### Create a sentiment classifier
+## 1. Start with a notebook
 
 Imagine you work for a company that wants to understand sentiment in customer feedback. In this exercise, you will use two open-weight LLMs to classify twelve product reviews as positive, negative, or neutral using zero-shot classification. You will then compare how the models label the same reviews.
 
-### Using open-weight models with marimo
+<img src={sentimentClassifierFlow} alt="Twelve product reviews go through a zero-shot prompt to two Ollama models. Each model returns sentiment labels, and the results are compared." />
 
-These examples use local, open-weight models through Ollama. In Module 4, you saw how to configure AI providers in marimo. For this notebook, enable AI features and select Ollama as the provider. We deliberately use small models in this exercise so that they download quickly and can run on most local machines. 
+### Set up Ollama
+
+This time you'll be working with local, open-weight models through Ollama namely `gemma3:1b` and `qwen3:1.7b`. These small models download quickly and can run on most local machines. In **Module 4**, you saw how to configure AI providers in marimo. For this notebook, enable AI features and select Ollama as the provider. 
 
 <details className="setup-details">
-  <summary>Need to set up Ollama?</summary>
+  <summary>Set up Ollama and download the models</summary>
 
   1. Download and install [Ollama](https://ollama.com/download).
   2. In a terminal, start the local server:
@@ -36,19 +39,22 @@ These examples use local, open-weight models through Ollama. In Module 4, you sa
 
   ```bash
   ollama pull gemma3:1b
-  ollama pull qwen2.5:0.5b
+  ollama pull qwen3:1.7b
   ```
 
 
 </details>
 
+### Run the starter notebook
+
+The notebook below is the starting point for this module. It contains twelve product reviews, two controls for choosing models, and a button to run the comparison. These controls are widgets, like the ones you used in [Module 3](/?module=3). When you select **Classify with both models**, marimo sends every review to each model. Each model returns a sentiment label, confidence score, and short reason. The results appear in a dataframe, with one row for every review and model pair.
 
 
-<MarimoEmbed notebook="/notebooks/0_sentiment_classifier_starter.html" title="Sentiment classifier starter" />
+<MarimoEmbed notebook="/notebooks/0_sentiment_classifier_starter.html" title="Compare two local models" />
 
-In the notebook, enter reviews, select **Classify with both models**, and inspect the two answers side by side. The results dataframe has one row for every review and model combination. With twelve reviews and two models, it has 24 rows.
+Select `Classify with both models` and inspect the answers side by side. With twelve reviews and two models, the results dataframe has 24 rows.
 
-## 1. Run a marimo notebook as a script
+## 2. Run a marimo notebook as a script
 
 You have used the classifier interactively. Now run the same comparison from a terminal when you need a repeatable result that can be saved to a file.
 
@@ -60,7 +66,7 @@ The script accepts two model names and an output path. `run_headless()` reads th
 cd course/notebooks/module-5
 uv run python 1_sentiment_classifier_script.py -- \
   --model-a gemma3:1b \
-  --model-b qwen2.5:0.5b \
+  --model-b qwen3:1.7b \
   --output results.csv
 ```
 
@@ -72,7 +78,7 @@ Open `results.csv`. It should contain 24 rows with the review text, model name, 
 3. Compare one row in the CSV file with the same answer in the starter notebook.
 </TryIt>
 
-## 2. Publish the classifier as a web app
+## 3. Publish the classifier as a web app
 
 The same classifier can be an app for people who do not need to edit code. The app keeps the model fields, review input, and run button, while hiding the notebook cells.
 
@@ -90,7 +96,7 @@ marimo run 2_sentiment_classifier_app.py
 3. Run the comparison and inspect where the models agree or disagree.
 </TryIt>
 
-## 3. Export and share a report
+## 4. Export and share a report
 
 The script creates a CSV file. This report notebook reads that file and gives you a simple view that you can export or share.
 
@@ -112,7 +118,7 @@ Use HTML for a report that someone can open in a browser, PDF for a fixed docume
 3. Open `report.html` and check that the table and label counts are present.
 </TryIt>
 
-## 4. Reuse the classifier in another notebook
+## 5. Reuse the classifier in another notebook
 
 The comparison logic can also become a Python module. `classifier_module.py` exposes `get_client()` and `compare_two_models()` with `@app.function`, so another notebook can import them.
 
@@ -124,7 +130,7 @@ The evaluation pipeline uses the same functions with a new set of reviews. It do
 from classifier_module import compare_two_models, get_client
 
 client = get_client()
-results = compare_two_models(client, texts, model_a="gemma3:1b", model_b="qwen2.5:0.5b")
+results = compare_two_models(client, texts, model_a="gemma3:1b", model_b="qwen3:1.7b")
 ```
 
 <TryIt>
@@ -133,7 +139,7 @@ results = compare_two_models(client, texts, model_a="gemma3:1b", model_b="qwen2.
 3. Run the notebook and inspect the summary.
 </TryIt>
 
-## 5. The complete classifier
+## 6. The complete classifier
 
 You have now used the same sentiment-classification problem as a notebook, script, app, report, and reusable module. The complete `sentiment_classifier.py` combines the interactive interface, command-line arguments, and reusable functions in one file.
 

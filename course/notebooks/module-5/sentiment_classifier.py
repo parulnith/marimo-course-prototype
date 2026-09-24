@@ -42,7 +42,7 @@ def _():
     A small LLM eval harness to classify product reviews with two Ollama models, side by side.
 
 
-    Prerequisites: start `Ollama` with `ollama serve`, then pull both models — `ollama pull gemma3:1b` and `ollama pull qwen2.5:0.5b`.
+    Prerequisites: start `Ollama` with `ollama serve`, then pull both models: `ollama pull gemma3:1b` and `ollama pull qwen3:1.7b`.
 
     > **Note:** the imports and `SYSTEM_PROMPT` live in a special **setup cell** at
     > the top of this file. That makes them visible to top-level `@app.function`s
@@ -164,7 +164,7 @@ def _():
         description="Compare two Ollama models on a set of reviews.",
     )
     parser.add_argument("--model-a", default="gemma3:1b")
-    parser.add_argument("--model-b", default="qwen2.5:0.5b")
+    parser.add_argument("--model-b", default="qwen3:1.7b")
     parser.add_argument("--base-url", default="http://localhost:11434/v1/")
     parser.add_argument("--output", default=None, help="Optional CSV path for results")
     args, _ = parser.parse_known_args()
@@ -199,7 +199,7 @@ def _(args):
     model_b_input = mo.ui.text(
         value=args.model_b,
         label="Model B",
-        placeholder="e.g. qwen2.5:0.5b",
+        placeholder="e.g. qwen3:1.7b",
     )
     reviews_input = mo.ui.text_area(
         value="\n".join(sample_reviews()),
@@ -411,7 +411,7 @@ def run_headless(argv):
         description="Compare two Ollama models on a set of reviews."
     )
     parser.add_argument("--model-a", default="gemma3:1b")
-    parser.add_argument("--model-b", default="qwen2.5:0.5b")
+    parser.add_argument("--model-b", default="qwen3:1.7b")
     parser.add_argument("--base-url", default="http://localhost:11434/v1/")
     parser.add_argument("--output", default=None, help="Optional CSV path for results")
     cli = parser.parse_args(argv)

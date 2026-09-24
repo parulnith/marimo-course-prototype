@@ -64,7 +64,7 @@ def _():
 @app.cell
 def _(mo):
     model_a = mo.ui.text(value="gemma3:1b", label="Model A")
-    model_b = mo.ui.text(value="qwen2.5:0.5b", label="Model B")
+    model_b = mo.ui.text(value="qwen3:1.7b", label="Model B")
     reviews = mo.ui.text_area(value="\n".join(REVIEWS), label="Reviews, one per line", rows=10, full_width=True)
     run = mo.ui.run_button(label="Classify", kind="success")
     mo.vstack([mo.hstack([model_a, model_b]), reviews, run])

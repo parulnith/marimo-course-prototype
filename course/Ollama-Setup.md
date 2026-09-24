@@ -41,7 +41,7 @@ No sign-in or API key is required for local models served at `http://localhost:1
 
 ```bash
 ollama pull gemma3:1b
-ollama pull qwen2.5:0.5b
+ollama pull qwen3:1.7b
 ```
 
 ### 4. Run a quick test
@@ -82,7 +82,7 @@ The `/v1` suffix matters for marimo because marimo talks to Ollama through Ollam
 ollama --version
 ollama serve
 ollama pull gemma3:1b
-ollama pull qwen2.5:0.5b
+ollama pull qwen3:1.7b
 ollama run gemma3:1b
 ollama list
 ```

@@ -56,7 +56,7 @@ def compare_two_models(texts, model_a, model_b):
 def run_headless(argv):
     parser = argparse.ArgumentParser(description="Compare two models on product reviews.")
     parser.add_argument("--model-a", default="gemma3:1b")
-    parser.add_argument("--model-b", default="qwen2.5:0.5b")
+    parser.add_argument("--model-b", default="qwen3:1.7b")
     parser.add_argument("--output", default="results.csv")
     args = parser.parse_args(argv)
     results = compare_two_models(REVIEWS, args.model_a, args.model_b)
@@ -79,7 +79,7 @@ def _():
 def _():
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--model-a", default="gemma3:1b")
-    parser.add_argument("--model-b", default="qwen2.5:0.5b")
+    parser.add_argument("--model-b", default="qwen3:1.7b")
     args, _ = parser.parse_known_args()
     return (args,)
 

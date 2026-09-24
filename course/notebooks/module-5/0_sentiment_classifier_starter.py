@@ -1,6 +1,11 @@
 # /// script
 # requires-python = ">=3.10"
-# dependencies = ["marimo", "openai", "pandas"]
+# dependencies = [
+#   "marimo",
+#   "pandas",
+#   "requests",
+#   "pyodide-http; sys_platform == 'emscripten'",
+# ]
 # ///
 
 import marimo
@@ -12,7 +17,13 @@ with app.setup:
     import json
     import marimo as mo
     import pandas as pd
-    from openai import OpenAI
+    import requests
+    import sys
+
+    if sys.platform == "emscripten":
+        import pyodide_http
+
+        pyodide_http.patch_all()
 
     REVIEWS = [
         "Oh wonderful, another charger that lasts a whole three weeks. Just what I needed.",
@@ -33,23 +44,30 @@ with app.setup:
 The label must be exactly positive, negative, or neutral. Do not use any other label."""
 
 
-@app.function
+@app.function(hide_code=True)
 def compare_reviews(texts, model_a, model_b):
-    client = OpenAI(base_url="http://localhost:11434/v1/", api_key="ollama")
     rows = []
     for text in texts:
         for model in (model_a, model_b):
             try:
-                response = client.chat.completions.create(
-                    model=model,
-                    messages=[
-                        {"role": "system", "content": SYSTEM_PROMPT},
-                        {"role": "user", "content": text},
-                    ],
-                    response_format={"type": "json_object"},
-                    temperature=0,
+                messages = [
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": text},
+                ]
+                response = requests.post(
+                    "http://localhost:11434/v1/chat/completions",
+                    headers={"Authorization": "Bearer ollama"},
+                    json={
+                        "model": model,
+                        "messages": messages,
+                        "response_format": {"type": "json_object"},
+                        "temperature": 0,
+                    },
+                    timeout=60,
                 )
-                answer = json.loads(response.choices[0].message.content or "{}")
+                response.raise_for_status()
+                content = response.json()["choices"][0]["message"]["content"]
+                answer = json.loads(content or "{}")
                 label = str(answer.get("label", "error")).strip().lower()
                 rows.append({
                     "text": text,
@@ -66,7 +84,7 @@ def compare_reviews(texts, model_a, model_b):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    # Create a sentiment classifier
+    # Compare two local models
 
     Compare two models on the same product reviews. Each model returns a sentiment label,
     confidence score, and short explanation.
@@ -77,7 +95,7 @@ def _(mo):
 @app.cell
 def _(mo):
     model_a = mo.ui.text(value="gemma3:1b", label="Model A")
-    model_b = mo.ui.text(value="qwen2.5:0.5b", label="Model B")
+    model_b = mo.ui.text(value="qwen3:1.7b", label="Model B")
     reviews = mo.ui.text_area(value="\n".join(REVIEWS), label="Reviews, one per line", rows=10, full_width=True)
     run = mo.ui.run_button(label="Classify with both models", kind="success")
     mo.vstack([mo.hstack([model_a, model_b]), reviews, run])
