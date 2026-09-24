@@ -35,7 +35,7 @@ def _(mo):
 def _():
     import marimo as mo
 
-    from sentiment_classifier import compare_two_models, get_client
+    from classifier_module import compare_two_models, get_client
 
     return compare_two_models, get_client, mo
 

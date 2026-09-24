@@ -21,7 +21,8 @@ with app.setup:
         "You are a sentiment classifier. "
         "Classify the sentiment of the product review given by the user. "
         'Respond ONLY with valid JSON: {"label": "<positive|negative|neutral>", '
-        '"confidence": <0.0-1.0>, "reason": "<one sentence>"}'
+        '"confidence": <0.0-1.0>, "reason": "<one sentence>"}. '
+        "The label must be exactly positive, negative, or neutral."
     )
 
 
@@ -62,7 +63,7 @@ def _():
 
 
 @app.function
-def get_client(base_url="http://localhost:11434/v1", api_key="ollama"):
+def get_client(base_url="http://localhost:11434/v1/", api_key="ollama"):
     return OpenAI(
         base_url=base_url, api_key=api_key or os.getenv("OPENAI_API_KEY", "ollama")
     )
@@ -93,6 +94,7 @@ def compare_two_models(client, texts, model_a, model_b):
                         {"role": "system", "content": SYSTEM_PROMPT},
                         {"role": "user", "content": text},
                     ],
+                    response_format={"type": "json_object"},
                     temperature=0.0,
                 )
                 raw = (response.choices[0].message.content or "").strip()
@@ -103,11 +105,12 @@ def compare_two_models(client, texts, model_a, model_b):
                     .strip()
                 )
                 parsed = json.loads(raw)
+                label = str(parsed.get("label", "error")).strip().lower()
                 rows.append(
                     {
                         "text": text,
                         "model": model,
-                        "label": parsed.get("label", "neutral"),
+                        "label": label if label in {"positive", "negative", "neutral"} else "error",
                         "confidence": round(float(parsed.get("confidence", 0.5)), 3),
                         "reason": parsed.get("reason", ""),
                     }
@@ -162,7 +165,7 @@ def _():
     )
     parser.add_argument("--model-a", default="gemma3:1b")
     parser.add_argument("--model-b", default="qwen2.5:0.5b")
-    parser.add_argument("--base-url", default="http://localhost:11434/v1")
+    parser.add_argument("--base-url", default="http://localhost:11434/v1/")
     parser.add_argument("--output", default=None, help="Optional CSV path for results")
     args, _ = parser.parse_known_args()
     return (args,)
@@ -409,7 +412,7 @@ def run_headless(argv):
     )
     parser.add_argument("--model-a", default="gemma3:1b")
     parser.add_argument("--model-b", default="qwen2.5:0.5b")
-    parser.add_argument("--base-url", default="http://localhost:11434/v1")
+    parser.add_argument("--base-url", default="http://localhost:11434/v1/")
     parser.add_argument("--output", default=None, help="Optional CSV path for results")
     cli = parser.parse_args(argv)
 

@@ -20,6 +20,11 @@ const notebookSources = [
   "course/notebooks/module-3/3_4_fit_and_compare_models.py",
   "course/notebooks/module-3/3_5_debug_errors_interactively.py",
   "course/notebooks/module-4/4_1_ai_features_demo.py",
+  "course/notebooks/module-5/0_sentiment_classifier_starter.py",
+  "course/notebooks/module-5/1_sentiment_classifier_script.py",
+  "course/notebooks/module-5/2_sentiment_classifier_app.py",
+  "course/notebooks/module-5/3_sentiment_classifier_report.py",
+  "course/notebooks/module-5/classifier_module.py",
   "course/notebooks/module-5/sentiment_classifier.py",
   "course/notebooks/module-5/eval_pipeline.py",
 ].map((path) => join(repoRoot, path));

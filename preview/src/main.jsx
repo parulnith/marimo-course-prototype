@@ -83,10 +83,11 @@ const modules = {
     Content: ModuleFive,
     lessons: [
       ["1-run-a-marimo-notebook-as-a-script", "Run a marimo notebook as a script", null, 1],
-      ["2-publish-the-notebook-as-a-web-app", "Publish the notebook as a web app", null, 2],
-      ["3-export-and-share-your-work", "Export and share your work", null, 3],
-      ["4-import-notebook-functions-into-another-notebook", "Import notebook functions", null, 4],
-      ["check-your-understanding", "Quiz", null, 5],
+      ["2-publish-the-classifier-as-a-web-app", "Publish the classifier as a web app", null, 2],
+      ["3-export-and-share-a-report", "Export and share a report", null, 3],
+      ["4-reuse-the-classifier-in-another-notebook", "Reuse the classifier", null, 4],
+      ["5-the-complete-classifier", "The complete classifier", null, 5],
+      ["check-your-understanding", "Quiz", null, 6],
     ],
   },
 };
