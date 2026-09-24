@@ -8,16 +8,19 @@ duration: 20 min
 
 import notebookToSystem from "../images/module-5/notebook-to-system.png";
 
-An interactive notebook is a useful place to begin an AI or ML project because it lets you experiment and test ideas quickly. However, the requirements may differ when you need to share your work with others or integrate it into a larger production system. marimo makes it possible to seamlessly transition from a notebook to a script, web app, shareable artifact, and reusable Python module without having to rewrite your code and in this module you'll see how to do that with a sentiment classifier.
+An interactive notebook is a useful place to begin an AI or ML project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work or integrate it into a larger production system.
+
+marimo lets you move from a notebook to a script, web app, shareable artifact, or reusable Python module without rewriting your code. In this module, you will see how to do this with a sentiment classifier.
 
 <img src={notebookToSystem} alt="A sentiment classifier notebook branching into a script and reusable module, then into a web app and shareable report." />
 
 ### Create a sentiment classifier
-Imagine you work for a company that wants to understand the sentiment in customer feedback. In this exercise, you will use an LLM to classify twelve product reviews as positive, negative, or neutral using zero-shot classification. You will run two open-weight models locally with Ollama, then compare how they label the same reviews.
 
-## Using open-weight models with marimo
+Imagine you work for a company that wants to understand sentiment in customer feedback. In this exercise, you will use two open-weight LLMs to classify twelve product reviews as positive, negative, or neutral using zero-shot classification. You will then compare how the models label the same reviews.
 
-These examples use local models through Ollama. If you set up Ollama in Module 4, you can continue to the notebook.
+### Using open-weight models with marimo
+
+These examples use local, open-weight models through Ollama. In Module 4, you saw how to configure AI providers in marimo. For this notebook, enable AI features and select Ollama as the provider. We deliberately use small models in this exercise so that they download quickly and can run on most local machines. 
 
 <details className="setup-details">
   <summary>Need to set up Ollama?</summary>
@@ -36,7 +39,7 @@ These examples use local models through Ollama. If you set up Ollama in Module 4
   ollama pull qwen2.5:0.5b
   ```
 
-  You do not need an API key for these local models.
+
 </details>
 
 
