@@ -44,6 +44,16 @@ with app.setup:
 The label must be exactly positive, negative, or neutral. Do not use any other label."""
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    # Product review sentiment classifier
+
+    Classify the same twelve product reviews with two local models and compare their results.
+    """)
+    return
+
+
 @app.function(hide_code=True)
 def compare_reviews(texts, model_a, model_b):
     rows = []
@@ -81,24 +91,17 @@ def compare_reviews(texts, model_a, model_b):
     return pd.DataFrame(rows)
 
 
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md("""
-    # Compare two local models
-
-    Compare two models on the same product reviews. Each model returns a sentiment label,
-    confidence score, and short explanation.
-    """)
-    return
-
-
 @app.cell
 def _(mo):
     model_a = mo.ui.text(value="gemma3:1b", label="Model A")
     model_b = mo.ui.text(value="qwen3:1.7b", label="Model B")
     reviews = mo.ui.text_area(value="\n".join(REVIEWS), label="Reviews, one per line", rows=10, full_width=True)
     run = mo.ui.run_button(label="Classify with both models", kind="success")
-    mo.vstack([mo.hstack([model_a, model_b]), reviews, run])
+    mo.vstack([
+        mo.hstack([model_a, model_b]),
+        reviews,
+        run,
+    ])
     return model_a, model_b, reviews, run
 
 
