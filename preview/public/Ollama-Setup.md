@@ -2,7 +2,7 @@
 
 **Module 4**
 
-Use this handout to set up Ollama locally and run a small model from the terminal.
+Use this handout to set up Ollama locally and run a small model from the command line.
 
 ---
 

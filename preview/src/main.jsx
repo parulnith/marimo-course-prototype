@@ -81,10 +81,10 @@ const modules = {
     title: "From Prototype to Production",
     duration: "20 min",
     Content: ModuleFive,
-    lessons: [
-      ["1-start-with-a-notebook", "Start with a notebook", null, 1],
-      ["2-run-a-marimo-notebook-as-a-script", "Turn your notebook into a script", null, 2],
-      ["3-publish-the-classifier-as-a-web-app", "Turn your notebook into a web app", null, 3],
+  lessons: [
+    ["1-start-with-a-notebook", "Start with a notebook", null, 1],
+    ["2-turn-the-notebook-into-a-web-app", "Turn your notebook into a web app", null, 2],
+    ["3-run-the-notebook-as-a-script", "Turn your notebook into a script", null, 3],
       ["4-export-and-share-a-report", "Share your work as an artifact", null, 4],
       ["5-reuse-the-classifier-in-another-notebook", "Reuse your notebook as a Python module", null, 5],
       ["6-the-complete-classifier", "Bring it all together", null, 6],
@@ -290,10 +290,14 @@ function MarimoEmbed({ title, notebook, openUrl }) {
     ? `${import.meta.env.BASE_URL}${requestedOpenUrl.slice(1)}`
     : requestedOpenUrl;
   const openLabel = openNotebookUrl?.includes("molab.marimo.io") ? "Open in molab" : "Open notebook";
+  const downloadUrl = notebook?.startsWith("/")
+    ? `${import.meta.env.BASE_URL}${notebook.slice(1).replace(/\.html(?:[?#].*)?$/, ".py")}`
+    : null;
   return (
     <div className={`notebook ${isEmbedded ? "notebook-embedded" : ""}`} data-notebook={notebook}>
       <div className="notebook-bar">
         {openUrl && <a href={openNotebookUrl} target="_blank" rel="noreferrer">{openLabel} ↗</a>}
+        {downloadUrl && <a href={downloadUrl} download>Download code ↓</a>}
       </div>
       {isEmbedded
         ? <iframe

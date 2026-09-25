@@ -35,11 +35,15 @@ function exportedNotebookPath(source) {
 
 function exportNotebook(source, force = false) {
   const destination = exportedNotebookPath(source);
+  const sourceDestination = join(notebookOutputDir, basename(source));
+  mkdirSync(notebookOutputDir, { recursive: true });
+  if (force || !existsSync(sourceDestination) || statSync(sourceDestination).mtimeMs < statSync(source).mtimeMs) {
+    copyFileSync(source, sourceDestination);
+  }
   if (!force && existsSync(destination) && statSync(destination).mtimeMs >= statSync(source).mtimeMs) {
     return false;
   }
 
-  mkdirSync(notebookOutputDir, { recursive: true });
   execFileSync(
     "uvx",
     ["--from", "marimo==0.23.16", "marimo", "export", "html-wasm", source, "-o", notebookOutputDir, "--mode", "edit", "--no-sandbox", "-f"],
