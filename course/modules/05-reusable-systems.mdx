@@ -14,7 +14,7 @@ import appView from "../images/module-5/app-view.gif";
 
 An interactive notebook is a great place to begin an AI project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work withi others or integrate it into a larger production system.
 
-marimo lets you move from a notebook to a script, web app, shareable artifact, or reusable Python module without rewriting your code and in this module, you will see exactly how to do this.
+marimo lets you move from a notebook to a script, web app, shareable artifact, or reusable Python module without rewriting your code and in this module,In this module, you will see how each form supports a different way of using the same work.
 
 <img src={notebookToSystem} alt="A marimo notebook used as a Python script, web app, shareable artifact, and Python module." />
 
@@ -176,8 +176,6 @@ To support script mode, the notebook uses a helper named `run_as_script()`. It r
 
 It then calls the same `compare_reviews()` function used by the notebook controls and saves the dataframe as a CSV file. The script prints a message that shows how many rows were written to the file.
 
-<img src={sentimentClassifierScriptFlow} alt="Model names and an output filename are passed to the classifier, which saves the results as a CSV file." />
-
 Enter this command in the command line from the folder that contains `sentiment_classifier_script.py`:
 
 ```bash
@@ -196,17 +194,15 @@ uv run sentiment_classifier_script.py -- \
 
 ## 5. Reuse the classifier in another notebook
 
-Since a marimo notebook is a Python file, many of the standard Python features can be used with it. For example, you can import functions from one marimo notebook into another. This lets you reuse notebook code without copying it.
-
-For instance, we can use the function from the sentiment classifier notebook in a second notebook that evaluates new reviews.
+A marimo notebook is a Python file, so you can import functions from one notebook into another. This lets you reuse notebook code without copying it. In this example, a second notebook imports the classifier function and applies it to three new reviews.
 
 To make a function available for import from a marimo notebook:
 
-- Define the function in its own cell.
-- Add `@app.function` above the function definition.
-- If the function needs a package or a fixed value, define it in the notebook's setup cell. This special cell runs before the other cells and makes shared imports and values available to reusable functions.
-- The function can also call another function marked with `@app.function`.
-- Keep the notebooks in the same folder, or make sure Python can otherwise find the notebook being imported.
+* Define the function in its own cell.
+* Add `@app.function` above the function definition.
+* Place packages and fixed values needed by the function in the notebook setup cell. This cell runs before the other cells and makes shared imports and values available to reusable functions.
+* Keep the notebooks in the same folder, or make sure Python can otherwise find the notebook being imported.
+
 
 The sentiment classifier notebook follows these requirements for `compare_reviews()`. In the following notebook, a normal Python import brings that function into a new analysis and applies it to three new reviews. The notebooks are in the same folder, so Python can find the sentiment classifier. See the [marimo guide to reusing functions and classes](https://docs.marimo.io/guides/reusing_functions/) for more details.
 

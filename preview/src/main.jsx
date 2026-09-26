@@ -359,8 +359,8 @@ function Sidebar({ module, open, setOpen }) {
 
 function CourseHome() {
   return <article className="course-home" id="course">
-    <p className="course-kicker">marimo course</p>
-    <h1>marimo for AI and ML Development</h1>
+    
+  <h1>marimo for AI and ML Development</h1>
     <p className="course-subtitle">Enable reactive execution and predictable AI workflows.</p>
     <p className="course-author">Parul Pandey</p>
     <div className="course-actions">
@@ -372,8 +372,8 @@ function CourseHome() {
         <li>See how reactive execution and clear dependencies prevent common reproducibility problems in notebooks.</li>
         <li>Build and share AI and ML experiments that use the same environment and dependencies.</li>
         <li>Explore data and evaluate models with interactive controls and visualizations.</li>
-        <li>Use AI coding agents while you prototype, debug models, and improve an ML workflow.</li>
-        <li>Turn one marimo notebook into a script, web app, shareable artifact, or Python module without rewriting the code.</li>
+        <li>Use AI coding agents while you prototype, debug models, and improve an AI workflow.</li>
+        <li>Turn one marimo notebook into a script, web app, shareable artifact, or Python module.</li>
       </ul>
     </section>
   </article>;
