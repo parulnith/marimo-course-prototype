@@ -123,6 +123,13 @@ def compare_two_models(client, texts, model_a, model_b):
 
 
 @app.function
+def compare_reviews(texts, model_a, model_b):
+    """Compare two Ollama models without creating the client in another notebook."""
+    client = get_client()
+    return compare_two_models(client, texts, model_a, model_b)
+
+
+@app.function
 def sample_reviews():
     return [
         "Oh wonderful, another charger that lasts a whole three weeks. Just what I needed.",
@@ -399,7 +406,7 @@ def _(model_a_input, model_b_input, verdicts_a, verdicts_b):
 
 
 @app.function
-def run_headless(argv):
+def run_as_script(argv):
     """Parse CLI args, run both models, and optionally write CSV output."""
     parser = argparse.ArgumentParser(
         description="Compare two Ollama models on a set of reviews."
@@ -425,6 +432,6 @@ if __name__ == "__main__":
 
     if "--" in sys.argv:
         sep = sys.argv.index("--")
-        run_headless(sys.argv[sep + 1 :])
+        run_as_script(sys.argv[sep + 1 :])
     else:
         app.run()

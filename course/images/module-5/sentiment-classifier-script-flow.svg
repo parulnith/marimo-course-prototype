@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="230" viewBox="0 0 900 230" role="img" aria-labelledby="title desc">
+  <title id="title">Run the sentiment classifier as a script</title>
+  <desc id="desc">Model names and an output filename are passed from the command line to the classifier, which saves results.csv.</desc>
+  <style>
+    .box { fill: #ffffff; stroke: #1c7361; stroke-width: 2; }
+    .output { fill: #e8f2ef; stroke: #1c7361; stroke-width: 2; }
+    .label { fill: #181a18; font-family: Arial, sans-serif; font-size: 19px; font-weight: 700; }
+    .detail { fill: #60645f; font-family: Arial, sans-serif; font-size: 14px; }
+    .arrow { stroke: #1c7361; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1c7361" />
+    </marker>
+  </defs>
+  <rect x="25" y="58" width="245" height="115" rx="10" class="box" />
+  <text x="147" y="97" text-anchor="middle" class="label">Command-line arguments</text>
+  <text x="147" y="126" text-anchor="middle" class="detail">--model-a, --model-b, --output</text>
+  <path d="M270 116 H360" class="arrow" />
+  <rect x="365" y="58" width="170" height="115" rx="10" class="box" />
+  <text x="450" y="97" text-anchor="middle" class="label">run_as_script()</text>
+  <text x="450" y="126" text-anchor="middle" class="detail">classifies reviews</text>
+  <path d="M535 116 H625" class="arrow" />
+  <rect x="630" y="58" width="245" height="115" rx="10" class="output" />
+  <text x="752" y="97" text-anchor="middle" class="label">results.csv</text>
+  <text x="752" y="126" text-anchor="middle" class="detail">one row per review and model</text>
+</svg>

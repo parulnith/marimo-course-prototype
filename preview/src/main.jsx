@@ -82,13 +82,12 @@ const modules = {
     duration: "20 min",
     Content: ModuleFive,
   lessons: [
-    ["1-start-with-a-notebook", "Start with a notebook", null, 1],
-    ["2-turn-the-notebook-into-a-web-app", "Turn your notebook into a web app", null, 2],
-    ["3-run-the-notebook-as-a-script", "Turn your notebook into a script", null, 3],
-      ["4-export-and-share-a-report", "Share your work as an artifact", null, 4],
-      ["5-reuse-the-classifier-in-another-notebook", "Reuse your notebook as a Python module", null, 5],
-      ["6-the-complete-classifier", "Bring it all together", null, 6],
-      ["check-your-understanding", "Quiz", null, 7],
+    ["1-start-with-a-notebook", "Build a sentiment classifier", null, 1],
+    ["2-turn-the-notebook-into-a-web-app", "Share as a web app", null, 2],
+    ["3-run-the-notebook-as-a-script", "Run as a Python script", null, 3],
+      ["4-export-and-share-a-report", "Export a shareable artifact", null, 4],
+      ["5-reuse-the-classifier-in-another-notebook", "Reuse as a Python module", null, 5],
+      ["check-your-understanding", "Quiz", null, 6],
     ],
   },
 };
@@ -278,10 +277,14 @@ function DemoPlaceholder({ title }) {
 }
 
 function MarimoEmbed({ title, notebook, openUrl }) {
-  const isEmbedded = /\.html(?:[?#]|$)/.test(notebook || "") || /^https?:\/\//.test(notebook || "");
-  const resolvedEmbedUrl = notebook?.startsWith("/")
-    ? `${import.meta.env.BASE_URL}${notebook.slice(1)}`
+  const isLocalMarimoNotebook = notebook?.startsWith("/") && /\.py(?:[?#]|$)/.test(notebook);
+  const embeddedNotebook = isLocalMarimoNotebook
+    ? notebook.replace(/\.py(?=\?|#|$)/, ".html")
     : notebook;
+  const isEmbedded = /\.html(?:[?#]|$)/.test(embeddedNotebook || "") || /^https?:\/\//.test(embeddedNotebook || "");
+  const resolvedEmbedUrl = embeddedNotebook?.startsWith("/")
+    ? `${import.meta.env.BASE_URL}${embeddedNotebook.slice(1)}`
+    : embeddedNotebook;
   const embedUrl = import.meta.env.DEV && notebook?.startsWith("/")
     ? `${resolvedEmbedUrl}${resolvedEmbedUrl.includes("?") ? "&" : "?"}dev=${devNotebookCacheKey}`
     : resolvedEmbedUrl;

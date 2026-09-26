@@ -3,7 +3,7 @@
 # dependencies = ["marimo", "openai", "pandas", "altair"]
 # ///
 
-"""Reuse the notebook's helpers from a marimo notebook OR a plain script.
+"""Reuse the notebook's helpers from another marimo notebook.
 """
 
 import marimo
@@ -15,18 +15,14 @@ app = marimo.App(width="medium")
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/parulnith/marimo-for-ai-and-ml-development-oreilly-workshop/blob/main/Module_5/eval_pipeline.py)
-    """)
-    return
+    # Reuse the classifier in another notebook
 
+    This notebook imports `compare_reviews()` from the sentiment classifier
+    notebook. You can now use it with a new set of reviews without copying the
+    classification code.
 
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md("""
-    # Eval Pipeline (notebook)
-
-    A marimo notebook that imports `compare_two_models` and `get_client` from
-    `sentiment_classifier.py` and runs them on three reviews.
+    Make sure Ollama is running and that `gemma3:1b` and `qwen3:1.7b` are
+    installed before you run the cells.
     """)
     return
 
@@ -35,15 +31,18 @@ def _(mo):
 def _():
     import marimo as mo
 
-    from classifier_module import compare_two_models, get_client
+    from sentiment_classifier import compare_reviews
 
-    return compare_two_models, get_client, mo
+    return compare_reviews, mo
 
 
-@app.cell
-def _(get_client):
-    client = get_client()
-    return (client,)
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    The import works like a normal Python import. Add the reviews you want to
+    evaluate in the next cell.
+    """)
+    return
 
 
 @app.cell
@@ -56,10 +55,22 @@ def _():
     return (texts,)
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    `texts` contains three reviews that were not used in the first notebook.
+    The next cell passes them to the imported comparison function.
+    """)
+    return
+
+
 @app.cell
-def _(client, compare_two_models, texts):
-    results = compare_two_models(client, texts, model_a="gemma3:1b", model_b="qwen3:1.7b")
-    # print(results[["model", "text", "label", "confidence"]].to_string(index=False))
+def _(compare_reviews, texts):
+    results = compare_reviews(
+        texts,
+        "gemma3:1b",
+        "qwen3:1.7b",
+    )
     results
     return (results,)
 

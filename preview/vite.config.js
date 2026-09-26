@@ -4,7 +4,7 @@ import remarkFrontmatter from "remark-frontmatter";
 import { defineConfig } from "vite";
 import { execFileSync } from "node:child_process";
 import { copyFileSync, existsSync, mkdirSync, rmSync, statSync } from "node:fs";
-import { basename, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = fileURLToPath(new URL("../", import.meta.url));
@@ -20,23 +20,25 @@ const notebookSources = [
   "course/notebooks/module-3/3_4_fit_and_compare_models.py",
   "course/notebooks/module-3/3_5_debug_errors_interactively.py",
   "course/notebooks/module-4/4_1_ai_features_demo.py",
-  "course/notebooks/module-5/0_sentiment_classifier_starter.py",
-  "course/notebooks/module-5/1_sentiment_classifier_script.py",
-  "course/notebooks/module-5/2_sentiment_classifier_app.py",
-  "course/notebooks/module-5/3_sentiment_classifier_report.py",
-  "course/notebooks/module-5/classifier_module.py",
   "course/notebooks/module-5/sentiment_classifier.py",
   "course/notebooks/module-5/eval_pipeline.py",
 ].map((path) => join(repoRoot, path));
 
+function notebookExportDir(source) {
+  return basename(dirname(source)) === "module-5"
+    ? join(notebookOutputDir, "module-5")
+    : notebookOutputDir;
+}
+
 function exportedNotebookPath(source) {
-  return join(notebookOutputDir, `${basename(source, ".py")}.html`);
+  return join(notebookExportDir(source), `${basename(source, ".py")}.html`);
 }
 
 function exportNotebook(source, force = false) {
+  const exportDir = notebookExportDir(source);
   const destination = exportedNotebookPath(source);
-  const sourceDestination = join(notebookOutputDir, basename(source));
-  mkdirSync(notebookOutputDir, { recursive: true });
+  const sourceDestination = join(exportDir, basename(source));
+  mkdirSync(exportDir, { recursive: true });
   if (force || !existsSync(sourceDestination) || statSync(sourceDestination).mtimeMs < statSync(source).mtimeMs) {
     copyFileSync(source, sourceDestination);
   }
@@ -46,12 +48,20 @@ function exportNotebook(source, force = false) {
 
   execFileSync(
     "uvx",
-    ["--from", "marimo==0.23.16", "marimo", "export", "html-wasm", source, "-o", notebookOutputDir, "--mode", "edit", "--no-sandbox", "-f"],
+    ["--from", "marimo==0.23.16", "marimo", "export", "html-wasm", source, "-o", exportDir, "--mode", "edit", "--no-sandbox", "-f"],
     { cwd: repoRoot, stdio: "inherit" },
   );
-  const generated = join(notebookOutputDir, "index.html");
+  const generated = join(exportDir, "index.html");
   copyFileSync(generated, destination);
   rmSync(generated);
+  if (basename(source) === "eval_pipeline.py") {
+    const publicDir = join(exportDir, "public");
+    mkdirSync(publicDir, { recursive: true });
+    copyFileSync(
+      join(dirname(source), "sentiment_classifier.py"),
+      join(publicDir, "sentiment_classifier.py"),
+    );
+  }
   return true;
 }
 
