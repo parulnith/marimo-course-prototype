@@ -21,6 +21,7 @@ const notebookSources = [
   "course/notebooks/module-3/3_5_debug_errors_interactively.py",
   "course/notebooks/module-4/4_1_ai_features_demo.py",
   "course/notebooks/module-5/sentiment_classifier.py",
+  "course/notebooks/module-5/sentiment_classifier_script.py",
   "course/notebooks/module-5/eval_pipeline.py",
 ].map((path) => join(repoRoot, path));
 
@@ -46,11 +47,14 @@ function exportNotebook(source, force = false) {
     return false;
   }
 
-  execFileSync(
-    "uvx",
-    ["--from", "marimo==0.23.16", "marimo", "export", "html-wasm", source, "-o", exportDir, "--mode", "edit", "--no-sandbox", "-f"],
-    { cwd: repoRoot, stdio: "inherit" },
-  );
+  const exportArgs = [
+    "--from", "marimo==0.23.16", "marimo", "export", "html-wasm", source,
+    "-o", exportDir, "--mode", "edit", "--no-sandbox", "-f",
+  ];
+  if (["sentiment_classifier.py", "sentiment_classifier_script.py"].includes(basename(source))) {
+    exportArgs.push("--execute");
+  }
+  execFileSync("uvx", exportArgs, { cwd: repoRoot, stdio: "inherit" });
   const generated = join(exportDir, "index.html");
   copyFileSync(generated, destination);
   rmSync(generated);

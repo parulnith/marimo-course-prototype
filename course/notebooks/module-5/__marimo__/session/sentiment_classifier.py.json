@@ -1,0 +1,74 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.16",
+    "script_metadata_hash": "26ae50b2e9d9c9c31c06188a15e27d54"
+  },
+  "cells": [
+    {
+      "id": "setup",
+      "code_hash": "1e6bcf58ce8b1c79097a191c9cd7b873",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Hbol",
+      "code_hash": "fcd001f150dd2fe33b63302fbc92a1b1",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"product-review-sentiment-classifier\">Product review sentiment classifier</h1>\n<span class=\"paragraph\">Classify the same twelve product reviews with two local models and compare their results.</span></span><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='Hbol-0' random-id='2ff394e1-e1e8-7e06-6b22-4db4c050f681'><marimo-text data-initial-value='&quot;gemma3:1b&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eModel A&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-placeholder='&quot;&quot;' data-kind='&quot;text&quot;' data-full-width='false' data-disabled='false' data-debounce='true'></marimo-text></marimo-ui-element><marimo-ui-element object-id='Hbol-1' random-id='e996902f-cdc6-c2e2-10cb-0888dd51e779'><marimo-text data-initial-value='&quot;qwen3:1.7b&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eModel B&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-placeholder='&quot;&quot;' data-kind='&quot;text&quot;' data-full-width='false' data-disabled='false' data-debounce='true'></marimo-text></marimo-ui-element></div><marimo-ui-element object-id='Hbol-2' random-id='c056955c-738b-15b2-0266-ef860443ed83'><marimo-text-area data-initial-value='&quot;Oh wonderful, another charger that lasts a whole three weeks. Just what I needed.&#92;nThe product itself is fantastic, but the courier left it in the rain.&#92;nNot bad. Not great. I keep using it, which probably says something.&#92;nI wanted to hate this but I can&#x27;t. Annoyingly good.&#92;nFive stars for the packaging. The thing inside? Different story.&#92;nDoes exactly what the listing says. That is neither a compliment nor a complaint.&#92;nReturned it. Then bought it again. Make of that what you will.&#92;nIf you enjoy reading 40-page manuals to brew coffee, this is the product for you.&#92;nCustomer service was great. Shame I had to call them four times.&#92;nHonestly underwhelming for the price, but I can see why some people love it.&#92;nBuild quality is solid, instructions are terrible.&#92;nIt works. My cat is unimpressed. I am cautiously optimistic.&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eReviews, one per line&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-placeholder='&quot;&quot;' data-disabled='false' data-debounce='true' data-full-width='true' data-rows='10'></marimo-text-area></marimo-ui-element><marimo-ui-element object-id='Hbol-3' random-id='3057f273-8048-0cdd-9e41-a05fe2b0095a'><marimo-button data-initial-value='0' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eClassify with both models&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-kind='&quot;success&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "a010ee04aeddd7e907a445d2e2aeef5a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "a11fe8264859ce285f9a98d511255c09",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Select <strong>Classify with both models</strong> to begin.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "6e757ff3ca7c8317042f5425389103b0",
+      "outputs": [
+        {
+          "type": "error",
+          "ename": "ancestor-stopped",
+          "evalue": "This cell wasn't run because an ancestor was stopped with `mo.stop`: ",
+          "traceback": []
+        }
+      ],
+      "console": []
+    }
+  ]
+}

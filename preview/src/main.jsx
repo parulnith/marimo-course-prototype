@@ -81,12 +81,12 @@ const modules = {
     title: "From Prototype to Production",
     duration: "20 min",
     Content: ModuleFive,
-  lessons: [
-    ["1-start-with-a-notebook", "Build a sentiment classifier", null, 1],
-    ["2-turn-the-notebook-into-a-web-app", "Share as a web app", null, 2],
-    ["3-run-the-notebook-as-a-script", "Run as a Python script", null, 3],
-      ["4-export-and-share-a-report", "Export a shareable artifact", null, 4],
-      ["5-reuse-the-classifier-in-another-notebook", "Reuse as a Python module", null, 5],
+    lessons: [
+      ["1-build-a-sentiment-classifier", "Build a sentiment classifier", null, 1],
+      ["2-export-and-share-the-notebook-in-multiple-formats", "Export and share in multiple formats", null, 2],
+      ["3-share-the-notebook-as-a-web-app", "Share the notebook as a web app", null, 3],
+      ["4-run-the-notebook-as-a-script", "Run the notebook as a script", null, 4],
+      ["5-reuse-the-classifier-in-another-notebook", "Reuse the classifier in another notebook", null, 5],
       ["check-your-understanding", "Quiz", null, 6],
     ],
   },

@@ -4,7 +4,6 @@
 #   "marimo",
 #   "pandas",
 #   "requests",
-#   "pyodide-http; sys_platform == 'emscripten'",
 # ]
 # ///
 
@@ -14,13 +13,9 @@ __generated_with = "0.23.16"
 app = marimo.App(width="medium")
 
 with app.setup:
+    import argparse
     import marimo as mo
     import sys
-
-    if sys.platform == "emscripten":
-        import pyodide_http
-
-        pyodide_http.patch_all()
 
     REVIEWS = [
         "Oh wonderful, another charger that lasts a whole three weeks. Just what I needed.",
@@ -41,26 +36,19 @@ with app.setup:
 The label must be exactly positive, negative, or neutral. Do not use any other label."""
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
-    model_a = mo.ui.text(value="gemma3:1b", label="Model A")
-    model_b = mo.ui.text(value="qwen3:1.7b", label="Model B")
-    reviews = mo.ui.text_area(value="\n".join(REVIEWS), label="Reviews, one per line", rows=10, full_width=True)
-    run = mo.ui.run_button(label="Classify with both models", kind="success")
-    mo.vstack([
-        mo.md("""
-        # Product review sentiment classifier
+    mo.md("""
+    # Run the sentiment classifier as a script
 
-        Classify the same twelve product reviews with two local models and compare their results.
-        """),
-        mo.hstack([model_a, model_b]),
-        reviews,
-        run,
-    ])
-    return model_a, model_b, reviews, run
+    This version receives the model names and output filename from the command
+    line. It classifies the reviews and saves the results to a CSV file without
+    opening the notebook interface.
+    """)
+    return
 
 
-@app.function
+@app.function(hide_code=True)
 def compare_reviews(texts, model_a, model_b):
     import json
 
@@ -71,59 +59,74 @@ def compare_reviews(texts, model_a, model_b):
     for model in (model_a, model_b):
         for text in texts:
             try:
-                messages = [
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": text},
-                ]
                 response = requests.post(
                     "http://localhost:11434/v1/chat/completions",
                     headers={"Authorization": "Bearer ollama"},
                     json={
                         "model": model,
-                        "messages": messages,
+                        "messages": [
+                            {"role": "system", "content": SYSTEM_PROMPT},
+                            {"role": "user", "content": text},
+                        ],
                         "response_format": {"type": "json_object"},
                         "temperature": 0,
                     },
                     timeout=60,
                 )
                 response.raise_for_status()
-                content = response.json()["choices"][0]["message"]["content"]
-                answer = json.loads(content or "{}")
+                answer = json.loads(
+                    response.json()["choices"][0]["message"]["content"] or "{}"
+                )
                 label = str(answer.get("label", "error")).strip().lower()
-                rows.append({
-                    "text": text,
-                    "model": model,
-                    "label": label if label in {"positive", "negative", "neutral"} else "error",
-                    "reason": answer.get("reason", ""),
-                })
+                rows.append(
+                    {
+                        "text": text,
+                        "model": model,
+                        "label": label
+                        if label in {"positive", "negative", "neutral"}
+                        else "error",
+                        "reason": answer.get("reason", ""),
+                    }
+                )
             except Exception as exc:
-                rows.append({"text": text, "model": model, "label": "error", "reason": str(exc)})
+                rows.append(
+                    {
+                        "text": text,
+                        "model": model,
+                        "label": "error",
+                        "reason": str(exc),
+                    }
+                )
     return pd.DataFrame(rows)
 
 
-@app.cell
-def _(compare_reviews, model_a, model_b, mo, reviews, run):
-    mo.stop(not run.value, mo.md("Select **Classify with both models** to begin."))
-    texts = [text.strip() for text in reviews.value.splitlines() if text.strip()]
-    results = compare_reviews(texts, model_a.value, model_b.value)
-    return (results,)
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    The script accepts three options:
+
+    - `--model-a` chooses the first model.
+    - `--model-b` chooses the second model.
+    - `--output` names the CSV file.
+    """)
+    return
 
 
-@app.cell
-def _(mo, results):
-    comparison = results.pivot(
-        index="text",
-        columns="model",
-        values=["label", "reason"],
-    )
-    comparison.columns = [f"{model}: {field}" for field, model in comparison.columns]
-    comparison = comparison.reset_index()
-    mo.vstack([
-        mo.md("## Compare each review side by side"),
-        comparison,
-    ])
-    return (comparison,)
+@app.function
+def run_as_script(argv):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model-a", default="gemma3:1b")
+    parser.add_argument("--model-b", default="qwen3:1.7b")
+    parser.add_argument("--output", default="results.csv")
+    args = parser.parse_args(argv)
+
+    results = compare_reviews(REVIEWS, args.model_a, args.model_b)
+    results.to_csv(args.output, index=False)
+    print(f"Wrote {len(results)} rows to {args.output}")
 
 
 if __name__ == "__main__":
-    app.run()
+    if "--" in sys.argv:
+        run_as_script(sys.argv[sys.argv.index("--") + 1 :])
+    else:
+        app.run()

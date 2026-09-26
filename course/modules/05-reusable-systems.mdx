@@ -9,8 +9,10 @@ duration: 20 min
 import notebookToSystem from "../images/module-5/notebook-to-system.png";
 import sentimentClassifierFlow from "../images/module-5/sentiment-classifier-flow.png";
 import sentimentClassifierScriptFlow from "../images/module-5/sentiment-classifier-script-flow.svg";
+import exportNotebook from "../images/module-5/export-notebook.gif";
+import appView from "../images/module-5/app-view.gif";
 
-An interactive notebook is a great place to begin an AI project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work or integrate it into a larger production system.
+An interactive notebook is a great place to begin an AI project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work withi others or integrate it into a larger production system.
 
 marimo lets you move from a notebook to a script, web app, shareable artifact, or reusable Python module without rewriting your code and in this module, you will see exactly how to do this.
 
@@ -18,13 +20,13 @@ marimo lets you move from a notebook to a script, web app, shareable artifact, o
 
 ## 1. Build a sentiment classifier
 
-Imagine you work for a company that wants to understand sentiment in customer feedback. In this exercise, you will use two open-weight LLMs to classify twelve product reviews as positive, negative, or neutral using zero-shot classification. You will then compare how the models label the same reviews.
+Imagine you work for a company that wants to understand sentiment in customer feedback. In this exercise, you will use two open-weight LLMs to classify product reviews as positive, negative, or neutral using zero-shot classification. You will then compare how the models label the same reviews.
 
 <img src={sentimentClassifierFlow} alt="Twelve product reviews go through one zero shot prompt to two Ollama models. Each model returns sentiment labels, and the results are compared." />
 
 ### Set up Ollama
 
-This module uses `gemma3:1b` and `qwen3:1.7b` through Ollama. Both models run on your computer, so you do not need an API key. You also do not need to connect Ollama to marimo's editor AI settings because the notebook sends requests directly to the local Ollama server.
+This module uses `gemma3:1b` and `qwen3:1.7b` through Ollama. Both models run on your computer, so you do not need an API key. 
 
 <details className="setup-details">
   <summary>Install Ollama and download the models</summary>
@@ -47,9 +49,8 @@ This module uses `gemma3:1b` and `qwen3:1.7b` through Ollama. Both models run on
 
 ### Run the classifier
 
-The embedded notebook contains the twelve reviews, two fields for the model names, and a button that starts the comparison. These controls use the widgets introduced in [Module 3](/?module=3).
+The following marimo notebook contains twelve product reviews, two fields for the model names, and a button that starts the comparison. These controls use the widgets introduced in [Module 3](/?module=3). The example uses only a few reviews to keep the notebook simple, but you can add more to the list.
 
-When you select **Classify with both models**, the notebook sends each review to both models. Each response contains a sentiment label, a confidence score, and a short reason. The final dataframe places both answers beside the original review so you can compare them.
 
 <Callout title="Before you run">
 Start Ollama and download both models before selecting **Classify with both models**. The comparison can take some time because the notebook makes 24 model requests.
@@ -60,7 +61,8 @@ Start Ollama and download both models before selecting **Classify with both mode
   title="Product review sentiment classifier"
 />
 
-The models may agree on a clear review and disagree on a review with mixed language. A different label does not tell you which model is correct. Read the review and both reasons before making that decision.
+When you select `Classify with both models`, the notebook sends each review to both models. The models then produce a sentiment label and a short reason. The final dataframe places both answers beside the original review so you can compare them.
+
 
 <div className="dataframe-preview">
   <table>
@@ -69,141 +71,66 @@ The models may agree on a clear review and disagree on a review with mixed langu
         <th>Review</th>
         <th>Gemma label</th>
         <th>Qwen label</th>
-        <th>Gemma confidence</th>
-        <th>Qwen confidence</th>
         <th>Gemma reason</th>
         <th>Qwen reason</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Build quality is solid, instructions are terrible.</td>
+        <td>I wanted to hate this but I can't. Annoyingly good.</td>
         <td>negative</td>
-        <td>negative</td>
-        <td>0.9</td>
-        <td>0</td>
-        <td>The review highlights a significant flaw in the instructions.</td>
-        <td>The negative sentiment dominates.</td>
+        <td>positive</td>
+        <td>The reviewer expresses a strong negative sentiment regarding the product's quality and enjoyment.</td>
+        <td>contains positive sentiment about the product's quality</td>
+      </tr>
+      <tr>
+        <td>It works. My cat is unimpressed. I am cautiously optimistic.</td>
+        <td>neutral</td>
+        <td>positive</td>
+        <td>The review expresses a functional result but lacks strong emotional engagement, suggesting a neutral sentiment.</td>
+        <td>user's own positive sentiment despite cat's unimpressed reaction</td>
+      </tr>
+      <tr>
+        <td>Not bad. Not great. I keep using it, which probably says something.</td>
+        <td>neutral</td>
+        <td>neutral</td>
+        <td>The language is somewhat mixed, suggesting a neutral sentiment, but with a slight leaning towards positive due to the emphasis on 'I keep using it'.</td>
+        <td>Mixed positive and negative sentiments, but the user continues using the product despite the mixed evaluation.</td>
       </tr>
       <tr>
         <td>Customer service was great. Shame I had to call them four times.</td>
         <td>negative</td>
         <td>neutral</td>
-        <td>0.8</td>
-        <td>0.5</td>
-        <td>The review expresses dissatisfaction with the service process.</td>
-        <td>The review contains both positive and negative sentiment.</td>
-      </tr>
-      <tr>
-        <td>Does exactly what the listing says. That is neither a compliment nor a complaint.</td>
-        <td>neutral</td>
-        <td>neutral</td>
-        <td>0.8</td>
-        <td>0</td>
-        <td>The review does not contain clear praise or criticism.</td>
-        <td>The review is factual and neutral.</td>
+        <td>Expresses dissatisfaction with customer service responsiveness.</td>
+        <td>mixed sentiment with positive and negative elements</td>
       </tr>
       <tr>
         <td>Five stars for the packaging. The thing inside? Different story.</td>
         <td>negative</td>
         <td>negative</td>
-        <td>0.6</td>
-        <td>0.5</td>
-        <td>The product feedback is negative despite the positive packaging comment.</td>
-        <td>The review changes from praise for the packaging to criticism of the product.</td>
-      </tr>
-      <tr>
-        <td>Honestly underwhelming for the price, but I can see why some people love it.</td>
-        <td>negative</td>
-        <td>neutral</td>
-        <td>0.8</td>
-        <td>0</td>
-        <td>The reviewer is dissatisfied with the value.</td>
-        <td>The review contains a mix of criticism and praise.</td>
+        <td>Negative feedback about the product's quality despite positive packaging impressions.</td>
+        <td>The review contains a positive mention of packaging but shifts to a negative critique of the product inside, with 'Different story' indicating a contrast.</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-## 2. Share the notebook as a web app
+Now that you have a working notebook, you can share it with others in several ways as described in the following sections.
 
-Sometimes, you only want to interact with a notebook without seeing its code. App view makes this possible. It is useful when sharing the end result with business stakeholders or others who do not need to edit the analysis.
+## 2. Export and share the notebook in multiple formats
 
-In the marimo editor, select the **preview** button in the bottom right corner. App view hides the code and shows the controls and results. You can use the grid editor if you want to arrange the outputs before sharing the app.
-
-<ImagePlaceholder
-  title="Open the classifier in app view"
-  description="Show the preview button in the marimo editor, followed by the classifier with its code hidden and its controls visible."
-/>
-
-You can also start app view from the command line. Run this command from the folder that contains the notebook:
-
-```bash
-marimo run sentiment_classifier.py
-```
-
-marimo starts a local web server and prints an address. Open that address in a browser to use the app. The server must keep running while other people use it.
-
-<TryIt>
-1. Open app view from the embedded notebook.
-2. Check that the model fields, review input, and button are visible.
-3. Return to edit view and confirm that the code is still available there.
-</TryIt>
-
-## 3. Run the notebook as a script
-
-Script mode is useful when you need to run the classifier repeatedly, such as processing a daily batch of product reviews and saving the results for a dashboard or report.
-
-This notebook already contains the classification logic. The only change is how it receives its inputs. Instead of taking model names from notebook controls, the script receives them as command-line arguments and writes the results to a CSV file.
-
-To support script mode, the notebook uses a helper named `run_as_script()`. It reads three values from the command line:
-
-- `--model-a` chooses the first model.
-- `--model-b` chooses the second model.
-- `--output` sets the name of the CSV file.
-
-It then calls the same `compare_reviews()` function used by the notebook controls and saves the dataframe.
-
-<img src={sentimentClassifierScriptFlow} alt="Model names and an output filename are passed to the classifier, which saves the results as a CSV file." />
-
-Enter this command in the command line from the folder that contains `sentiment_classifier.py`:
-
-```bash
-uv run sentiment_classifier.py -- \
-  --model-a gemma3:1b \
-  --model-b qwen3:1.7b \
-  --output results.csv
-```
-
-The `--` separates the notebook filename from the arguments for the classifier. The command creates 24 rows because both models classify all twelve reviews.
-
-<ImagePlaceholder
-  title="Run the classifier from the command line"
-  description="Show the command running, the message that 24 rows were written, and the new results.csv file."
-/>
-
-<TryIt>
-1. Match the three command options to their descriptions above.
-2. If you are working locally, run the command and open `results.csv`.
-3. Change the output name and run the command again.
-</TryIt>
-
-## 4. Export and share the notebook
-
-When you share a notebook directly, interactive controls and plots may not work for the recipient. marimo provides several export options that preserve the notebook's results in a format that is easier to share, including static HTML, PDF, and interactive WebAssembly HTML. Each format has different advantages so you can choose an export format based on how someone will use the report:
+When you share a traditional notebook, interactive controls and plots may not work for the recipient. marimo provides several export options that preserve the notebook's results in a format that is easier to share, including static HTML, PDF, and interactive WebAssembly HTML. Each format has different advantages so you can choose an export format based on how someone will use the report:
 
 - Static HTML opens in a browser and shows the outputs that were present when you exported it.
 - PDF gives you a fixed document.
+- Markdown saves the notebook content in a text format that you can use in documentation.
 - WASM HTML runs the notebook in the browser, so supported controls remain interactive without a Python server.
 
-After you run the classifier in the editor, open the notebook menu and select **Download as static HTML** to save the current view.
+After you run the classifier, you can either select the **download** button in the notebook editor or export from the command line. From the download menu, select **Download as HTML** to include the notebook code or **Download as HTML (exclude code)** to share the results without showing the code. You can also download a fixed PDF or continue working with the notebook as Markdown, `.ipynb`, notebook source, or a flat Python script.
 
-<ImagePlaceholder
-  title="Export the current notebook view"
-  description="Show the completed classifier results, the notebook menu, and the Download as static HTML option."
-/>
+<img src={exportNotebook} alt="Opening the notebook download menu and choosing an export format." />
 
-You can also export from the command line. Enter these commands from the folder that contains the notebook:
+To export from the command line, enter these commands from the folder that contains the notebook:
 
 ```bash
 marimo export html sentiment_classifier.py -o sentiment_report.html
@@ -215,24 +142,78 @@ marimo export html-wasm sentiment_classifier.py -o sentiment_wasm --mode run
 A WASM notebook runs in the browser, but this classifier still needs access to Ollama. Someone without Ollama cannot send new reviews to the local models. Use static HTML or PDF when you only need to share completed results.
 </Callout>
 
+## 3. Share the notebook as a web app
+
+Sometimes, you only want to interact with a notebook without seeing its code. App view makes this possible. It is useful when sharing the end result with business stakeholders or others who do not need to edit the analysis.
+
+you can open the notebook in app view by selecting the **preview** button in the bottom right corner of the notebook editor. App view hides the code and shows only the controls and results. You can use the grid editor if you want to arrange the outputs before sharing the app.
+
+
+<img src={appView} alt="Opening the sentiment classifier in app view so its controls appear without the notebook code." />
+
+You can also run the notebook as a web app from the command line. Enter this command from the folder that contains marimo notebook:
+
+```bash
+marimo run notebook.py
+```
+
+## 4. Run the notebook as a script
+
+Script mode is useful when you need to run the classifier repeatedly, such as processing a daily batch of product reviews and saving the results for a dashboard or report.
+
+The notebook below is a separate version of the classifier for script mode. It does not include the model fields, review input, or run button from the interactive notebook. Instead, it receives the model names and output filename as command-line arguments and writes the results to a CSV file.
+
+<MarimoEmbed
+  notebook="/notebooks/module-5/sentiment_classifier_script.py?v=20260926-1"
+  title="Run the sentiment classifier as a script"
+/>
+
+To support script mode, the notebook uses a helper named `run_as_script()`. It reads three values from the command line:
+
+- `--model-a` chooses the first model.
+- `--model-b` chooses the second model.
+- `--output` sets the name of the CSV file.
+
+It then calls the same `compare_reviews()` function used by the notebook controls and saves the dataframe as a CSV file. The script prints a message that shows how many rows were written to the file.
+
+<img src={sentimentClassifierScriptFlow} alt="Model names and an output filename are passed to the classifier, which saves the results as a CSV file." />
+
+Enter this command in the command line from the folder that contains `sentiment_classifier_script.py`:
+
+```bash
+uv run sentiment_classifier_script.py -- \
+  --model-a gemma3:1b \
+  --model-b qwen3:1.7b \
+  --output results.csv
+```
+
+<TryIt>
+1. Make sure Ollama is running, then run the command above.
+2. Open `results.csv` and confirm that it contains 24 rows: one result from each model for every review.
+3. Change `--output` to `second_run.csv` and run the command again. Confirm that both CSV files are in the folder.
+</TryIt>
+
+
 ## 5. Reuse the classifier in another notebook
 
 Since a marimo notebook is a Python file, many of the standard Python features can be used with it. For example, you can import functions from one marimo notebook into another. This lets you reuse notebook code without copying it.
 
-For instance, we can use the classifier function created in the previous notebook in a second notebook that evaluates new reviews.
+For instance, we can use the function from the sentiment classifier notebook in a second notebook that evaluates new reviews.
 
-The sentiment classifier defines `compare_reviews()` with `@app.function`. A reusable function must be in its own cell. It can use imports and values from the setup cell, as well as other reusable functions.
+To make a function available for import from a marimo notebook:
 
-The embedded notebook below imports `compare_reviews()` from the sentiment classifier and applies it to three new reviews.
+- Define the function in its own cell.
+- Add `@app.function` above the function definition.
+- If the function needs a package or a fixed value, define it in the notebook's setup cell. This special cell runs before the other cells and makes shared imports and values available to reusable functions.
+- The function can also call another function marked with `@app.function`.
+- Keep the notebooks in the same folder, or make sure Python can otherwise find the notebook being imported.
+
+The sentiment classifier notebook follows these requirements for `compare_reviews()`. In the following notebook, a normal Python import brings that function into a new analysis and applies it to three new reviews. The notebooks are in the same folder, so Python can find the sentiment classifier. See the [marimo guide to reusing functions and classes](https://docs.marimo.io/guides/reusing_functions/) for more details.
 
 <MarimoEmbed
   notebook="/notebooks/module-5/eval_pipeline.py?v=20260925-2"
   title="Reuse the classifier with new reviews"
 />
-
-<Callout title="How the import works">
-The two notebooks are part of the same project, so Python can find the sentiment classifier when the second notebook imports it. See the [marimo guide to reusing functions and classes](https://docs.marimo.io/guides/reusing_functions/) for the full requirements.
-</Callout>
 
 <TryIt>
 1. Find the cell that imports `compare_reviews()`.

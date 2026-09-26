@@ -1,0 +1,74 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.16",
+    "script_metadata_hash": "7ce98cce614e6899c1fc4d406fcaa684"
+  },
+  "cells": [
+    {
+      "id": "setup",
+      "code_hash": "94124345dabc6f2d910c9fe25d42e8de",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Hbol",
+      "code_hash": "7013f0805a41ea63a117a2f7c59bd5f9",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"run-the-sentiment-classifier-as-a-script\">Run the sentiment classifier as a script</h1>\n<span class=\"paragraph\">This version receives the model names and output filename from the command\nline. It classifies the reviews and saves the results to a CSV file without\nopening the notebook interface.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "a27b98769d9fb1f3233c0dd22ef90d8e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "b4eb44fdc27fcf33fe278ade26894d87",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">The script accepts three options:</span>\n<ul>\n<li><code>--model-a</code> chooses the first model.</li>\n<li><code>--model-b</code> chooses the second model.</li>\n<li><code>--output</code> names the CSV file.</li>\n</ul></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "f09730d0907e053b9264c9cb6f965ad1",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}
