@@ -1,22 +1,18 @@
 ---
 title: From Prototype to Production
 shortTitle: Prototype to Production
-description: Use one marimo notebook as an app, a script, a shareable artifact, and a source of reusable Python functions.
+description: Present notebook results through apps and separate views, share completed work, and reuse the analysis as Python code.
 order: 5
-duration: 20 min
+duration: 25 min
 ---
 
-import notebookToSystem from "../images/module-5/notebook-to-system.png";
 import sentimentClassifierFlow from "../images/module-5/sentiment-classifier-flow.png";
-import sentimentClassifierScriptFlow from "../images/module-5/sentiment-classifier-script-flow.svg";
 import exportNotebook from "../images/module-5/export-notebook.gif";
 import appView from "../images/module-5/app-view.gif";
 
-An interactive notebook is a great place to begin a project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work with others or integrate it into a larger production system.
+An interactive notebook is a useful place to develop an AI project. Once the analysis works, you may need to present the findings to colleagues or run the same analysis on new data.
 
-marimo lets you move from a notebook to a script, web app, shareable artifact, or reusable Python module without rewriting your code. In this module, you will see how each form seamlessly supports a different method to reuse your work.
-
-<img src={notebookToSystem} alt="A marimo notebook used as a Python script, web app, shareable artifact, and Python module." />
+In this module, you will build a sentiment classifier and use it in both situations. First, you will explore ways to present and share its results, including separate views with marimo-studio. Then you will run the classifier as a script and import its functions into another notebook.
 
 ## 1. Build a sentiment classifier
 
@@ -117,7 +113,72 @@ When you select `Classify with both models`, the notebook sends each review to b
 
 Now that you have a working notebook, you can share it with others in several ways as described in the following sections.
 
-## 2. Export and share the notebook in multiple formats
+## 2. Present and share the results
+
+Choose the presentation based on what your audience needs to do. Someone trying the classifier needs its controls. Someone attending a review meeting needs a clear explanation of the findings.
+
+### Use the notebook in app view
+
+Sometimes, you only want to interact with a notebook without seeing its code. App view makes this possible. It is useful when sharing the end result with business stakeholders or others who do not need to edit the analysis.
+
+You can open the notebook in app view by selecting the **preview** button in the bottom right corner of the notebook editor. App view hides the code and shows only the controls and results. You can use the grid editor if you want to arrange the outputs before sharing the app.
+
+
+<img src={appView} alt="Opening the sentiment classifier in app view so its controls appear without the notebook code." />
+
+You can also run the notebook as a web app from the command line. Enter this command from the folder that contains the marimo notebook:
+
+```bash
+marimo run sentiment_classifier.py
+```
+
+### Create separate views with marimo-studio
+
+With [marimo-studio](https://marimo-team.github.io/marimo-studio/), you can keep the analysis in a notebook and create separate views of its results. Each view has its own layout. You can create a slide deck for a meeting and a report for someone who wants to inspect the findings in detail.
+
+For our classifier, the model calls and comparison logic belong in the notebook. The choice of which results to show, and how to arrange them, belongs in the view. This means you can change the presentation without copying the classification logic into another application.
+
+### Present the comparison as slides
+
+Suppose you need to explain the model comparison at a team meeting. A useful presentation would introduce the task, show a few disagreements, and explain what to investigate next. You can arrange these slides around the discussion you want to have, independently of the notebook's cell order.
+
+The [Studio examples](https://marimo-team.github.io/marimo-studio/#example-views) include slide decks alongside other views of the same notebooks. Open the quadratic programs example and compare its lecture and explainer views to see this separation in practice.
+
+To try this with the classifier, use the coding agent workflow from [Module 4](/?module=4). Save a copy of `sentiment_classifier.py` for this exercise, start Ollama, and run the comparison. Then give your coding agent the following request, replacing the filename if you renamed your copy:
+
+```text
+Read the installed Studio instructions by running:
+uvx --with marimo-studio agent-plugins read marimo-studio
+
+Create a slide deck view of sentiment_classifier.py for a team reviewing
+our sentiment classifier. Keep the model calls and shared calculations
+in the notebook.
+
+Include a slide explaining the task, a slide comparing the model labels,
+and a slide showing two reviews where the models disagree. Finish with
+questions for a human review of the results. If there are fewer than two
+disagreements, show the available examples and say so.
+
+Use the notebook's actual results. Do not invent model outputs or claim
+that agreement measures accuracy. Show the view in Preview and check
+that the displayed labels match the notebook results.
+```
+
+This follows Studio's documented [coding agent workflow](https://marimo-team.github.io/marimo-studio/guide/coding-agents). The agent reads instructions supplied with the installed package before creating the view.
+
+Review the slides beside the notebook. Check that the examples match the completed comparison. Without human labels to compare against, you can discuss agreement between the models, but you cannot conclude which model is more accurate.
+
+<TryIt>
+1. Ask the agent to change the slide layout or shorten the slide text. Check that the classification logic stays in the notebook.
+2. Ask for a report view that includes the full comparison table from the same notebook.
+3. Compare the report with the slides. Identify what changed in the presentation and what analysis they share.
+</TryIt>
+
+### Choose how to share the results
+
+A view determines how someone sees and uses the analysis. The way you run or export it determines whether they can perform new calculations. For Studio views, follow the [run and export guide](https://marimo-team.github.io/marimo-studio/guide/run-and-share) for the selected runtime.
+
+For the notebook itself, you can use the export options below to share completed results or a browser-based notebook.
 
 When you share a traditional notebook, interactive controls and plots may not work for the recipient. marimo provides several export options that preserve the notebook's results in a format that is easier to share, including static HTML, PDF, and interactive WebAssembly HTML. Each format has different advantages so you can choose an export format based on how someone will use the report:
 
@@ -142,22 +203,7 @@ marimo export html-wasm sentiment_classifier.py -o sentiment_wasm --mode run
 A WASM notebook runs in the browser, but this classifier still needs access to Ollama. Someone without Ollama cannot send new reviews to the local models. Use static HTML or PDF when you only need to share completed results.
 </Callout>
 
-## 3. Share the notebook as a web app
-
-Sometimes, you only want to interact with a notebook without seeing its code. App view makes this possible. It is useful when sharing the end result with business stakeholders or others who do not need to edit the analysis.
-
-you can open the notebook in app view by selecting the **preview** button in the bottom right corner of the notebook editor. App view hides the code and shows only the controls and results. You can use the grid editor if you want to arrange the outputs before sharing the app.
-
-
-<img src={appView} alt="Opening the sentiment classifier in app view so its controls appear without the notebook code." />
-
-You can also run the notebook as a web app from the command line. Enter this command from the folder that contains marimo notebook:
-
-```bash
-marimo run notebook.py
-```
-
-## 4. Run the notebook as a script
+## 3. Run the notebook as a script
 
 Script mode is useful when you need to run the classifier repeatedly, such as processing a daily batch of product reviews and saving the results for a dashboard or report.
 
@@ -186,13 +232,13 @@ uv run sentiment_classifier_script.py -- \
 ```
 
 <TryIt>
-1. Ensure Ollama is running, then run the command above.
+1. Make sure Ollama is running, then run the command above.
 2. Open `results.csv` and confirm that it contains 24 rows: one result from each model for every review.
 3. Change `--output` to `second_run.csv` and run the command again. Confirm that both CSV files are in the folder.
 </TryIt>
 
 
-## 5. Reuse the classifier in another notebook
+## 4. Reuse the classifier in another notebook
 
 A marimo notebook is a Python file, so you can import functions from one notebook into another. This lets you reuse notebook code without copying it. In this example, a second notebook imports the classifier function and applies it to three new reviews.
 
@@ -218,6 +264,19 @@ The sentiment classifier notebook follows these requirements for `compare_review
 </TryIt>
 
 ## Check your understanding
+
+<Quiz
+  question="Why create separate views with marimo-studio?"
+  options={[
+    "To present the same notebook analysis in different layouts for different audiences.",
+    "To remove the need to run the models before showing their results.",
+    "To automatically determine which model is more accurate.",
+    "To make Ollama available on every reader's computer."
+  ]}
+  answer={0}
+  correctFeedback="Correct. You can keep the shared analysis in the notebook and create a separate layout for each view."
+  incorrectFeedback="Think about presenting the same results in a meeting and in a detailed report."
+/>
 
 <Quiz
   question="When should you run a notebook as a web app?"
