@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Review room occupancy · Monitor</title>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@unocss/runtime@66.10.5/uno.global.js"
+      integrity="sha384-iX+gEyr2u+Tmd8XxbySu2iimH7dOfTZn9xahADx38mJHYzAI2CJUCo5+PPGOSU2b"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/iconify-icon@3.0.3/dist/iconify-icon.min.js"
+      integrity="sha384-jypoV+nlFXLykSFUJkpVjPG/eid90inFxyvUI1corcUR778eMGexPBFzNC94eOc+"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      :root {
+        --card-border: color-mix(in srgb, currentColor 14%, transparent);
+        --muted: color-mix(in srgb, currentColor 62%, transparent);
+        --warn: #b45309;
+      }
+
+      body {
+        margin: 0;
+        background: var(--background, Canvas);
+        color: var(--foreground, CanvasText);
+        font-family: var(--text-font, system-ui, sans-serif);
+      }
+
+      .eyebrow {
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .card {
+        border: 1px solid var(--card-border);
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+      }
+
+      .card .label {
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+
+      .card .value {
+        font-size: 2rem;
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+
+      .card .hint {
+        color: var(--muted);
+        font-size: 0.8125rem;
+      }
+
+      .card.error .value {
+        color: var(--warn);
+      }
+    </style>
+  </head>
+  <body>
+    <main id="app-shell" class="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+      <header class="mb-8">
+        <p class="eyebrow">Review room occupancy</p>
+        <h1 class="mt-1 mb-2 text-3xl font-semibold">Occupancy monitor</h1>
+        <p class="m-0" style="color: var(--muted)">
+          Current results from the room sensors. A reading counts as occupied when
+          its light and CO₂ score is at or above the threshold.
+        </p>
+      </header>
+
+      <section class="card mb-6" aria-label="Current threshold">
+        <marimo-cell name="threshold_control"></marimo-cell>
+      </section>
+
+      <h2 class="eyebrow mb-3">Occupancy summary</h2>
+      <section class="grid gap-4 sm:grid-cols-3 mb-8" aria-label="Occupancy summary">
+        <div class="card" data-marimo-lens-label="Readings checked"
+          data-marimo-lens-render-source='{"path":"index.html"}'>
+          <div class="label">Readings checked</div>
+          <span hidden data-format="count" mo-value="model_summary.observations"></span>
+          <div class="value" aria-live="polite">–</div>
+        </div>
+        <div class="card" data-marimo-lens-label="Correctly flagged occupied"
+          data-marimo-lens-render-source='{"path":"index.html"}'>
+          <div class="label">Correctly flagged occupied</div>
+          <span hidden data-format="count" mo-value="model_summary.true_positive"></span>
+          <div class="value" aria-live="polite">–</div>
+        </div>
+        <div class="card" data-marimo-lens-label="Correctly flagged empty"
+          data-marimo-lens-render-source='{"path":"index.html"}'>
+          <div class="label">Correctly flagged empty</div>
+          <span hidden data-format="count" mo-value="model_summary.true_negative"></span>
+          <div class="value" aria-live="polite">–</div>
+        </div>
+      </section>
+
+      <h2 class="eyebrow mb-3">Prediction quality</h2>
+      <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8" aria-label="Prediction quality">
+        <div class="card" data-marimo-lens-label="Precision"
+          data-marimo-lens-render-source='{"path":"index.html"}'>
+          <div class="label">Precision</div>
+          <span hidden data-format="percent" mo-value="model_summary.precision"></span>
+          <div class="value" aria-live="polite">–</div>
+          <div class="hint">Of rooms flagged occupied, share that were.</div>
+        </div>
+        <div class="card" data-marimo-lens-label="Recall"
+          data-marimo-lens-render-source='{"path":"index.html"}'>
+          <div class="label">Recall</div>
+          <span hidden data-format="percent" mo-value="model_summary.recall"></span>
+          <div class="value" aria-live="polite">–</div>
+          <div class="hint">Of occupied rooms, share that were flagged.</div>
+        </div>
+        <div class="card error" data-marimo-lens-label="False positives"
+          data-marimo-lens-render-source='{"path":"index.html"}'>
+          <div class="label flex items-center gap-2">
+            <iconify-icon inline icon="lucide:lightbulb" aria-hidden="true"></iconify-icon>
+            False positives
+          </div>
+          <span hidden data-format="count" mo-value="model_summary.false_positive"></span>
+          <div class="value" aria-live="polite">–</div>
+          <div class="hint">Empty room flagged occupied: lights may stay on.</div>
+        </div>
+        <div class="card error" data-marimo-lens-label="False negatives"
+          data-marimo-lens-render-source='{"path":"index.html"}'>
+          <div class="label flex items-center gap-2">
+            <iconify-icon inline icon="lucide:lightbulb-off" aria-hidden="true"></iconify-icon>
+            False negatives
+          </div>
+          <span hidden data-format="count" mo-value="model_summary.false_negative"></span>
+          <div class="value" aria-live="polite">–</div>
+          <div class="hint">Occupied room missed: lights may turn off.</div>
+        </div>
+      </section>
+
+      <footer class="text-sm" style="color: var(--muted)">
+        <marimo-cell name="data_credit"></marimo-cell>
+      </footer>
+    </main>
+    <script type="module">
+      /** Subscribe an explicit `mo-value` host to current values and later updates. */
+      const observeMarimoValue = (host, { onValue, onError = () => {} }) => {
+        const sync = (event) => onValue(event.detail.value);
+        const fail = (event) => onError(event.detail);
+        host.addEventListener("marimo-value-updated", sync);
+        host.addEventListener("marimo-value-error", fail);
+        if (host.dataset.marimoError !== undefined) {
+          onError({
+            selector: host.getAttribute("mo-value")?.trim() ?? "",
+            code: host.dataset.marimoErrorCode,
+            message: host.dataset.marimoError,
+            hint: host.dataset.marimoDiagnosticHint,
+          });
+        } else if (host.marimoValue !== undefined) {
+          onValue(host.marimoValue);
+        }
+        return () => {
+          host.removeEventListener("marimo-value-updated", sync);
+          host.removeEventListener("marimo-value-error", fail);
+        };
+      };
+
+      // Display formatting only; every value comes from the notebook.
+      const formats = {
+        count: new Intl.NumberFormat("en-US"),
+        percent: new Intl.NumberFormat("en-US", { style: "percent", minimumFractionDigits: 1, maximumFractionDigits: 1 }),
+        number2: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      };
+
+      for (const host of document.querySelectorAll("[mo-value][data-format]")) {
+        const format = formats[host.dataset.format];
+        // The hidden host receives the value; the visible sibling shows it formatted.
+        const display = host.nextElementSibling;
+        const stop = observeMarimoValue(host, {
+          onValue: (value) => {
+            display.textContent = typeof value === "number" ? format.format(value) : String(value);
+          },
+          onError: () => {
+            display.textContent = "Unavailable";
+          },
+        });
+        window.addEventListener("pagehide", stop, { once: true });
+      }
+
+      document.querySelector("#app-shell")?.setAttribute("data-ready", "");
+    </script>
+  </body>
+</html>

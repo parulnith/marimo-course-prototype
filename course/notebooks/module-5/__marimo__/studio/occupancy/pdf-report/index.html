@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Room occupancy report</title>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@unocss/runtime@66.10.5/uno.global.js"
+      integrity="sha384-iX+gEyr2u+Tmd8XxbySu2iimH7dOfTZn9xahADx38mJHYzAI2CJUCo5+PPGOSU2b"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/iconify-icon@3.0.3/dist/iconify-icon.min.js"
+      integrity="sha384-jypoV+nlFXLykSFUJkpVjPG/eid90inFxyvUI1corcUR778eMGexPBFzNC94eOc+"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      :root {
+        --rule: color-mix(in srgb, currentColor 14%, transparent);
+        --muted: color-mix(in srgb, currentColor 62%, transparent);
+        --accent: #2563eb;
+      }
+
+      body {
+        margin: 0;
+        background: var(--background, Canvas);
+        color: var(--foreground, CanvasText);
+        font-family: var(--text-font, system-ui, sans-serif);
+      }
+
+      .report { --marimo-cell-font-size: 1rem; }
+
+      .eyebrow {
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        margin: 0 0 0.5rem;
+        text-transform: uppercase;
+      }
+
+      .report h1 { font-size: 1.875rem; line-height: 1.2; margin: 0; }
+
+      .report h2 {
+        border-top: 1px solid var(--rule);
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin: 0 0 0.75rem;
+        padding-top: 1.5rem;
+      }
+
+      .report p { line-height: 1.6; margin: 0 0 0.75rem; }
+
+      .download {
+        align-items: center;
+        background: var(--accent);
+        border: 0;
+        border-radius: 0.5rem;
+        color: white;
+        cursor: pointer;
+        display: inline-flex;
+        font: inherit;
+        font-weight: 600;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        white-space: nowrap;
+      }
+
+      .download:hover { filter: brightness(1.1); }
+      .download:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+      .report-errors {
+        border-collapse: collapse;
+        font-size: 0.875rem;
+        font-variant-numeric: tabular-nums;
+        width: 100%;
+      }
+
+      .report-errors th,
+      .report-errors td {
+        border-bottom: 1px solid var(--rule);
+        padding: 0.4rem 0.6rem;
+        text-align: left;
+        white-space: nowrap;
+      }
+
+      .report-errors th { color: var(--muted); font-weight: 600; }
+
+      .table-wrap { overflow-x: auto; }
+
+      .credit {
+        border-top: 1px solid var(--rule);
+        color: var(--muted);
+        font-size: 0.875rem;
+        padding-top: 1rem;
+      }
+
+      @page { margin: 16mm; }
+
+      @media print {
+        .no-print { display: none !important; }
+        body { background: white; color: black; }
+        .report { max-width: none; padding: 0; }
+        section { break-inside: avoid; }
+        .table-wrap { overflow: visible; }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="app-shell" class="report mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
+      <header class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="eyebrow">Review room occupancy</p>
+          <h1>Room occupancy report</h1>
+        </div>
+        <button type="button" class="download no-print" id="download-pdf">
+          <iconify-icon inline icon="lucide:download" aria-hidden="true"></iconify-icon>
+          Download PDF
+        </button>
+      </header>
+
+      <section class="mb-8" aria-label="The task">
+        <h2>The task</h2>
+        <p>
+          Meeting rooms report light and CO₂ readings. A scoring rule combines them into a
+          score between 0 and 1, and a reading counts as occupied when its score is at or
+          above a decision threshold. This report compares those predictions with the
+          recorded occupancy for the same readings.
+        </p>
+      </section>
+
+      <section class="mb-8" aria-label="Results at the selected threshold">
+        <h2>Results at the selected threshold</h2>
+        <marimo-cell name="report_summary_output"></marimo-cell>
+        <div class="mt-4">
+          <marimo-cell name="metrics_output"></marimo-cell>
+        </div>
+      </section>
+
+      <section class="mb-8" aria-label="The trade-off">
+        <h2>The trade-off</h2>
+        <p>
+          A false positive treats an empty room as occupied, so lights and air conditioning
+          may stay on. A false negative treats an occupied room as empty, so lights could
+          switch off on people. Raising the threshold can only reduce false positives and can
+          only add false negatives; lowering it does the opposite. The right choice depends on
+          which mistake costs more.
+        </p>
+        <marimo-cell name="report_headline_output"></marimo-cell>
+      </section>
+
+      <section class="mb-8" aria-label="Prediction errors">
+        <h2>Prediction errors</h2>
+        <div class="table-wrap">
+          <marimo-cell name="report_error_table_output"></marimo-cell>
+        </div>
+      </section>
+
+      <footer class="credit">
+        <marimo-cell name="data_credit"></marimo-cell>
+      </footer>
+    </main>
+    <script type="module">
+      // The browser's print dialog saves the page as a PDF; print styles hide this button.
+      document.querySelector("#download-pdf")?.addEventListener("click", () => window.print());
+      document.querySelector("#app-shell")?.setAttribute("data-ready", "");
+    </script>
+  </body>
+</html>

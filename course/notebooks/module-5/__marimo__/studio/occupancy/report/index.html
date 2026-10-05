@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Review room occupancy · Report</title>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@unocss/runtime@66.10.5/uno.global.js"
+      integrity="sha384-iX+gEyr2u+Tmd8XxbySu2iimH7dOfTZn9xahADx38mJHYzAI2CJUCo5+PPGOSU2b"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      :root {
+        --rule: color-mix(in srgb, currentColor 14%, transparent);
+        --muted: color-mix(in srgb, currentColor 62%, transparent);
+        --accent: #2563eb;
+        --highlight: color-mix(in srgb, #2563eb 10%, transparent);
+      }
+
+      body {
+        margin: 0;
+        background: var(--background, Canvas);
+        color: var(--foreground, CanvasText);
+        font-family: var(--text-font, system-ui, sans-serif);
+      }
+
+      .report {
+        --marimo-cell-font-size: 1rem;
+      }
+
+      .eyebrow {
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin: 0 0 0.5rem;
+      }
+
+      .report h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+        margin: 0 0 0.75rem;
+      }
+
+      .report h2 {
+        border-top: 1px solid var(--rule);
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin: 0 0 0.75rem;
+        padding-top: 1.5rem;
+      }
+
+      .report p,
+      .report li {
+        line-height: 1.6;
+      }
+
+      .report p {
+        margin: 0 0 0.75rem;
+      }
+
+      .lede {
+        color: var(--muted);
+        font-size: 1.0625rem;
+      }
+
+      .note {
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+
+      .threshold-comparison {
+        border-collapse: collapse;
+        font-variant-numeric: tabular-nums;
+        width: 100%;
+      }
+
+      .threshold-comparison th,
+      .threshold-comparison td {
+        border-bottom: 1px solid var(--rule);
+        padding: 0.5rem 0.75rem;
+        text-align: right;
+      }
+
+      .threshold-comparison th:first-child,
+      .threshold-comparison td:first-child {
+        text-align: left;
+      }
+
+      .threshold-comparison th {
+        color: var(--muted);
+        font-size: 0.8125rem;
+        font-weight: 600;
+      }
+
+      .threshold-comparison tr.current td {
+        background: var(--highlight);
+        font-weight: 600;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      .credit {
+        border-top: 1px solid var(--rule);
+        color: var(--muted);
+        font-size: 0.875rem;
+        padding-top: 1rem;
+      }
+
+      @media print {
+        :root { --highlight: #e8eefc; }
+        body { background: white; color: black; }
+        .report { max-width: none; padding: 0; }
+        section { break-inside: avoid; }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="app-shell" class="report mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
+      <header class="mb-8">
+        <p class="eyebrow">Review room occupancy</p>
+        <h1>Choosing a threshold for room occupancy</h1>
+        <p class="lede">
+          A summary of how well a simple sensor rule detects occupied meeting rooms,
+          and what changing its decision threshold would mean.
+        </p>
+      </header>
+
+      <section class="mb-10" aria-label="Key finding">
+        <marimo-cell name="report_headline_output"></marimo-cell>
+      </section>
+
+      <section class="mb-10" aria-label="Background">
+        <h2>Background</h2>
+        <p>
+          Each meeting room reports light and CO₂ readings. A scoring rule combines
+          them into a score between 0 and 1, and a reading counts as occupied when its
+          score is at or above the decision threshold.
+        </p>
+        <p>
+          The threshold decides which mistake happens more often. A <strong>false
+          positive</strong> treats an empty room as occupied, so lights and air
+          conditioning may stay on. A <strong>false negative</strong> treats an occupied
+          room as empty, so lights could switch off on people.
+        </p>
+      </section>
+
+      <section class="mb-10" aria-label="Results at the current threshold">
+        <h2>Results at the current threshold</h2>
+        <marimo-cell name="metrics_output"></marimo-cell>
+        <div class="mt-6">
+          <marimo-cell name="report_summary_output"></marimo-cell>
+        </div>
+      </section>
+
+      <section class="mb-10" aria-label="Comparing thresholds">
+        <h2>Comparing thresholds</h2>
+        <p>
+          Raising the threshold can only reduce false positives and can only add false
+          negatives. The table shows nearby options; the current threshold is highlighted.
+        </p>
+        <div class="table-wrap mb-6">
+          <marimo-cell name="threshold_comparison_output"></marimo-cell>
+        </div>
+        <div class="table-wrap">
+          <marimo-cell name="tradeoff_output"></marimo-cell>
+        </div>
+      </section>
+
+      <section class="mb-10" aria-label="Method and limits">
+        <h2>Method and limits</h2>
+        <ul class="m-0 pl-5">
+          <li>The score is a fixed rule (70% light, 30% CO₂), not a trained model or a probability.</li>
+          <li>Results compare predictions with recorded occupancy for the same readings, so they describe this data, not performance on new rooms or dates.</li>
+          <li>Which threshold is best depends on whether wasted energy or lights switching off on people is the bigger cost.</li>
+        </ul>
+      </section>
+
+      <footer class="credit">
+        <marimo-cell name="data_credit"></marimo-cell>
+      </footer>
+    </main>
+    <script type="module">
+      document.querySelector("#app-shell")?.setAttribute("data-ready", "");
+    </script>
+  </body>
+</html>

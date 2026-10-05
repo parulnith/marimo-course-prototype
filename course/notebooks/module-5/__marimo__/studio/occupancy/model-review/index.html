@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Review room occupancy · Model review</title>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@unocss/runtime@66.10.5/uno.global.js"
+      integrity="sha384-iX+gEyr2u+Tmd8XxbySu2iimH7dOfTZn9xahADx38mJHYzAI2CJUCo5+PPGOSU2b"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/iconify-icon@3.0.3/dist/iconify-icon.min.js"
+      integrity="sha384-jypoV+nlFXLykSFUJkpVjPG/eid90inFxyvUI1corcUR778eMGexPBFzNC94eOc+"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        margin: 0;
+        background: var(--background, Canvas);
+        color: var(--foreground, CanvasText);
+        font-family: var(--text-font, system-ui, sans-serif);
+      }
+
+      .view-header {
+        margin-bottom: 3rem;
+      }
+
+      .view-header p {
+        color: var(--muted-foreground, color-mix(in srgb, currentColor 66%, transparent));
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .lede { color: var(--muted-foreground, color-mix(in srgb, currentColor 66%, transparent)); }
+      .section-title { font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem; }
+      .panel { border: 1px solid color-mix(in srgb, currentColor 14%, transparent); border-radius: 0.75rem; padding: 1.25rem; }
+      .panel h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+      .panel p { margin: 0 0 0.5rem; line-height: 1.5; }
+      .hint { color: color-mix(in srgb, currentColor 62%, transparent); font-size: 0.875rem; margin: 0; }
+    </style>
+  </head>
+  <body>
+    <main id="app-shell" class="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <header class="view-header">
+        <p>Review room occupancy</p>
+        <h1>Choose a decision threshold</h1>
+        <span class="lede">Move the threshold and compare the two kinds of mistakes before choosing a value.</span>
+      </header>
+
+      <section class="panel mb-6" aria-label="Threshold">
+        <marimo-cell name="threshold_control"></marimo-cell>
+      </section>
+
+      <section class="mb-6" aria-label="Precision, recall, and error counts">
+        <h2 class="section-title">Results at this threshold</h2>
+        <marimo-cell name="metrics_output"></marimo-cell>
+      </section>
+
+      <section class="panel mb-6" aria-label="Threshold trade-off">
+        <h2 class="section-title">How the threshold trades one error for the other</h2>
+        <p class="hint mb-3">Each point is the same evaluation run at another slider position. The dashed line marks the current threshold.</p>
+        <marimo-cell name="tradeoff_output"></marimo-cell>
+      </section>
+
+      <section class="grid gap-4 sm:grid-cols-2 mb-8" aria-label="What the errors mean">
+        <div class="panel">
+          <h3 class="flex items-center gap-2"><iconify-icon inline icon="lucide:lightbulb" aria-hidden="true"></iconify-icon>False positive</h3>
+          <p>The room was <strong>empty</strong>, but the sensors said it was occupied. The lights or air conditioning may stay on in an empty room, wasting energy.</p>
+          <p class="hint">Raising the threshold usually means fewer of these.</p>
+        </div>
+        <div class="panel">
+          <h3 class="flex items-center gap-2"><iconify-icon inline icon="lucide:lightbulb-off" aria-hidden="true"></iconify-icon>False negative</h3>
+          <p>People were <strong>in the room</strong>, but the sensors said it was empty. The lights could switch off while someone is still there.</p>
+          <p class="hint">Lowering the threshold usually means fewer of these.</p>
+        </div>
+      </section>
+
+      <section class="grid gap-6 lg:grid-cols-[1fr_2fr] mb-8" aria-label="Where the errors come from">
+        <div class="panel">
+          <h2 class="section-title">Confusion matrix</h2>
+          <p class="hint mb-3">Recorded occupancy against the prediction at the current threshold. The off-diagonal cells are the errors.</p>
+          <marimo-cell name="confusion_output"></marimo-cell>
+        </div>
+        <div class="panel">
+          <h2 class="section-title">Score distribution</h2>
+          <p class="hint mb-3">Readings left of the dashed line are predicted empty. Overlap between the colours near the line is where errors happen.</p>
+          <marimo-cell name="score_distribution_output"></marimo-cell>
+        </div>
+      </section>
+
+      <section aria-label="Prediction errors">
+        <marimo-cell name="errors_output"></marimo-cell>
+      </section>
+
+      <footer class="mt-8 text-sm">
+        <marimo-cell name="data_credit"></marimo-cell>
+      </footer>
+    </main>
+    <script type="module">
+      /** Subscribe an explicit `mo-value` host to current values and later updates. */
+      const observeMarimoValue = (host, { onValue, onError = () => {} }) => {
+        const sync = (event) => onValue(event.detail.value);
+        const fail = (event) => onError(event.detail);
+        host.addEventListener("marimo-value-updated", sync);
+        host.addEventListener("marimo-value-error", fail);
+        if (host.dataset.marimoError !== undefined) {
+          onError({
+            selector: host.getAttribute("mo-value")?.trim() ?? "",
+            code: host.dataset.marimoErrorCode,
+            message: host.dataset.marimoError,
+            hint: host.dataset.marimoDiagnosticHint,
+          });
+        } else if (host.marimoValue !== undefined) {
+          onValue(host.marimoValue);
+        }
+        return () => {
+          host.removeEventListener("marimo-value-updated", sync);
+          host.removeEventListener("marimo-value-error", fail);
+        };
+      };
+
+      document.querySelector("#app-shell")?.setAttribute("data-ready", "");
+    </script>
+  </body>
+</html>
