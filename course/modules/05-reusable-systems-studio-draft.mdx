@@ -1,277 +1,203 @@
 ---
 title: From Prototype to Production
 shortTitle: Prototype to Production
-description: Present notebook results through apps and separate views, share completed work, and reuse the analysis as Python code.
+description: Share notebook results, run and reuse Python code, and create separate views with marimo-studio.
 order: 5
-duration: 25 min
+duration: 20 min
 ---
 
-import sentimentClassifierFlow from "../images/module-5/sentiment-classifier-flow.png";
-import exportNotebook from "../images/module-5/export-notebook.gif";
-import appView from "../images/module-5/app-view.gif";
 
-An interactive notebook is a useful place to develop an AI project. Once the analysis works, you may need to present the findings to colleagues or run the same analysis on new data.
+An interactive notebook is a great place to begin a project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work with others or integrate it into a larger production system.
 
-In this module, you will build a sentiment classifier and use it in both situations. First, you will explore ways to present and share its results, including separate views with marimo-studio. Then you will run the classifier as a script and import its functions into another notebook.
+In this module, you will learn how to share and reuse your marimo notebook, then create a custom view of its analysis with marimo-studio.
 
-## 1. Build a sentiment classifier
+## 1. Share your notebook in multiple ways
 
-Imagine you work for a company that wants to understand sentiment in customer feedback. In this exercise, you will use two open-weight LLMs to classify product reviews as positive, negative, or neutral using zero-shot classification. You will then compare how the models label the same reviews.
+### 1.1 Explore the occupancy notebook
 
-<img src={sentimentClassifierFlow} alt="Twelve product reviews go through one zero shot prompt to two Ollama models. Each model returns sentiment labels, and the results are compared." />
+Imagine you work for a company that wants to estimate whether a meeting room is occupied from its sensor readings. Your task is to compare the predicted occupancy with the recorded occupancy and choose a decision threshold. A false positive could keep the lights on in an empty room. A false negative could turn them off while people are still there.
 
-### Set up Ollama
+We will use this example throughout the module.
 
-This module uses `gemma3:1b` and `qwen3:1.7b` through Ollama. Both models run on your computer, so you do not need an API key. 
+Explore the occupancy notebook below. The sensor data is included, so you can run the example directly in the course.
+
+The following marimo notebook contains 8,143 sensor readings and a slider for the decision threshold. A reading is predicted as occupied when its score is at least the threshold. These controls use the widgets introduced in [Module 3](/?module=3).
+
+<MarimoEmbed
+  notebook="/notebooks/module-5/occupancy.py?v=20261005-1"
+  title="Review room occupancy"
+/>
+
+<Callout title="About this example">
+
+This simplified course notebook is adapted from [marimo-studio's original occupancy notebook](https://github.com/marimo-team/marimo-studio/blob/72376de50eb89fe8372ad55f3b341cfb439be154/examples/occupancy.py), using the [UCI Occupancy Detection dataset](https://doi.org/10.24432/C5X01N). We kept its scoring rule and threshold evaluation, and made its functions reusable. Section 2 shows how to add command-line arguments and save predictions. It combines light and CO₂ readings into a score. This is a simple scoring rule, not a trained model or a probability. Its metrics describe the same observations used to define the score.
+
+</Callout>
+
+Move the threshold from `0.5` to `0.7` and inspect the error counts. The dataframe places each prediction beside the recorded occupancy, so you can inspect where they differ.
+
+### 1.2 Share and export your notebook
+
+Select the **preview** button in the notebook editor to open app view. It shows the controls and results without the code.
+
+{/* Add GIF showing app view here. */}
+
+You can also export the notebook in multiple formats, as shown in the image below.
+
+{/* Add image showing export options here. */}
+
+## 2. Use your notebook as a script or Python module
+
+### 2.1 Run the notebook as a script
+
+You can run the occupancy notebook you explored above as a script from the command line. This is useful when you want to run the same analysis repeatedly without opening the notebook interface. For example, you might want to process a batch of sensor readings and save the results for a dashboard or report.
+
+As you saw in Module 1, a notebook cell can have a Python function name. Here, `script_options` is the cell that reads the input file, threshold, and output filename. The updated cells use these values when the notebook runs as a script.
+
+<MarimoEmbed
+  notebook="/notebooks/module-5/occupancy.py?v=20261005-1"
+  title="Add script support to the occupancy notebook"
+/>
+
+In the notebook, the `script_options` cell reads three command-line arguments:
+
+- `--input` specifies the sensor data file. If you leave it out, the notebook uses `public/occupancy.csv`.
+- `--threshold` specifies the threshold to use.
+- `--output` specifies where to save the predictions.
+
+The `selected_model` cell uses the threshold from the command line when the file runs as a script. The `save_predictions` cell writes the CSV and prints the summary. In the editor, the notebook continues to use the slider.
+
+To try it in a terminal, run the command below from the folder containing `occupancy.py` and the `public` data folder:
+
+```bash
+uv run occupancy.py \
+  --threshold 0.5 \
+  --output occupancy_predictions.csv
+```
+
+You should see output similar to the following:
+
+```text
+Wrote 8143 rows to occupancy_predictions.csv
+False positives: 90; false negatives: 5
+```
+
+### 2.2 Reuse the evaluation in another notebook
+
+Another advantage of a marimo notebook is that it is a Python file. You can import its functions into another notebook instead of copying code.
+
+You already have an occupancy notebook in Section 1.1. Its `score_readings()` and `evaluate_occupancy()` functions are already in the correct format for reuse: each is defined in its own cell and uses imports from the setup cell. When your own function follows this pattern, marimo marks it as reusable in the editor.
+
+The notebook below imports both functions and uses them to compare three thresholds using the same sensor readings.
+
+<TryIt>
+Adjust the thresholds in the notebook below. Compare the false positive and false negative counts for each threshold. 
+</TryIt>
+
+<MarimoEmbed
+  notebook="/notebooks/module-5/occupancy_reuse.py?v=20261003-1"
+  title="Import and reuse the occupancy functions"
+/>
+
+## 3. Create a custom view with marimo Studio
+
+### 3.1 What is Studio?
+
+With [marimo-studio](https://marimo.io/blog/introducing-marimo-studio), you can create separate views connected to the same notebook. Studio keeps each view in its own folder. The Python analysis stays in the notebook, while each view has its own layout and wording. You can use a coding agent to build these views.
+
+### 3.2 Explore the official occupancy model review
+
+Open the official [occupancy model review](https://marimo-team.github.io/marimo-studio/examples/occupancy?view=model-review) and move its threshold control. Observe how the false positive and false negative counts change. The same source notebook also has a monitor and a PDF report. These views show how you can present the same analysis for different tasks.
+
+Now you will create your own simpler model review view from the course's `occupancy.py`. The goal is to help someone compare the two kinds of error before choosing a threshold. The score and evaluation functions will remain in the notebook.
+
+### 3.3 Create your own `model_review` view
+
+Use the occupancy notebook from the previous sections with the coding agent workflow introduced in [Module 4](/?module=4). You will need `uv` and a coding agent that can run terminal commands. Give the agent this request:
+
+```text
+Run `uvx --with marimo-studio agent-plugins read marimo-studio`
+and set up Studio for the existing occupancy.py in this course folder.
+Use its bundled public/occupancy.csv data. Keep score_readings() and
+evaluate_occupancy() in the notebook.
+
+Create a plain HTML view named model_review for a facilities team
+choosing an occupancy threshold. Include the notebook's threshold control,
+precision and recall, false positive and false negative counts, and a table
+of errors. Explain the two types of error in plain language.
+
+Use the notebook's threshold_control cell and its model_summary and
+error_rows values. Keep the calculations in Python and connect the view
+to those results. Explain that this is a weighted sensor score, not a
+trained model, and that its metrics are measured on these observations.
+
+Build the view, show it in Preview, and give me the local URL. Check that
+changing the threshold updates both the metrics and the error table.
+```
+
+This follows the [Studio coding agent workflow](https://marimo-team.github.io/marimo-studio/guide/coding-agents). Open the generated view and compare it with the notebook. Both should show the same error counts when the threshold is the same.
+
+### 3.4 See how it connects to the notebook
+
+Studio views can reference named notebook cells and values. In this example, the view uses `threshold_control`, `model_summary`, and `error_rows` from `occupancy.py`. The calculations stay in Python, while the view decides how to arrange and present them.
+
+Locate these three names in the generated view, then find the corresponding cell or value in `occupancy.py`. Ask the agent to help you trace the connection if needed.
 
 <details className="setup-details">
-  <summary>Install Ollama and download the models</summary>
+  <summary>Optional: How views access notebook results</summary>
 
-  1. Download and install [Ollama](https://ollama.com/download).
-  2. Start the local server from the command line.
+The [Studio introduction](https://marimo.io/blog/introducing-marimo-studio) describes three access methods. You do not need to learn all three for this exercise.
 
-  ```bash
-  ollama serve
-  ```
-
-  3. Open a second command line window and download the models.
-
-  ```bash
-  ollama pull gemma3:1b
-  ollama pull qwen3:1.7b
-  ```
+<table>
+  <thead>
+    <tr>
+      <th>In the view</th>
+      <th style={{ width: "auto", textAlign: "left" }}>What it accesses</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>{"<marimo-cell>"}</code></td>
+      <td style={{ width: "auto", textAlign: "left" }}>A cell's output, including live controls.</td>
+    </tr>
+    <tr>
+      <td><code>{"<marimo-output>"}</code></td>
+      <td style={{ width: "auto", textAlign: "left" }}>A Python object, even if the notebook does not display it.</td>
+    </tr>
+    <tr>
+      <td><code>mo-value</code></td>
+      <td style={{ width: "auto", textAlign: "left" }}>A Python value that the view's own code can use.</td>
+    </tr>
+  </tbody>
+</table>
 
 </details>
 
-### Run the classifier
+### 3.5 Check your view
 
-The following marimo notebook contains twelve product reviews, two fields for the model names, and a button that starts the comparison. These controls use the widgets introduced in [Module 3](/?module=3). The example uses only a few reviews to keep the notebook simple, but you can add more to the list.
+Set the threshold to `0.5`, then to `0.7`. Compare the false positive and false negative counts. Check one row in the error table against the same reading in the notebook.
 
+Then ask the agent to change the heading or table layout for your audience. Check that the presentation change leaves `evaluate_occupancy()` unchanged.
 
-<Callout title="Before you run">
-Start Ollama and download both models before selecting **Classify with both models**. The comparison can take some time because the notebook makes 24 model requests.
+<TryIt>
+Add a short explanation for someone managing the room's lights. Explain which type of error would leave the lights on in an empty room and which would miss an occupied room. Use the displayed counts to discuss the tradeoff.
+</TryIt>
+
+Studio views can be shared using a live Python server, a browser runtime, or prepared static states, depending on what the notebook requires. In this module, we will keep the view local and focus on creating and checking it. See the [Studio run and export guide](https://marimo-team.github.io/marimo-studio/guide/run-and-share) when you are ready to deploy it.
+
+<Callout title="Draft review note">
+The course notebooks and script commands are checked separately from Studio. The view creation and verification exercise still needs a local rehearsal before the lesson is recorded or published.
 </Callout>
 
-<MarimoEmbed
-  notebook="/notebooks/module-5/sentiment_classifier.py?v=20260925-2"
-  title="Product review sentiment classifier"
-/>
-
-When you select `Classify with both models`, the notebook sends each review to both models. The models then produce a sentiment label and a short reason. The final dataframe places both answers beside the original review so you can compare them.
-
-
-<div className="dataframe-preview">
-  <table>
-    <thead>
-      <tr>
-        <th>Review</th>
-        <th>Gemma label</th>
-        <th>Qwen label</th>
-        <th>Gemma reason</th>
-        <th>Qwen reason</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>I wanted to hate this but I can't. Annoyingly good.</td>
-        <td>negative</td>
-        <td>positive</td>
-        <td>The reviewer expresses a strong negative sentiment regarding the product's quality and enjoyment.</td>
-        <td>contains positive sentiment about the product's quality</td>
-      </tr>
-      <tr>
-        <td>It works. My cat is unimpressed. I am cautiously optimistic.</td>
-        <td>neutral</td>
-        <td>positive</td>
-        <td>The review expresses a functional result but lacks strong emotional engagement, suggesting a neutral sentiment.</td>
-        <td>user's own positive sentiment despite cat's unimpressed reaction</td>
-      </tr>
-      <tr>
-        <td>Not bad. Not great. I keep using it, which probably says something.</td>
-        <td>neutral</td>
-        <td>neutral</td>
-        <td>The language is somewhat mixed, suggesting a neutral sentiment, but with a slight leaning towards positive due to the emphasis on 'I keep using it'.</td>
-        <td>Mixed positive and negative sentiments, but the user continues using the product despite the mixed evaluation.</td>
-      </tr>
-      <tr>
-        <td>Customer service was great. Shame I had to call them four times.</td>
-        <td>negative</td>
-        <td>neutral</td>
-        <td>Expresses dissatisfaction with customer service responsiveness.</td>
-        <td>mixed sentiment with positive and negative elements</td>
-      </tr>
-      <tr>
-        <td>Five stars for the packaging. The thing inside? Different story.</td>
-        <td>negative</td>
-        <td>negative</td>
-        <td>Negative feedback about the product's quality despite positive packaging impressions.</td>
-        <td>The review contains a positive mention of packaging but shifts to a negative critique of the product inside, with 'Different story' indicating a contrast.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-Now that you have a working notebook, you can share it with others in several ways as described in the following sections.
-
-## 2. Present and share the results
-
-Choose the presentation based on what your audience needs to do. Someone trying the classifier needs its controls. Someone attending a review meeting needs a clear explanation of the findings.
-
-### Use the notebook in app view
-
-Sometimes, you only want to interact with a notebook without seeing its code. App view makes this possible. It is useful when sharing the end result with business stakeholders or others who do not need to edit the analysis.
-
-You can open the notebook in app view by selecting the **preview** button in the bottom right corner of the notebook editor. App view hides the code and shows only the controls and results. You can use the grid editor if you want to arrange the outputs before sharing the app.
-
-
-<img src={appView} alt="Opening the sentiment classifier in app view so its controls appear without the notebook code." />
-
-You can also run the notebook as a web app from the command line. Enter this command from the folder that contains the marimo notebook:
-
-```bash
-marimo run sentiment_classifier.py
-```
-
-### Create separate views with marimo-studio
-
-With [marimo-studio](https://marimo-team.github.io/marimo-studio/), you can keep the analysis in a notebook and create separate views of its results. Each view has its own layout. You can create a slide deck for a meeting and a report for someone who wants to inspect the findings in detail.
-
-For our classifier, the model calls and comparison logic belong in the notebook. The choice of which results to show, and how to arrange them, belongs in the view. This means you can change the presentation without copying the classification logic into another application.
-
-### Present the comparison as slides
-
-Suppose you need to explain the model comparison at a team meeting. A useful presentation would introduce the task, show a few disagreements, and explain what to investigate next. You can arrange these slides around the discussion you want to have, independently of the notebook's cell order.
-
-The [Studio examples](https://marimo-team.github.io/marimo-studio/#example-views) include slide decks alongside other views of the same notebooks. Open the quadratic programs example and compare its lecture and explainer views to see this separation in practice.
-
-To try this with the classifier, use the coding agent workflow from [Module 4](/?module=4). Save a copy of `sentiment_classifier.py` for this exercise, start Ollama, and run the comparison. Then give your coding agent the following request, replacing the filename if you renamed your copy:
-
-```text
-Read the installed Studio instructions by running:
-uvx --with marimo-studio agent-plugins read marimo-studio
-
-Create a slide deck view of sentiment_classifier.py for a team reviewing
-our sentiment classifier. Keep the model calls and shared calculations
-in the notebook.
-
-Include a slide explaining the task, a slide comparing the model labels,
-and a slide showing two reviews where the models disagree. Finish with
-questions for a human review of the results. If there are fewer than two
-disagreements, show the available examples and say so.
-
-Use the notebook's actual results. Do not invent model outputs or claim
-that agreement measures accuracy. Show the view in Preview and check
-that the displayed labels match the notebook results.
-```
-
-This follows Studio's documented [coding agent workflow](https://marimo-team.github.io/marimo-studio/guide/coding-agents). The agent reads instructions supplied with the installed package before creating the view.
-
-Review the slides beside the notebook. Check that the examples match the completed comparison. Without human labels to compare against, you can discuss agreement between the models, but you cannot conclude which model is more accurate.
-
-<TryIt>
-1. Ask the agent to change the slide layout or shorten the slide text. Check that the classification logic stays in the notebook.
-2. Ask for a report view that includes the full comparison table from the same notebook.
-3. Compare the report with the slides. Identify what changed in the presentation and what analysis they share.
-</TryIt>
-
-### Choose how to share the results
-
-A view determines how someone sees and uses the analysis. The way you run or export it determines whether they can perform new calculations. For Studio views, follow the [run and export guide](https://marimo-team.github.io/marimo-studio/guide/run-and-share) for the selected runtime.
-
-For the notebook itself, you can use the export options below to share completed results or a browser-based notebook.
-
-When you share a traditional notebook, interactive controls and plots may not work for the recipient. marimo provides several export options that preserve the notebook's results in a format that is easier to share, including static HTML, PDF, and interactive WebAssembly HTML. Each format has different advantages so you can choose an export format based on how someone will use the report:
-
-- Static HTML opens in a browser and shows the outputs that were present when you exported it.
-- PDF gives you a fixed document.
-- Markdown saves the notebook content in a text format that you can use in documentation.
-- WASM HTML runs the notebook in the browser, so supported controls remain interactive without a Python server.
-
-After you run the classifier, you can either select the **download** button in the notebook editor or export from the command line. From the download menu, select **Download as HTML** to include the notebook code or **Download as HTML (exclude code)** to share the results without showing the code. You can also download a fixed PDF or continue working with the notebook as Markdown, `.ipynb`, notebook source, or a flat Python script.
-
-<img src={exportNotebook} alt="Opening the notebook download menu and choosing an export format." />
-
-To export from the command line, enter these commands from the folder that contains the notebook:
-
-```bash
-marimo export html sentiment_classifier.py -o sentiment_report.html
-marimo export pdf sentiment_classifier.py -o sentiment_report.pdf
-marimo export html-wasm sentiment_classifier.py -o sentiment_wasm --mode run
-```
-
-<Callout title="WASM and local models">
-A WASM notebook runs in the browser, but this classifier still needs access to Ollama. Someone without Ollama cannot send new reviews to the local models. Use static HTML or PDF when you only need to share completed results.
-</Callout>
-
-## 3. Run the notebook as a script
-
-Script mode is useful when you need to run the classifier repeatedly, such as processing a daily batch of product reviews and saving the results for a dashboard or report.
-
-The notebook below is a separate version of the classifier for script mode. It does not include the model fields, review input, or run button from the interactive notebook. Instead, it receives the model names and output filename as command-line arguments and writes the results to a CSV file.
-
-<MarimoEmbed
-  notebook="/notebooks/module-5/sentiment_classifier_script.py?v=20260926-1"
-  title="Run the sentiment classifier as a script"
-/>
-
-To support script mode, the notebook uses a helper named `run_as_script()`. It reads three values from the command line:
-
-- `--model-a` chooses the first model.
-- `--model-b` chooses the second model.
-- `--output` sets the name of the CSV file.
-
-It then calls the same `compare_reviews()` function used by the notebook controls and saves the dataframe as a CSV file. The script prints a message that shows how many rows were written to the file.
-
-Enter this command in the command line from the folder that contains `sentiment_classifier_script.py`:
-
-```bash
-uv run sentiment_classifier_script.py -- \
-  --model-a gemma3:1b \
-  --model-b qwen3:1.7b \
-  --output results.csv
-```
-
-<TryIt>
-1. Make sure Ollama is running, then run the command above.
-2. Open `results.csv` and confirm that it contains 24 rows: one result from each model for every review.
-3. Change `--output` to `second_run.csv` and run the command again. Confirm that both CSV files are in the folder.
-</TryIt>
-
-
-## 4. Reuse the classifier in another notebook
-
-A marimo notebook is a Python file, so you can import functions from one notebook into another. This lets you reuse notebook code without copying it. In this example, a second notebook imports the classifier function and applies it to three new reviews.
-
-To make a function available for import from a marimo notebook:
-
-* Define the function in its own cell.
-* Add `@app.function` above the function definition.
-* Place packages and fixed values needed by the function in the notebook setup cell. This cell runs before the other cells and makes shared imports and values available to reusable functions.
-* Keep the notebooks in the same folder, or make sure Python can otherwise find the notebook being imported.
-
-
-The sentiment classifier notebook follows these requirements for `compare_reviews()`. In the following notebook, a normal Python import brings that function into a new analysis and applies it to three new reviews. The notebooks are in the same folder, so Python can find the sentiment classifier. See the [marimo guide to reusing functions and classes](https://docs.marimo.io/guides/reusing_functions/) for more details.
-
-<MarimoEmbed
-  notebook="/notebooks/module-5/eval_pipeline.py?v=20260925-2"
-  title="Reuse the classifier with new reviews"
-/>
-
-<TryIt>
-1. Find the cell that imports `compare_reviews()`.
-2. Replace the three reviews with examples from your own task.
-3. Run the remaining cells and inspect the results.
-</TryIt>
-
-## Check your understanding
+### Check your understanding
 
 <Quiz
   question="Why create separate views with marimo-studio?"
   options={[
     "To present the same notebook analysis in different layouts for different audiences.",
-    "To remove the need to run the models before showing their results.",
-    "To automatically determine which model is more accurate.",
-    "To make Ollama available on every reader's computer."
+    "To avoid calculating the results shown in the view.",
+    "To automatically choose the best decision threshold.",
+    "To make every notebook result correct."
   ]}
   answer={0}
   correctFeedback="Correct. You can keep the shared analysis in the notebook and create a separate layout for each view."
@@ -284,7 +210,7 @@ The sentiment classifier notebook follows these requirements for `compare_review
     "When people need to use its controls without editing the code.",
     "When a scheduled process needs to run without an interface.",
     "When you only need a fixed PDF.",
-    "When you want to install an Ollama model."
+    "When you want to download a dataset."
   ]}
   answer={0}
   correctFeedback="Correct. App view shows the controls and outputs while hiding the code."
@@ -309,7 +235,7 @@ The sentiment classifier notebook follows these requirements for `compare_review
   options={[
     "So another notebook or Python program can import it.",
     "So marimo always hides the function's code.",
-    "So the function can install a language model.",
+    "So the function can change the notebook layout.",
     "So the notebook can only run as an app."
   ]}
   answer={0}

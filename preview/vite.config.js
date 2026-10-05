@@ -3,9 +3,10 @@ import react from "@vitejs/plugin-react";
 import remarkFrontmatter from "remark-frontmatter";
 import { defineConfig } from "vite";
 import { execFileSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, rmSync, statSync } from "node:fs";
+import { copyFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, rmSync, statSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { tmpdir } from "node:os";
 
 const repoRoot = fileURLToPath(new URL("../", import.meta.url));
 const notebookOutputDir = join(repoRoot, "preview/public/notebooks");
@@ -23,6 +24,8 @@ const notebookSources = [
   "course/notebooks/module-5/sentiment_classifier.py",
   "course/notebooks/module-5/sentiment_classifier_script.py",
   "course/notebooks/module-5/eval_pipeline.py",
+  "course/notebooks/module-5/occupancy.py",
+  "course/notebooks/module-5/occupancy_reuse.py",
 ].map((path) => join(repoRoot, path));
 
 function notebookExportDir(source) {
@@ -47,17 +50,23 @@ function exportNotebook(source, force = false) {
     return false;
   }
 
+  const stagingDir = mkdtempSync(join(tmpdir(), "marimo-course-export-"));
   const exportArgs = [
     "--from", "marimo==0.23.16", "marimo", "export", "html-wasm", source,
-    "-o", exportDir, "--mode", "edit", "--no-sandbox", "-f",
+    "-o", stagingDir, "--mode", "edit", "--no-sandbox", "-f",
   ];
   if (["sentiment_classifier.py", "sentiment_classifier_script.py"].includes(basename(source))) {
     exportArgs.push("--execute");
   }
-  execFileSync("uvx", exportArgs, { cwd: repoRoot, stdio: "inherit" });
-  const generated = join(exportDir, "index.html");
-  copyFileSync(generated, destination);
-  rmSync(generated);
+  try {
+    execFileSync("uvx", exportArgs, { cwd: repoRoot, stdio: "inherit" });
+    copyFileSync(join(stagingDir, "index.html"), destination);
+    rmSync(join(stagingDir, "index.html"));
+    // Keep sibling notebooks' public files and wheels when merging an export.
+    cpSync(stagingDir, exportDir, { recursive: true });
+  } finally {
+    rmSync(stagingDir, { recursive: true, force: true });
+  }
   if (basename(source) === "eval_pipeline.py") {
     const publicDir = join(exportDir, "public");
     mkdirSync(publicDir, { recursive: true });
@@ -65,6 +74,12 @@ function exportNotebook(source, force = false) {
       join(dirname(source), "sentiment_classifier.py"),
       join(publicDir, "sentiment_classifier.py"),
     );
+  }
+  if (["occupancy.py", "occupancy_reuse.py"].includes(basename(source))) {
+    const publicDir = join(exportDir, "public");
+    mkdirSync(publicDir, { recursive: true });
+    copyFileSync(join(dirname(source), "public/occupancy.csv"), join(publicDir, "occupancy.csv"));
+    copyFileSync(join(dirname(source), "occupancy.py"), join(publicDir, "occupancy.py"));
   }
   return true;
 }
@@ -75,6 +90,7 @@ function marimoNotebookSync() {
     buildStart() {
       if (process.env.GITHUB_ACTIONS) return;
       for (const source of notebookSources) exportNotebook(source);
+      execFileSync("python3", [join(repoRoot, "preview/scripts/package_occupancy.py")], { cwd: repoRoot });
     },
     configureServer(server) {
       server.watcher.add(notebookSources);
@@ -90,6 +106,9 @@ function marimoNotebookSync() {
         if (!source) return;
         try {
           exportNotebook(source, true);
+          if (basename(source).startsWith("occupancy")) {
+            execFileSync("python3", [join(repoRoot, "preview/scripts/package_occupancy.py")], { cwd: repoRoot });
+          }
           server.ws.send({ type: "full-reload" });
         } catch (error) {
           server.config.logger.error(`Could not export ${basename(source)}: ${error.message}`);

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="410" viewBox="0 0 1080 410" role="img" aria-labelledby="title desc">
+<title id="title">One occupancy notebook, separate views</title>
+<desc id="desc">Sensor readings, scoring, and evaluation stay in occupancy.py. A model review and optional slides use those notebook results, each with its own presentation files.</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#23776a" stroke-width="1.5"/></marker></defs>
+<rect width="1080" height="410" rx="16" fill="#f7faf9"/>
+<g font-family="Arial, sans-serif" fill="#243934">
+<text x="32" y="44" font-size="25" font-weight="700">Keep the analysis in one notebook</text>
+<rect x="32" y="78" width="420" height="286" rx="12" fill="white" stroke="#cddbd6"/>
+<text x="56" y="114" font-family="monospace" font-size="22">occupancy.py</text>
+<path d="M32 132H452" stroke="#cddbd6"/>
+<rect x="56" y="155" width="370" height="48" rx="6" fill="#d9eee6"/>
+<text x="72" y="186" font-size="18">Light and CO₂ sensor readings</text>
+<rect x="56" y="217" width="370" height="48" rx="6" fill="#d9eee6"/>
+<text x="72" y="248" font-family="monospace" font-size="18">score_readings()</text>
+<rect x="56" y="279" width="370" height="48" rx="6" fill="#d9eee6"/>
+<text x="72" y="310" font-family="monospace" font-size="18">evaluate_occupancy()</text>
+<path d="M453 221H516V153H576 M516 221V309H576" fill="none" stroke="#23776a" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="586" y="78" width="462" height="138" rx="12" fill="white" stroke="#cddbd6"/>
+<text x="610" y="111" font-size="22" font-weight="700">Model review</text>
+<text x="610" y="145" font-size="18">Adjust the decision threshold.</text>
+<text x="610" y="176" font-size="18">Inspect metrics and individual errors.</text>
+<rect x="586" y="238" width="462" height="126" rx="12" fill="white" stroke="#cddbd6"/>
+<text x="610" y="272" font-size="22" font-weight="700">Slides (optional)</text>
+<text x="610" y="308" font-size="18">Present the tradeoff at two thresholds.</text>
+<text x="610" y="339" font-size="18">Use the same notebook calculations.</text>
+<text x="586" y="395" font-size="16" fill="#546b63">Each view has its own folder and layout.</text>
+</g></svg>

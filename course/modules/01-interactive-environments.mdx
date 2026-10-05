@@ -99,6 +99,8 @@ Below we have a reactive notebool and it uses the same hidden-state example from
 Change `b` from `2` to `11`. Run that cell by clicking its play button or pressing `Cmd + Enter`. This reactive notebook then reruns the dependent cell and updates `c` from `3` to `12`. Next, remove the line that defines `b` and run the cell again. Check what happens to the cell that uses `b`.
 </TryIt>
 
+Each marimo cell is saved as a Python function. You can give a cell a clear function name, such as `load_data()` or `calculate_total()`, to make it easier to refer to later.
+
 Notice that the notebook invalidates the result when an input is missing. It does not continue to use the deleted value.
 
 The next example uses the reactive compound-interest workflow.

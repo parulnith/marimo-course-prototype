@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>Review room occupancy</title>
+    <script type="module" crossorigin src="./assets/index-Gv23EHlE.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-TXkS1QI3.js">
+    <link rel="modulepreload" crossorigin href="./assets/objects-BlG0ZrO0.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-LvLJmgfZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-Bj1aDYRI.js">
+    <link rel="modulepreload" crossorigin href="./assets/compiler-runtime-B3qBwwSJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-Blw4afVn.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEventListener-C0195JsF.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-DOVIEEPN.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionRound-i2ImZxgc.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-BUCH2FMc.js">
+    <link rel="modulepreload" crossorigin href="./assets/vega-loader.browser-Dun7Qe4B.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-B7U4xkIN.js">
+    <link rel="modulepreload" crossorigin href="./assets/clsx-XrBBnd7s.js">
+    <link rel="modulepreload" crossorigin href="./assets/cn-DYvqRARy.js">
+    <link rel="modulepreload" crossorigin href="./assets/badge-B92a4ePY.js">
+    <link rel="modulepreload" crossorigin href="./assets/button-DDGiD1NW.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-dom-CSu739Rf.js">
+    <link rel="modulepreload" crossorigin href="./assets/fullscreen-CTDqNQr6.js">
+    <link rel="modulepreload" crossorigin href="./assets/menu-items-CCi6aOPm.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BLN8PNJV.js">
+    <link rel="modulepreload" crossorigin href="./assets/createLucideIcon-w-Qo9n0R.js">
+    <link rel="modulepreload" crossorigin href="./assets/check-rzLRd0j9.js">
+    <link rel="modulepreload" crossorigin href="./assets/x-C-Eq0ag8.js">
+    <link rel="modulepreload" crossorigin href="./assets/select-BP75_5jJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-4bZlU7jl.js">
+    <link rel="modulepreload" crossorigin href="./assets/use-toast-BwJoaaDM.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEvent-D91BmmQi.js">
+    <link rel="modulepreload" crossorigin href="./assets/invariant-CkiqGLcK.js">
+    <link rel="modulepreload" crossorigin href="./assets/isObject-DvLSfCY5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseFor-DKD1r8uL.js">
+    <link rel="modulepreload" crossorigin href="./assets/merge-_9WLTEyt.js">
+    <link rel="modulepreload" crossorigin href="./assets/zod-H_cgTO0M.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-BWBBpCkT.js">
+    <link rel="modulepreload" crossorigin href="./assets/constants-CDyU_g2F.js">
+    <link rel="modulepreload" crossorigin href="./assets/session-BmukRjSi.js">
+    <link rel="modulepreload" crossorigin href="./assets/Deferred-D2igisxY.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-B-Q7J_6d.js">
+    <link rel="modulepreload" crossorigin href="./assets/uuid-ImXS-885.js">
+    <link rel="modulepreload" crossorigin href="./assets/DeferredRequestRegistry-C8EV1PoE.js">
+    <link rel="modulepreload" crossorigin href="./assets/requests-9-v2bhoi.js">
+    <link rel="modulepreload" crossorigin href="./assets/useLifecycle-lLOBhc-1.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNonce-CbdaHKzX.js">
+    <link rel="modulepreload" crossorigin href="./assets/useTheme-Bxv9B31g.js">
+    <link rel="modulepreload" crossorigin href="./assets/arrays-DbOq36rN.js">
+    <link rel="modulepreload" crossorigin href="./assets/strings--BknHX9C.js">
+    <link rel="modulepreload" crossorigin href="./assets/once-CGKw_kwj.js">
+    <link rel="modulepreload" crossorigin href="./assets/capabilities-DoEg0XwL.js">
+    <link rel="modulepreload" crossorigin href="./assets/createReducer-DGx5Af-C.js">
+    <link rel="modulepreload" crossorigin href="./assets/paths-BKO-pHK6.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-12S8I4CH.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DYEuVkEX.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CiVShZKM.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BJZAIIze.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-aRc_dRed.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DnjsPBRJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DcwTQG1A.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CPjTeT8p.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DI1-Z60I.js">
+    <link rel="modulepreload" crossorigin href="./assets/stex-FMMSUPAS.js">
+    <link rel="modulepreload" crossorigin href="./assets/toDate-Ct2FT81-.js">
+    <link rel="modulepreload" crossorigin href="./assets/purify.es-CWmnYhGI.js">
+    <link rel="modulepreload" crossorigin href="./assets/cjs-D5tzp-Y6.js">
+    <link rel="modulepreload" crossorigin href="./assets/isSymbol-BT6B8Bon.js">
+    <link rel="modulepreload" crossorigin href="./assets/now-CsYTPAhW.js">
+    <link rel="modulepreload" crossorigin href="./assets/debounce-OiXznToA.js">
+    <link rel="modulepreload" crossorigin href="./assets/database-zap-CKO8g4BU.js">
+    <link rel="modulepreload" crossorigin href="./assets/main-BNL5rxQw.js">
+    <link rel="modulepreload" crossorigin href="./assets/cells-CJLUCcQg.js">
+    <link rel="modulepreload" crossorigin href="./assets/kbd-C5HnBH5U.js">
+    <link rel="modulepreload" crossorigin href="./assets/useInstallPackage-WiYBwhUO.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-dialog-Bb8Lz8ko.js">
+    <link rel="modulepreload" crossorigin href="./assets/dialog-BCVepWLJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDebounce-JDKr83KO.js">
+    <link rel="modulepreload" crossorigin href="./assets/numbers-rmawRqQP.js">
+    <link rel="modulepreload" crossorigin href="./assets/SSRProvider-BUSmWJKC.js">
+    <link rel="modulepreload" crossorigin href="./assets/context-BFPaAUK_.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNumberFormatter-4-Qvf4uR.js">
+    <link rel="modulepreload" crossorigin href="./assets/usePress-5hBv4sjD.js">
+    <link rel="modulepreload" crossorigin href="./assets/input-JxFwu-3G.js">
+    <link rel="modulepreload" crossorigin href="./assets/ImperativeModal-fY-ZfT0b.js">
+    <link rel="modulepreload" crossorigin href="./assets/cell-link-CWQ4BYr-.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-BJVx3eBW.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-jlwhGxSb.js">
+    <link rel="modulepreload" crossorigin href="./assets/chevron-right-BS_NcSch.js">
+    <link rel="modulepreload" crossorigin href="./assets/dropdown-menu-dHmZR8bI.js">
+    <link rel="modulepreload" crossorigin href="./assets/links-wcQA1Np1.js">
+    <link rel="modulepreload" crossorigin href="./assets/useRunCells-DZ4glj3f.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-Bxb1_Gtw.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-3iHFdt22.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-icon-neDQUo4Q.js">
+    <link rel="modulepreload" crossorigin href="./assets/RenderHTML-C1rWkDWe.js">
+    <link rel="modulepreload" crossorigin href="./assets/datasource-DbljozeY.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-Rxc-B11B.js">
+    <link rel="modulepreload" crossorigin href="./assets/hat-glasses-BttHlyvs.js">
+    <link rel="modulepreload" crossorigin href="./assets/package-Bxz_8e44.js">
+    <link rel="modulepreload" crossorigin href="./assets/sparkles-DUCpRFlS.js">
+    <link rel="modulepreload" crossorigin href="./assets/MarimoErrorOutput-Cu5WMawt.js">
+    <link rel="modulepreload" crossorigin href="./assets/ErrorBoundary-DzTD8LVq.js">
+    <link rel="modulepreload" crossorigin href="./assets/eye-off-BOZA7gbn.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-cw-CYq4mK5a.js">
+    <link rel="modulepreload" crossorigin href="./assets/tree-actions-BiQ4VzX-.js">
+    <link rel="modulepreload" crossorigin href="./assets/spinner-D-V4psAa.js">
+    <link rel="modulepreload" crossorigin href="./assets/html-to-image-CN9yTa5s.js">
+    <link rel="modulepreload" crossorigin href="./assets/focus-B6HBbAwF.js">
+    <link rel="modulepreload" crossorigin href="./assets/useAsyncData-Bg5iAViP.js">
+    <link rel="modulepreload" crossorigin href="./assets/LazyAnyLanguageCodeMirror-A-Ant1Ad.js">
+    <link rel="modulepreload" crossorigin href="./assets/micromark-factory-space-Dx_STMJD.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-5FQGJX7Z-CYQpNADu.js">
+    <link rel="modulepreload" crossorigin href="./assets/markdown-renderer-CzJx-MnJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/command-Dqxie4gq.js">
+    <link rel="modulepreload" crossorigin href="./assets/field-BsxD35VE.js">
+    <link rel="modulepreload" crossorigin href="./assets/popover-Bcz1Zikb.js">
+    <link rel="modulepreload" crossorigin href="./assets/errors-PgHhDa-M.js">
+    <link rel="modulepreload" crossorigin href="./assets/download-DwYUg-o4.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-CH2plyy9.js">
+    <link rel="modulepreload" crossorigin href="./assets/useIframeCapabilities-j6fR_dBA.js">
+    <link rel="modulepreload" crossorigin href="./assets/error-banner-BSxEOIn2.js">
+    <link rel="modulepreload" crossorigin href="./assets/formats-DzmLpc9A.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-CCTAhdFi.js">
+    <link rel="modulepreload" crossorigin href="./assets/en-US-CjNeNXDB.js">
+    <link rel="modulepreload" crossorigin href="./assets/isValid-D7naiWNs.js">
+    <link rel="modulepreload" crossorigin href="./assets/dates-C2LWzsCZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/extends-B9D0JO9U.js">
+    <link rel="modulepreload" crossorigin href="./assets/emotion-is-prop-valid.esm-lG8j6oqk.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDateFormatter-rtpVEy3J.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-icons.esm-D4GMDkIf.js">
+    <link rel="modulepreload" crossorigin href="./assets/RSPContexts-WiCgGm__.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-D-tcnZC7.js">
+    <link rel="modulepreload" crossorigin href="./assets/ellipsis-C_B8Ux9M.js">
+    <link rel="modulepreload" crossorigin href="./assets/external-link-BOlXZUla.js">
+    <link rel="modulepreload" crossorigin href="./assets/message-circle-dL5J5ZsZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/plus-AgXtozBz.js">
+    <link rel="modulepreload" crossorigin href="./assets/trash-2-72W0TZ3L.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-resizable-panels.browser.esm-Z-MD3n3J.js">
+    <link rel="modulepreload" crossorigin href="./assets/JsonOutput-D2UI9WX5.js">
+    <link rel="modulepreload" crossorigin href="./assets/chart-no-axes-column-iDRxid4h.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-function-DNNRTPQJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/spec-C7opZZRp.js">
+    <link rel="modulepreload" crossorigin href="./assets/column-preview-DREOGG_c.js">
+    <link rel="modulepreload" crossorigin href="./assets/icons-CIPE8AIY.js">
+    <link rel="modulepreload" crossorigin href="./assets/radio-group-CcU5wNVj.js">
+    <link rel="modulepreload" crossorigin href="./assets/floating-outline-DBlzcHYf.js">
+    <link rel="modulepreload" crossorigin href="./assets/switch-OVajJBPR.js">
+    <link rel="modulepreload" crossorigin href="./assets/objectWithoutPropertiesLoose-CboCOq4o.js">
+    <link rel="modulepreload" crossorigin href="./assets/esm-B30N1GS0.js">
+    <link rel="modulepreload" crossorigin href="./assets/readonly-python-code-CYfbPYQ0.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-headphone-DAu6VO6j.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-CJH9JNGH.js">
+    <link rel="modulepreload" crossorigin href="./assets/image-5XI2VU-q.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-icons-CODNoWOy.js">
+    <link rel="modulepreload" crossorigin href="./assets/events-90X9nql5.js">
+    <link rel="modulepreload" crossorigin href="./assets/share-852X_cqy.js">
+    <link rel="modulepreload" crossorigin href="./assets/blob-BNTWOaI9.js">
+    <link rel="modulepreload" crossorigin href="./assets/memoize-Tp7rARFe.js">
+    <link rel="modulepreload" crossorigin href="./assets/get-C-qh_et5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseSet-CsW0tABf.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-CsGOoEZv.js">
+    <link rel="modulepreload" crossorigin href="./assets/label-CqjrpwRC.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-W6ZZMHnc.js">
+    <link rel="modulepreload" crossorigin href="./assets/textarea-DtCcemo9.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-ccw-sLaKP2vj.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-BYlqbYKI.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderShortcut-Bl8_FVn8.js">
+    <link rel="modulepreload" crossorigin href="./assets/useBoolean-CFj86iac.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDeepCompareMemoize-CSMoa-ga.js">
+    <link rel="modulepreload" crossorigin href="./assets/types-jdbI9Q8O.js">
+    <link rel="modulepreload" crossorigin href="./assets/semaphore-C-Nli4KG.js">
+    <link rel="modulepreload" crossorigin href="./assets/fileToBase64-hLJmVjNJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/pathUtils-icFgkNy9.js">
+    <link rel="modulepreload" crossorigin href="./assets/prop-types-C638SUfx.js">
+    <link rel="modulepreload" crossorigin href="./assets/es-gYgfF8y5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_hasPath-hMc_3QZy.js">
+    <link rel="modulepreload" crossorigin href="./assets/hasIn-CSsM95b1.js">
+    <link rel="modulepreload" crossorigin href="./assets/flatten-Bd5tsfm_.js">
+    <link rel="modulepreload" crossorigin href="./assets/pick-D1xb4gl6.js">
+    <link rel="modulepreload" crossorigin href="./assets/code-xml-aSiY8T7C.js">
+    <link rel="modulepreload" crossorigin href="./assets/globe-Dwo3iXzC.js">
+    <link rel="modulepreload" crossorigin href="./assets/house-DS0r7dNZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-DFICx2Qv.js">
+    <link rel="modulepreload" crossorigin href="./assets/triangle-alert-BL4YVsPy.js">
+    <link rel="modulepreload" crossorigin href="./assets/bundle.esm-D0TWQ6iT.js">
+    <link rel="stylesheet" crossorigin href="./assets/cells-BVzo2MHf.css">
+    <link rel="stylesheet" crossorigin href="./assets/markdown-renderer-DdDKmWlR.css">
+    <link rel="stylesheet" crossorigin href="./assets/JsonOutput-BQtz7-np.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-8Nlyq3mV.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "# /// script\n# requires-python = \"\u003E=3.11\"\n# dependencies = [\n#     \"marimo\u003E=0.23.16\",\n#     \"pandas\u003E=2.2\",\n#     \"pyodide-http; sys_platform == 'emscripten'\",\n# ]\n# ///\n\n# Adapted from marimo-studio examples/occupancy.py (Apache-2.0).\n# Copyright 2026 Marimo. See licenses/marimo-studio-LICENSE.txt.\n# Course changes: pandas implementation, bundled data, reusable functions, and\n# command-line arguments. This is a score, not a fitted ML model.\n\nimport marimo\n\n__generated_with = \"0.23.16\"\napp = marimo.App(width=\"medium\", app_title=\"Review room occupancy\")\n\nwith app.setup:\n    import argparse\n    import sys\n\n    import marimo as mo\n    import pandas as pd\n\n\n@app.function\ndef score_readings(readings):\n    \"\"\"Apply the official example's light/CO2 score to these readings.\"\"\"\n    if readings.empty:\n        raise ValueError(\"Provide at least one sensor reading.\")\n    light_max = float(readings[\"Light\"].quantile(0.99, interpolation=\"nearest\"))\n    co2_min = float(readings[\"CO2\"].min())\n    co2_max = float(readings[\"CO2\"].quantile(0.99, interpolation=\"nearest\"))\n    scored = readings.copy()\n    light_score = scored[\"Light\"].clip(0, light_max) / max(light_max, 1.0)\n    co2_score = (scored[\"CO2\"].clip(co2_min, co2_max) - co2_min) / max(\n        co2_max - co2_min, 1.0\n    )\n    scored[\"score\"] = (0.7 * light_score + 0.3 * co2_score).astype(\"float32\")\n    return scored\n\n\n@app.function\ndef evaluate_occupancy(scored, threshold=0.5):\n    \"\"\"Return per-row predictions and metrics for one decision threshold.\"\"\"\n    if not 0 \u003C= threshold \u003C= 1:\n        raise ValueError(\"Threshold must be between 0 and 1.\")\n    if scored.empty:\n        raise ValueError(\"Provide at least one scored reading.\")\n    rows = scored.copy()\n    rows[\"predicted\"] = (rows[\"score\"] \u003E= threshold).astype(int)\n    actual = rows[\"Occupancy\"] == 1\n    predicted = rows[\"predicted\"] == 1\n    rows[\"outcome\"] = \"true negative\"\n    rows.loc[actual \u0026 predicted, \"outcome\"] = \"true positive\"\n    rows.loc[~actual \u0026 predicted, \"outcome\"] = \"false positive\"\n    rows.loc[actual \u0026 ~predicted, \"outcome\"] = \"false negative\"\n    tp = int((actual \u0026 predicted).sum())\n    tn = int((~actual \u0026 ~predicted).sum())\n    fp = int((~actual \u0026 predicted).sum())\n    fn = int((actual \u0026 ~predicted).sum())\n    summary = {\n        \"threshold\": threshold,\n        \"observations\": len(rows),\n        \"accuracy\": (tp + tn) / len(rows),\n        \"precision\": tp / max(tp + fp, 1),\n        \"recall\": tp / max(tp + fn, 1),\n        \"true_positive\": tp,\n        \"true_negative\": tn,\n        \"false_positive\": fp,\n        \"false_negative\": fn,\n    }\n    return rows, summary\n\n\n@app.cell\ndef script_options():\n    # When the file runs in a terminal, read its optional command-line arguments.\n    # In the notebook editor, keep using the interactive controls below.\n    is_script = mo.app_meta().mode == \"script\"\n    if is_script:\n        parser = argparse.ArgumentParser(description=\"Evaluate room occupancy\")\n        parser.add_argument(\"--input\", default=\"public/occupancy.csv\")\n        parser.add_argument(\"--threshold\", type=float, default=0.5)\n        parser.add_argument(\"--output\", default=\"occupancy_predictions.csv\")\n        args = parser.parse_args()\n    else:\n        args = None\n    return args, is_script\n\n\n@app.cell(hide_code=True)\ndef introduction():\n    mo.md(\"\"\"\n    # Review room occupancy\n\n    Use light and CO\u2082 readings to estimate whether a room is occupied.\n    Move the threshold to see how false positives and false negatives change.\n\n    This course adaptation uses the scoring rule from\n    [marimo-studio's occupancy example](https://marimo-team.github.io/marimo-studio/examples/occupancy?view=model-review).\n    It combines normalized light (70%) and CO\u2082 (30%). It is not a trained model\n    or a calibrated probability. Metrics describe these same observations,\n    not performance on unseen data.\n    \"\"\")\n    return\n\n\n@app.cell\ndef load_readings(args, is_script):\n    if sys.platform == \"emscripten\":\n        import pyodide_http\n        pyodide_http.patch_all()\n    data_source = (\n        args.input\n        if is_script\n        else str(mo.notebook_location() / \"public\" / \"occupancy.csv\")\n    )\n    readings = pd.read_csv(data_source, parse_dates=[\"date\"]).sort_values(\"date\")\n    readings.head(8)\n    return (readings,)\n\n\n@app.cell\ndef score_observations(readings):\n    scored = score_readings(readings)\n    return (scored,)\n\n\n@app.cell\ndef threshold_control():\n    threshold = mo.ui.slider(\n        start=0.1, stop=0.9, step=0.05, value=0.5,\n        label=\"Occupancy threshold\", show_value=True,\n    )\n    threshold\n    return (threshold,)\n\n\n@app.cell\ndef selected_model(args, is_script, scored, threshold):\n    selected_threshold = args.threshold if is_script else threshold.value\n    prediction_rows, model_summary = evaluate_occupancy(scored, selected_threshold)\n    error_rows = prediction_rows[\n        prediction_rows[\"predicted\"] != prediction_rows[\"Occupancy\"]\n    ]\n    return error_rows, model_summary, prediction_rows\n\n\n@app.cell(hide_code=True)\ndef metrics_output(model_summary):\n    mo.hstack([\n        mo.stat(label=\"Precision\", value=f\"{model_summary['precision']:.1%}\"),\n        mo.stat(label=\"Recall\", value=f\"{model_summary['recall']:.1%}\"),\n        mo.stat(label=\"False positives\", value=str(model_summary[\"false_positive\"])),\n        mo.stat(label=\"False negatives\", value=str(model_summary[\"false_negative\"])),\n    ], widths=\"equal\")\n    return\n\n\n@app.cell(hide_code=True)\ndef prediction_table(prediction_rows):\n    mo.vstack([\n        mo.md(\"## Predictions beside observed occupancy\"),\n        mo.ui.table(prediction_rows, page_size=8),\n    ])\n    return\n\n\n@app.cell(hide_code=True)\ndef errors_output(error_rows):\n    mo.vstack([\n        mo.md(\"## Inspect the errors\\nA false positive predicts an occupied room when it was empty. A false negative misses an occupied room.\"),\n        mo.ui.table(error_rows, page_size=8),\n    ])\n    return\n\n\n@app.cell(hide_code=True)\ndef data_credit():\n    mo.md(\"\"\"\n    Data: Luis Candanedo, [UCI Occupancy Detection](https://doi.org/10.24432/C5X01N),\n    licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).\n    The bundled CSV contains 8,143 observations from the training split.\n    \"\"\")\n    return\n\n\n@app.cell\ndef save_predictions(args, is_script, model_summary, prediction_rows):\n    # In script mode, write the predictions and a short summary to the terminal.\n    # The editor continues to show the results above without writing a file.\n    if is_script:\n        prediction_rows.to_csv(args.output, index=False)\n        print(f\"Wrote {len(prediction_rows)} rows to {args.output}\")\n        print(\n            f\"False positives: {model_summary['false_positive']}; \"\n            f\"false negatives: {model_summary['false_negative']}\"\n        )\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+<marimo-code hidden="">%23%20%2F%2F%2F%20script%0A%23%20requires-python%20%3D%20%22%3E%3D3.11%22%0A%23%20dependencies%20%3D%20%5B%0A%23%20%20%20%20%20%22marimo%3E%3D0.23.16%22%2C%0A%23%20%20%20%20%20%22pandas%3E%3D2.2%22%2C%0A%23%20%20%20%20%20%22pyodide-http%3B%20sys_platform%20%3D%3D%20'emscripten'%22%2C%0A%23%20%5D%0A%23%20%2F%2F%2F%0A%0A%23%20Adapted%20from%20marimo-studio%20examples%2Foccupancy.py%20(Apache-2.0).%0A%23%20Copyright%202026%20Marimo.%20See%20licenses%2Fmarimo-studio-LICENSE.txt.%0A%23%20Course%20changes%3A%20pandas%20implementation%2C%20bundled%20data%2C%20reusable%20functions%2C%20and%0A%23%20command-line%20arguments.%20This%20is%20a%20score%2C%20not%20a%20fitted%20ML%20model.%0A%0Aimport%20marimo%0A%0A__generated_with%20%3D%20%220.23.16%22%0Aapp%20%3D%20marimo.App(width%3D%22medium%22%2C%20app_title%3D%22Review%20room%20occupancy%22)%0A%0Awith%20app.setup%3A%0A%20%20%20%20import%20argparse%0A%20%20%20%20import%20sys%0A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20import%20pandas%20as%20pd%0A%0A%0A%40app.function%0Adef%20score_readings(readings)%3A%0A%20%20%20%20%22%22%22Apply%20the%20official%20example's%20light%2FCO2%20score%20to%20these%20readings.%22%22%22%0A%20%20%20%20if%20readings.empty%3A%0A%20%20%20%20%20%20%20%20raise%20ValueError(%22Provide%20at%20least%20one%20sensor%20reading.%22)%0A%20%20%20%20light_max%20%3D%20float(readings%5B%22Light%22%5D.quantile(0.99%2C%20interpolation%3D%22nearest%22))%0A%20%20%20%20co2_min%20%3D%20float(readings%5B%22CO2%22%5D.min())%0A%20%20%20%20co2_max%20%3D%20float(readings%5B%22CO2%22%5D.quantile(0.99%2C%20interpolation%3D%22nearest%22))%0A%20%20%20%20scored%20%3D%20readings.copy()%0A%20%20%20%20light_score%20%3D%20scored%5B%22Light%22%5D.clip(0%2C%20light_max)%20%2F%20max(light_max%2C%201.0)%0A%20%20%20%20co2_score%20%3D%20(scored%5B%22CO2%22%5D.clip(co2_min%2C%20co2_max)%20-%20co2_min)%20%2F%20max(%0A%20%20%20%20%20%20%20%20co2_max%20-%20co2_min%2C%201.0%0A%20%20%20%20)%0A%20%20%20%20scored%5B%22score%22%5D%20%3D%20(0.7%20*%20light_score%20%2B%200.3%20*%20co2_score).astype(%22float32%22)%0A%20%20%20%20return%20scored%0A%0A%0A%40app.function%0Adef%20evaluate_occupancy(scored%2C%20threshold%3D0.5)%3A%0A%20%20%20%20%22%22%22Return%20per-row%20predictions%20and%20metrics%20for%20one%20decision%20threshold.%22%22%22%0A%20%20%20%20if%20not%200%20%3C%3D%20threshold%20%3C%3D%201%3A%0A%20%20%20%20%20%20%20%20raise%20ValueError(%22Threshold%20must%20be%20between%200%20and%201.%22)%0A%20%20%20%20if%20scored.empty%3A%0A%20%20%20%20%20%20%20%20raise%20ValueError(%22Provide%20at%20least%20one%20scored%20reading.%22)%0A%20%20%20%20rows%20%3D%20scored.copy()%0A%20%20%20%20rows%5B%22predicted%22%5D%20%3D%20(rows%5B%22score%22%5D%20%3E%3D%20threshold).astype(int)%0A%20%20%20%20actual%20%3D%20rows%5B%22Occupancy%22%5D%20%3D%3D%201%0A%20%20%20%20predicted%20%3D%20rows%5B%22predicted%22%5D%20%3D%3D%201%0A%20%20%20%20rows%5B%22outcome%22%5D%20%3D%20%22true%20negative%22%0A%20%20%20%20rows.loc%5Bactual%20%26%20predicted%2C%20%22outcome%22%5D%20%3D%20%22true%20positive%22%0A%20%20%20%20rows.loc%5B~actual%20%26%20predicted%2C%20%22outcome%22%5D%20%3D%20%22false%20positive%22%0A%20%20%20%20rows.loc%5Bactual%20%26%20~predicted%2C%20%22outcome%22%5D%20%3D%20%22false%20negative%22%0A%20%20%20%20tp%20%3D%20int((actual%20%26%20predicted).sum())%0A%20%20%20%20tn%20%3D%20int((~actual%20%26%20~predicted).sum())%0A%20%20%20%20fp%20%3D%20int((~actual%20%26%20predicted).sum())%0A%20%20%20%20fn%20%3D%20int((actual%20%26%20~predicted).sum())%0A%20%20%20%20summary%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%22threshold%22%3A%20threshold%2C%0A%20%20%20%20%20%20%20%20%22observations%22%3A%20len(rows)%2C%0A%20%20%20%20%20%20%20%20%22accuracy%22%3A%20(tp%20%2B%20tn)%20%2F%20len(rows)%2C%0A%20%20%20%20%20%20%20%20%22precision%22%3A%20tp%20%2F%20max(tp%20%2B%20fp%2C%201)%2C%0A%20%20%20%20%20%20%20%20%22recall%22%3A%20tp%20%2F%20max(tp%20%2B%20fn%2C%201)%2C%0A%20%20%20%20%20%20%20%20%22true_positive%22%3A%20tp%2C%0A%20%20%20%20%20%20%20%20%22true_negative%22%3A%20tn%2C%0A%20%20%20%20%20%20%20%20%22false_positive%22%3A%20fp%2C%0A%20%20%20%20%20%20%20%20%22false_negative%22%3A%20fn%2C%0A%20%20%20%20%7D%0A%20%20%20%20return%20rows%2C%20summary%0A%0A%0A%40app.cell%0Adef%20script_options()%3A%0A%20%20%20%20%23%20When%20the%20file%20runs%20in%20a%20terminal%2C%20read%20its%20optional%20command-line%20arguments.%0A%20%20%20%20%23%20In%20the%20notebook%20editor%2C%20keep%20using%20the%20interactive%20controls%20below.%0A%20%20%20%20is_script%20%3D%20mo.app_meta().mode%20%3D%3D%20%22script%22%0A%20%20%20%20if%20is_script%3A%0A%20%20%20%20%20%20%20%20parser%20%3D%20argparse.ArgumentParser(description%3D%22Evaluate%20room%20occupancy%22)%0A%20%20%20%20%20%20%20%20parser.add_argument(%22--input%22%2C%20default%3D%22public%2Foccupancy.csv%22)%0A%20%20%20%20%20%20%20%20parser.add_argument(%22--threshold%22%2C%20type%3Dfloat%2C%20default%3D0.5)%0A%20%20%20%20%20%20%20%20parser.add_argument(%22--output%22%2C%20default%3D%22occupancy_predictions.csv%22)%0A%20%20%20%20%20%20%20%20args%20%3D%20parser.parse_args()%0A%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20args%20%3D%20None%0A%20%20%20%20return%20args%2C%20is_script%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20introduction()%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20%23%20Review%20room%20occupancy%0A%0A%20%20%20%20Use%20light%20and%20CO%E2%82%82%20readings%20to%20estimate%20whether%20a%20room%20is%20occupied.%0A%20%20%20%20Move%20the%20threshold%20to%20see%20how%20false%20positives%20and%20false%20negatives%20change.%0A%0A%20%20%20%20This%20course%20adaptation%20uses%20the%20scoring%20rule%20from%0A%20%20%20%20%5Bmarimo-studio's%20occupancy%20example%5D(https%3A%2F%2Fmarimo-team.github.io%2Fmarimo-studio%2Fexamples%2Foccupancy%3Fview%3Dmodel-review).%0A%20%20%20%20It%20combines%20normalized%20light%20(70%25)%20and%20CO%E2%82%82%20(30%25).%20It%20is%20not%20a%20trained%20model%0A%20%20%20%20or%20a%20calibrated%20probability.%20Metrics%20describe%20these%20same%20observations%2C%0A%20%20%20%20not%20performance%20on%20unseen%20data.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20load_readings(args%2C%20is_script)%3A%0A%20%20%20%20if%20sys.platform%20%3D%3D%20%22emscripten%22%3A%0A%20%20%20%20%20%20%20%20import%20pyodide_http%0A%20%20%20%20%20%20%20%20pyodide_http.patch_all()%0A%20%20%20%20data_source%20%3D%20(%0A%20%20%20%20%20%20%20%20args.input%0A%20%20%20%20%20%20%20%20if%20is_script%0A%20%20%20%20%20%20%20%20else%20str(mo.notebook_location()%20%2F%20%22public%22%20%2F%20%22occupancy.csv%22)%0A%20%20%20%20)%0A%20%20%20%20readings%20%3D%20pd.read_csv(data_source%2C%20parse_dates%3D%5B%22date%22%5D).sort_values(%22date%22)%0A%20%20%20%20readings.head(8)%0A%20%20%20%20return%20(readings%2C)%0A%0A%0A%40app.cell%0Adef%20score_observations(readings)%3A%0A%20%20%20%20scored%20%3D%20score_readings(readings)%0A%20%20%20%20return%20(scored%2C)%0A%0A%0A%40app.cell%0Adef%20threshold_control()%3A%0A%20%20%20%20threshold%20%3D%20mo.ui.slider(%0A%20%20%20%20%20%20%20%20start%3D0.1%2C%20stop%3D0.9%2C%20step%3D0.05%2C%20value%3D0.5%2C%0A%20%20%20%20%20%20%20%20label%3D%22Occupancy%20threshold%22%2C%20show_value%3DTrue%2C%0A%20%20%20%20)%0A%20%20%20%20threshold%0A%20%20%20%20return%20(threshold%2C)%0A%0A%0A%40app.cell%0Adef%20selected_model(args%2C%20is_script%2C%20scored%2C%20threshold)%3A%0A%20%20%20%20selected_threshold%20%3D%20args.threshold%20if%20is_script%20else%20threshold.value%0A%20%20%20%20prediction_rows%2C%20model_summary%20%3D%20evaluate_occupancy(scored%2C%20selected_threshold)%0A%20%20%20%20error_rows%20%3D%20prediction_rows%5B%0A%20%20%20%20%20%20%20%20prediction_rows%5B%22predicted%22%5D%20!%3D%20prediction_rows%5B%22Occupancy%22%5D%0A%20%20%20%20%5D%0A%20%20%20%20return%20error_rows%2C%20model_summary%2C%20prediction_rows%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20metrics_output(model_summary)%3A%0A%20%20%20%20mo.hstack(%5B%0A%20%20%20%20%20%20%20%20mo.stat(label%3D%22Precision%22%2C%20value%3Df%22%7Bmodel_summary%5B'precision'%5D%3A.1%25%7D%22)%2C%0A%20%20%20%20%20%20%20%20mo.stat(label%3D%22Recall%22%2C%20value%3Df%22%7Bmodel_summary%5B'recall'%5D%3A.1%25%7D%22)%2C%0A%20%20%20%20%20%20%20%20mo.stat(label%3D%22False%20positives%22%2C%20value%3Dstr(model_summary%5B%22false_positive%22%5D))%2C%0A%20%20%20%20%20%20%20%20mo.stat(label%3D%22False%20negatives%22%2C%20value%3Dstr(model_summary%5B%22false_negative%22%5D))%2C%0A%20%20%20%20%5D%2C%20widths%3D%22equal%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20prediction_table(prediction_rows)%3A%0A%20%20%20%20mo.vstack(%5B%0A%20%20%20%20%20%20%20%20mo.md(%22%23%23%20Predictions%20beside%20observed%20occupancy%22)%2C%0A%20%20%20%20%20%20%20%20mo.ui.table(prediction_rows%2C%20page_size%3D8)%2C%0A%20%20%20%20%5D)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20errors_output(error_rows)%3A%0A%20%20%20%20mo.vstack(%5B%0A%20%20%20%20%20%20%20%20mo.md(%22%23%23%20Inspect%20the%20errors%5CnA%20false%20positive%20predicts%20an%20occupied%20room%20when%20it%20was%20empty.%20A%20false%20negative%20misses%20an%20occupied%20room.%22)%2C%0A%20%20%20%20%20%20%20%20mo.ui.table(error_rows%2C%20page_size%3D8)%2C%0A%20%20%20%20%5D)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20data_credit()%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20Data%3A%20Luis%20Candanedo%2C%20%5BUCI%20Occupancy%20Detection%5D(https%3A%2F%2Fdoi.org%2F10.24432%2FC5X01N)%2C%0A%20%20%20%20licensed%20under%20%5BCC%20BY%204.0%5D(https%3A%2F%2Fcreativecommons.org%2Flicenses%2Fby%2F4.0%2F).%0A%20%20%20%20The%20bundled%20CSV%20contains%208%2C143%20observations%20from%20the%20training%20split.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20save_predictions(args%2C%20is_script%2C%20model_summary%2C%20prediction_rows)%3A%0A%20%20%20%20%23%20In%20script%20mode%2C%20write%20the%20predictions%20and%20a%20short%20summary%20to%20the%20terminal.%0A%20%20%20%20%23%20The%20editor%20continues%20to%20show%20the%20results%20above%20without%20writing%20a%20file.%0A%20%20%20%20if%20is_script%3A%0A%20%20%20%20%20%20%20%20prediction_rows.to_csv(args.output%2C%20index%3DFalse)%0A%20%20%20%20%20%20%20%20print(f%22Wrote%20%7Blen(prediction_rows)%7D%20rows%20to%20%7Bargs.output%7D%22)%0A%20%20%20%20%20%20%20%20print(%0A%20%20%20%20%20%20%20%20%20%20%20%20f%22False%20positives%3A%20%7Bmodel_summary%5B'false_positive'%5D%7D%3B%20%22%0A%20%20%20%20%20%20%20%20%20%20%20%20f%22false%20negatives%3A%20%7Bmodel_summary%5B'false_negative'%5D%7D%22%0A%20%20%20%20%20%20%20%20)%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "notebook.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "edit",
+            "version": "0.23.16",
+            "serverToken": "unused",
+            "config": {"ai": {"custom_providers": {}, "enabled": true, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "auto_close_pairs": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 17, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "uv"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"app_title": "Review room occupancy", "sql_output": "auto", "width": "medium"},
+            "view": {"showAppCode": false},
+            "notebook": null,
+            "session": null,
+            "runtimeConfig": null,
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  </body>
+</html>
