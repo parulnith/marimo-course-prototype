@@ -10,6 +10,8 @@ import studioNotebookViews from "../images/module-5/studio-notebook-views.webp";
 import occupancyMonitorVideo from "../images/module-5/occupancy-monitor.mp4";
 import occupancyModelReviewVideo from "../images/module-5/occupancy-model-review.mp4";
 import occupancyReport from "../images/module-5/occupancy-report.png";
+import studioAddSimpleView from "../images/module-5/studio-add-simple-view.png";
+import studioSimpleView from "../images/module-5/studio-simple-view.png";
 
 An interactive notebook is a great place to begin a project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work with others or integrate it into a larger production system.
 
@@ -125,15 +127,13 @@ All three can use results from the same `occupancy.py` notebook. The notebook co
 
 Our notebook already calculates the selected threshold, precision and recall, false positive and false negative counts, and rows where the prediction was incorrect. A view can use these results instead of calculating them again.
 
-### 3.1 Create a monitor
 
-You can create and edit Studio views yourself or use a coding assistant. Studio works with marimo's built-in AI assistant as well as external coding agents.
 
-In this section, we will use **marimo's AI assistant**, introduced in [Module 4](/?module=4), because it is available directly inside the notebook editor. The agent can inspect the notebook, create the view files, and connect them to existing notebook results.
+### 3.1 Create a simple view manually
 
-The calculations will stay in `occupancy.py`; the view will control how those results are presented.
+Creating a Studio view is simple. In this activity, let's create a small view from the occupancy notebook.
 
-<Callout title="Start Studio and open marimo AI">
+<Callout title="Start marimo Studio">
 
 This activity runs locally. Open a terminal in the course folder that contains `occupancy.py`, then start marimo with Studio:
 
@@ -141,18 +141,57 @@ This activity runs locally. Open a terminal in the course folder that contains `
 uvx --with marimo-studio marimo edit occupancy.py --sandbox --watch
 ```
 
-Open the Studio preview for the notebook. Then open the AI sidebar in the notebook editor and switch it to **Code Mode**. If you prefer another coding assistant, you can use the same prompts there as long as it can access the notebook and Studio project files.
+Studio opens `occupancy.py` in your browser.
 
 </Callout>
+
+With `occupancy.py` open, click the arrow beside the current view name in the top bar, then select **Add view**. Enter `simple-view` as the name, choose **HTML document**, and select **Create view**. If an existing view opens first, this adds `simple-view` alongside it.
+
+<img src={studioAddSimpleView} alt="The Studio Add view panel with simple-view entered as the name and HTML document selected." />
+
+Click the **Source** button (`<>`) in the Studio toolbar. In the source panel, open `index.html`, select all of its contents, and replace them with:
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Occupancy results</title>
+  </head>
+  <body>
+    <div id="app-shell">
+      <main>
+        <h1>Occupancy results</h1>
+        <marimo-cell name="metrics_output"></marimo-cell>
+      </main>
+    </div>
+  </body>
+</html>
+```
+
+Save the file, then open **Preview**. The `<marimo-cell>` element tells Studio to render the output of the notebook cell named `metrics_output` inside the view.
+
+<img src={studioSimpleView} alt="The occupancy notebook beside Studio Preview, which displays the metrics_output cell in a simple HTML view." />
+
+<p className="figure-caption">
+  The view references the notebook's <code>metrics_output</code> cell. The calculation remains in <code>occupancy.py</code>, while the view controls where the result appears.
+</p>
+
+You could continue building the view manually, as you just saw, or take the help of a coding assistant as you'll see in the next section.
+
+### 3.2 Create a monitor
+
+Studio views can be created manually, as you just saw, or with a coding assistant. Studio works with marimo's built-in AI assistant as well as external coding agents.
+
+In this module, we will use marimo's AI assistant, introduced in [Module 4](/?module=4), because it is available directly inside the notebook editor. Open the AI sidebar and switch it to **Code Mode**. If you prefer another coding assistant, you can use the same prompts as long as it can access the notebook and Studio project files.
 
 First, ask the agent to inspect the notebook:
 
 ```text
 Inspect occupancy.py.
 
-Identify the exact notebook cells and values that contain:
+Identify the notebook cells and values that contain:
 - the threshold control
-- occupancy results
 - precision and recall
 - false positive and false negative counts
 - prediction errors
@@ -162,7 +201,7 @@ List their names and briefly explain what each one contains.
 Do not change any files yet.
 ```
 
-AI agents word their answers differently each time, so your response will not match exactly. It should identify similar cells. In our run, the agent found that the notebook already contains everything the view needs:
+AI assistants may word their answers differently. In our run, the important parts were:
 
 - `threshold_control` contains the threshold slider.
 - `selected_model` calculates the predictions, metrics, and error rows.
@@ -171,27 +210,23 @@ AI agents word their answers differently each time, so your response will not ma
 
 The underlying calculations remain in `score_readings()` and `evaluate_occupancy()`.
 
-We can now build a view from these existing notebook results instead of calculating them again.
-
-Now create the first view:
+We can now build a view from these existing results instead of calculating them again.
 
 ```text
 Create a plain HTML Studio view named monitor for occupancy.py.
 
 The view is for a facilities team. Show:
-- the current threshold using threshold_control
-- precision and recall from model_summary
-- false positive and false negative counts from model_summary
-- a short occupancy summary based on the existing notebook results
+- the threshold control
+- precision and recall
+- false positive and false negative counts
 
-Use the existing cells and values from occupancy.py. Keep all calculations,
-including score_readings() and evaluate_occupancy(), in the notebook.
-Do not recreate these calculations in the view.
+Use the existing notebook cells and values. Keep all calculations in
+occupancy.py. Keep the layout simple and easy to scan.
 
 Build the view and show it in Preview.
 ```
 
-The agent chooses its own layout, so your monitor will look a little different. It should be similar to the one in the video below: the threshold slider, a short occupancy summary, and cards for precision, recall, false positives, and false negatives.
+The assistant chooses the layout, so your monitor may look slightly different from the one shown below.
 
 Watch the monitor being created in Studio:
 
@@ -200,41 +235,34 @@ Watch the monitor being created in Studio:
   Your browser does not support the video tag.
 </video>
 
-You now have two separate parts of the project:
-
-- `occupancy.py` contains the analysis and calculations.
-- The `monitor` view controls how selected results are presented.
+You now have two separate parts of the project: `occupancy.py` contains the analysis and calculations, while the `monitor` view controls how selected results are presented.
 
 Change the threshold in the view and check that the values shown there match the notebook.
 
-### 3.2 Create a model review
+### 3.3 Create a model review
 
-The monitor gives a quick overview. Someone choosing the decision threshold needs more detail about how that threshold affects errors. At `0.5`, the notebook produces 90 false positives and 5 false negatives. At `0.7`, it produces fewer false positives but many more false negatives. The model review makes this tradeoff easier to inspect before choosing a threshold.
+The monitor gives a quick overview. Someone choosing the decision threshold needs more detail about how that threshold affects errors.
 
 ```text
 Create another Studio view named model-review for occupancy.py.
 
-This view is for someone choosing the occupancy decision threshold. Include:
+This view is for someone choosing the occupancy decision threshold. Show:
 - the notebook's threshold control
 - precision and recall
 - false positive and false negative counts
-- a chart showing how false positives, false negatives, precision, and
-  recall change across thresholds, with the current threshold marked
-- a confusion matrix for the current threshold
-- a chart of score distributions for empty and occupied readings, with
-  the current threshold marked
 - a table of prediction errors
 
-Explain false positives and false negatives in plain language.
-
-Use the existing notebook results and keep all calculations in occupancy.py.
-If a chart needs new results, add notebook cells that reuse
-evaluate_occupancy(). Do not recreate the evaluation logic in the view.
+Add a short explanation of a false positive, predicting occupied when the
+room is empty, and a false negative, predicting empty when the room is
+occupied. Use the existing notebook results. Keep all calculations in
+occupancy.py. Keep the view simple and focused on comparing errors.
 
 Build the view and show it in Preview.
 ```
 
-Your model review will look something similar to the one shown below. It'll have a threshold slider and metrics at the top, a trade-off chart across thresholds, a confusion matrix, a score distribution chart, and the table of prediction errors. The agent may also add a few notebook cells to calculate the chart data.
+Set the threshold to `0.5`, then change it to `0.7`. Compare the precision, recall, false positive count, false negative count, and error rows at the two thresholds.
+
+The monitor and model review use the same analysis, but they support different tasks. The monitor gives the facilities team a quick summary, while the model review makes the effect of the decision threshold easier to inspect.
 
 Watch the model review being created in Studio:
 
@@ -244,33 +272,35 @@ Watch the model review being created in Studio:
 </video>
 
 
-### 3.3 Create a report
+### 3.4 Create a report
 
-Finally, create a view for someone who needs to read the results rather than interact with the analysis.
+Finally, create a view for someone who wants to read the results rather than explore them in detail.
 
 ```text
 Create a Studio view named report for occupancy.py.
 
-Present the occupancy analysis as a short report for a manager. Include:
-- a headline with the current threshold, how many readings it
-  misclassifies, and the threshold with the fewest total errors
-- a short description of the task and what false positives and false
-  negatives mean for the rooms
+Make it a short report for a manager. Include:
+- a short description of the occupancy task
+- the selected threshold
 - precision and recall
 - false positive and false negative counts
-- a table comparing nearby thresholds, with the current one highlighted
-- the threshold trade-off chart
-- a short note on the method and its limits
+- a short explanation of what the two errors mean in practice
+- a short takeaway
 
-Use the existing calculations from occupancy.py. Do not copy calculated
-values into the view. If the report needs new numbers or text built from
-results, add notebook cells that reuse the existing results. Build the
-view and show it in Preview.
+Use the existing results from occupancy.py. Keep all calculations in the
+notebook. Use a simple report layout with a title, summary metrics,
+explanation, and conclusion. Build the view and show it in Preview.
 ```
 
-<img src={occupancyReport} alt="A Studio report view showing the occupancy threshold, prediction metrics, tradeoff explanation, prediction errors, and a Download PDF button." />
+<img src={occupancyReport} alt="A Studio report view showing the occupancy threshold, prediction metrics, error explanation, and summary." />
 
-When the report looks right, you can export it as a PDF. The report view includes a **Download PDF** button that uses the browser's print-to-PDF feature.
+The three views now use the same `occupancy.py` analysis in different ways:
+
+- **Monitor**: the facilities team can quickly check the results.
+- **Model review**: the person choosing the threshold can inspect how it affects errors.
+- **Report**: the manager can read a short summary of the analysis.
+
+The calculations have not been copied into the views. They remain in `occupancy.py`, while each view presents those results for a different audience.
 
 ### Check your understanding
 
