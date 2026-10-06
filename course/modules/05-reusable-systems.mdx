@@ -14,6 +14,7 @@ import studioAddSimpleView from "../images/module-5/studio-add-simple-view.png";
 import studioSimpleView from "../images/module-5/studio-simple-view.png";
 import appViewGif from "../images/module-5/app-view.gif";
 import exportFormatsGif from "../images/module-5/export-formats.gif";
+import marimoPairGif from "../images/module-5/marimo-pair.gif";
 
 An interactive notebook is a great place to begin a project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work with others or integrate it into a larger production system.
 
@@ -21,7 +22,7 @@ In this module, you will learn how to share and reuse your marimo notebook, then
 
 ## 1. Share your notebook in multiple ways
 
-### 1.1 Explore the occupancy notebook
+### Explore the occupancy notebook
 
 Imagine you work for a company that wants to estimate whether a meeting room is occupied from its sensor readings. Your task is to compare the predicted occupancy with the recorded occupancy and choose a decision threshold. A false positive could keep the lights on in an empty room. A false negative could turn them off while people are still there.
 
@@ -33,8 +34,15 @@ The following marimo notebook contains 8,143 sensor readings and a slider for th
 
 <MarimoEmbed
   notebook="/notebooks/module-5/occupancy.py?v=20261005-1"
+  openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-5/occupancy.py"
   title="Review room occupancy"
 />
+
+<Callout title="Download the course files">
+
+You will work with this notebook locally in Sections 2 and 3. [Download the notebook and data](/notebooks/module-5/module-5-occupancy.zip), then extract the folder. It includes `occupancy.py` and `occupancy.csv`.
+
+</Callout>
 
 <Callout title="About this example">
 
@@ -44,7 +52,7 @@ This simplified course notebook is adapted from [marimo-studio's original occupa
 
 Move the threshold from `0.5` to `0.7` and inspect the error counts. The dataframe places each prediction beside the recorded occupancy, so you can inspect where they differ.
 
-### 1.2 Share and export your notebook
+### Share and export your notebook
 
 Select the **preview** button in the notebook editor to open app view. It shows the controls and results without the code.
 
@@ -56,7 +64,7 @@ You can also export and share the notebook in multiple formats, as shown in the 
 
 ## 2. Use your notebook as a script or Python module
 
-### 2.1 Run the notebook as a script
+### Run the notebook as a script
 
 You can run the occupancy notebook you explored above as a script from the command line. This is useful when you want to run the same analysis repeatedly without opening the notebook interface. For example, you might want to process a batch of sensor readings and save the results for a dashboard or report.
 
@@ -69,13 +77,13 @@ As you saw in Module 1, a notebook cell can have a Python function name. Here, `
 
 In the notebook, the `script_options` cell reads three command-line arguments:
 
-- `--input` specifies the sensor data file. If you leave it out, the notebook uses `public/occupancy.csv`.
+- `--input` specifies the sensor data file. If you leave it out, the notebook uses `occupancy.csv`.
 - `--threshold` specifies the threshold to use.
 - `--output` specifies where to save the predictions.
 
 The `selected_model` cell uses the threshold from the command line when the file runs as a script. The `save_predictions` cell writes the CSV and prints the summary. In the editor, the notebook continues to use the slider.
 
-To try it in a terminal, run the command below from the folder containing `occupancy.py` and the `public` data folder:
+To try it in a terminal, run the command below from the folder containing `occupancy.py` and `occupancy.csv`:
 
 ```bash
 uv run occupancy.py \
@@ -90,22 +98,19 @@ Wrote 8143 rows to occupancy_predictions.csv
 False positives: 90; false negatives: 5
 ```
 
-### 2.2 Reuse the evaluation in another notebook
+### Reuse functions from the notebook
 
 Another advantage of a marimo notebook is that it is a Python file. You can import its functions into another notebook instead of copying code.
 
-You already have an occupancy notebook in Section 1.1. Its `score_readings()` and `evaluate_occupancy()` functions are already in the correct format for reuse: each is defined in its own cell and uses imports from the setup cell. When your own function follows this pattern, marimo marks it as reusable in the editor.
+You already explored the occupancy notebook above. Its `score_readings()` and `evaluate_occupancy()` functions are already in the correct format for reuse: each is defined in its own cell and uses imports from the setup cell. When your own function follows this pattern, marimo marks it as reusable in the editor.
 
-The notebook below imports both functions and uses them to compare three thresholds using the same sensor readings.
+When another notebook or Python program needs the same scoring rule, import the functions from `occupancy.py`:
 
-<TryIt>
-Adjust the thresholds in the notebook below. Compare the false positive and false negative counts for each threshold. 
-</TryIt>
+```python
+from occupancy import evaluate_occupancy, score_readings
+```
 
-<MarimoEmbed
-  notebook="/notebooks/module-5/occupancy_reuse.py?v=20261003-1"
-  title="Import and reuse the occupancy functions"
-/>
+The functions remain in one source notebook, so you can update the scoring rule in one place and use it wherever you need it.
 
 ## 3. Create views from one notebook with marimo Studio
 
@@ -125,25 +130,23 @@ For our occupancy analysis, the same notebook can be useful in three different w
 - Someone choosing the **decision threshold** might need a model review that makes false positives and false negatives easier to compare.
 - A **manager** might want a short report summarising the results.
 
-All three can use results from the same `occupancy.py` notebook. The notebook continues to contain the data and Python calculations. Each view chooses which results to show and how to arrange them.
-
-Our notebook already calculates the selected threshold, precision and recall, false positive and false negative counts, and rows where the prediction was incorrect. A view can use these results instead of calculating them again.
+All three can use results from the same notebook which continues to contain the data and Python calculations. Each view chooses which results to show and how to arrange them.
 
 
-
-### 3.1 Create a simple view manually
+### Create a simple view manually
 
 Creating a Studio view is simple. In this activity, let's create a small view from the occupancy notebook.
 
-<Callout title="Start marimo Studio">
+<Callout title="Start marimo Studio locally">
 
-This activity runs locally. Open a terminal in the course folder that contains `occupancy.py`, then start marimo with Studio:
+Use the files you downloaded in Section 1. Open a terminal in the extracted `module-5-occupancy` folder, which contains `occupancy.py` and `occupancy.csv`, then run:
 
 ```bash
+cd module-5-occupancy
 uvx --with marimo-studio marimo edit occupancy.py --sandbox --watch
 ```
 
-Studio opens `occupancy.py` in your browser.
+Studio opens `occupancy.py` in your browser. Continue with the steps below.
 
 </Callout>
 
@@ -181,13 +184,19 @@ Save the file, then open **Preview**. The `<marimo-cell>` element tells Studio t
 
 You could continue building the view manually, as you just saw, or use an AI agent, as you will see in the next section.
 
-### 3.2 Create a monitor
+### Create Studio views with marimo pair
 
-Studio views can be created manually, as you just saw, or with an AI agent.
+Studio views can be created manually, as you just saw, or you can create them with an AI agent.
 
-In [Module 4](/?module=4), you used [marimo pair](https://marimo.io/pair) to connect an AI agent to a running notebook. Use it again here with `occupancy.py`. Pair gives the agent access to the active notebook, so it can inspect the existing analysis, create Studio view files, and help you check the result.
+In [Module 4](/?module=4), you used [marimo pair](https://marimo.io/pair) to connect an AI agent to a running notebook. You will use it again here to create Studio views. marimo pair gives the agent access to the active notebook, so it can inspect the existing analysis, create Studio view files, and help you check the result.
 
-Start `occupancy.py`, then open **Settings → Pair with an agent** and connect your preferred agent. Send the prompts in the following sections to your paired agent. You can pair with Codex, Claude Code, Cursor, or another compatible AI agent.
+With the local `occupancy.py` notebook open, select **Actions → Pair with an agent**, choose your AI agent, and follow the connection instructions.
+
+<img className="lesson-gif" src={marimoPairGif} alt="The Actions menu in a local occupancy notebook shows the option to pair with an agent." />
+
+If this is your first time using Pair, return to [Module 4](/?module=4) for the installation and setup steps, or read the [marimo pair guide](https://docs.marimo.io/guides/generate_with_ai/marimo_pair/). You can pair with Codex, Claude Code, Cursor, or another compatible AI agent.
+
+### Create a monitor
 
 First, send this prompt to your paired agent:
 
@@ -243,7 +252,7 @@ You now have two separate parts of the project: `occupancy.py` contains the anal
 
 Change the threshold in the view and check that the values shown there match the notebook.
 
-### 3.3 Create a model review
+### Create a model review
 
 The monitor gives a quick overview. Someone choosing the decision threshold needs more detail about how that threshold affects errors.
 
@@ -278,7 +287,7 @@ Watch the model review being created in Studio:
 </video>
 
 
-### 3.4 Create a report
+### Create a report
 
 Finally, create a view for someone who wants to read the results rather than explore them in detail.
 
@@ -302,13 +311,19 @@ explanation, and conclusion. Build the view and show it in Preview.
 
 <img src={occupancyReport} alt="A Studio report view showing the occupancy threshold, prediction metrics, error explanation, and summary." />
 
-The three views now use the same `occupancy.py` analysis in different ways:
+Studio keeps each view in its own folder beside the notebook. After you create the views in this section, the Files panel will look like this:
 
-- **Monitor**: the facilities team can quickly check the results.
-- **Model review**: the person choosing the threshold can inspect how it affects errors.
-- **Report**: the manager can read a short summary of the analysis.
+```text
+__marimo__/
+└── studio/
+    └── occupancy
+        ├── simple-view/
+        ├── monitor/
+        ├── model-review/
+        └── report/
+```
 
-The calculations have not been copied into the views. They remain in `occupancy.py`, while each view presents those results for a different audience. You can also change the notebook and have those changes reflected in every view making use of the same analysis.
+As you can see, the calculations have not been copied into the views. They remain in a single marimo notebook while each view presents those results for a different audience.
 
 ## Check your understanding
 

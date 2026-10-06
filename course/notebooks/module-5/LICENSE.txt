@@ -1,3 +1,17 @@
+Occupancy course download
+
+`occupancy.py` is adapted from marimo-studio's `occupancy.py` example.
+Copyright 2026 Marimo. The original is available at
+https://github.com/marimo-team/marimo-studio/blob/72376de50eb89fe8372ad55f3b341cfb439be154/examples/occupancy.py.
+Course changes include the pandas implementation, reusable functions,
+command-line arguments, and CSV output.
+
+`occupancy.csv` contains the 8,143-row training split of Luis
+Candanedo's UCI Occupancy Detection dataset. It is licensed under CC BY 4.0:
+https://doi.org/10.24432/C5X01N
+
+The following Apache License 2.0 applies to the adapted Studio example:
+
 Copyright 2026 Marimo. All rights reserved.
 
                                  Apache License

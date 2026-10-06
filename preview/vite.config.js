@@ -25,7 +25,6 @@ const notebookSources = [
   "course/notebooks/module-5/sentiment_classifier_script.py",
   "course/notebooks/module-5/eval_pipeline.py",
   "course/notebooks/module-5/occupancy.py",
-  "course/notebooks/module-5/occupancy_reuse.py",
 ].map((path) => join(repoRoot, path));
 
 function notebookExportDir(source) {
@@ -75,10 +74,10 @@ function exportNotebook(source, force = false) {
       join(publicDir, "sentiment_classifier.py"),
     );
   }
-  if (["occupancy.py", "occupancy_reuse.py"].includes(basename(source))) {
+  if (basename(source) === "occupancy.py") {
     const publicDir = join(exportDir, "public");
     mkdirSync(publicDir, { recursive: true });
-    copyFileSync(join(dirname(source), "public/occupancy.csv"), join(publicDir, "occupancy.csv"));
+    copyFileSync(join(dirname(source), "occupancy.csv"), join(publicDir, "occupancy.csv"));
     copyFileSync(join(dirname(source), "occupancy.py"), join(publicDir, "occupancy.py"));
   }
   return true;

@@ -15,7 +15,7 @@
 # ///
 
 # Adapted from marimo-studio examples/occupancy.py (Apache-2.0).
-# Copyright 2026 Marimo. See licenses/marimo-studio-LICENSE.txt.
+# Copyright 2026 Marimo. See LICENSE.txt.
 # Course changes: pandas implementation, bundled data, reusable functions, and
 # command-line arguments. This is a score, not a fitted ML model.
 
@@ -89,7 +89,7 @@ def script_options():
     is_script = mo.app_meta().mode == "script"
     if is_script:
         parser = argparse.ArgumentParser(description="Evaluate room occupancy")
-        parser.add_argument("--input", default="public/occupancy.csv")
+        parser.add_argument("--input", default="occupancy.csv")
         parser.add_argument("--threshold", type=float, default=0.5)
         parser.add_argument("--output", default="occupancy_predictions.csv")
         args = parser.parse_args()
@@ -123,7 +123,7 @@ def load_readings(args, is_script):
     data_source = (
         args.input
         if is_script
-        else str(mo.notebook_location() / "public" / "occupancy.csv")
+        else str(mo.notebook_location() / "occupancy.csv")
     )
     readings = pd.read_csv(data_source, parse_dates=["date"]).sort_values("date")
     readings.head(8)
