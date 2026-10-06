@@ -183,11 +183,13 @@ You could continue building the view manually, as you just saw, or use an AI age
 
 ### 3.2 Create a monitor
 
-Studio views can be created manually, as you just saw, or with an AI agent. Studio works with marimo's built-in AI agent as well as external AI agents.
+Studio views can be created manually, as you just saw, or with an AI agent.
 
-Now you will use marimo's AI agent, introduced in [Module 4](/?module=4), to build these views. Open the AI sidebar and switch it to **Code Mode**. You can also use another AI agent, such as Codex or Claude Code, with the same prompts.
+In [Module 4](/?module=4), you used [marimo pair](https://marimo.io/pair) to connect an AI agent to a running notebook. Use it again here with `occupancy.py`. Pair gives the agent access to the active notebook, so it can inspect the existing analysis, create Studio view files, and help you check the result.
 
-First, ask the agent to inspect the notebook:
+Start `occupancy.py`, then open **Settings → Pair with an agent** and connect your preferred agent. Send the prompts in the following sections to your paired agent. You can pair with Codex, Claude Code, Cursor, or another compatible AI agent.
+
+First, send this prompt to your paired agent:
 
 ```text
 Inspect occupancy.py.
@@ -212,7 +214,7 @@ AI agents may word their answers differently. In our run, the important parts we
 
 The underlying calculations remain in `score_readings()` and `evaluate_occupancy()`.
 
-We can now build a view from these existing results instead of calculating them again.
+We can now build a view from these existing results instead of calculating them again. Send this prompt to your paired agent:
 
 ```text
 Create a plain HTML Studio view named monitor for occupancy.py.
@@ -228,7 +230,7 @@ occupancy.py. Keep the layout simple and easy to scan.
 Build the view and show it in Preview.
 ```
 
-The assistant chooses the layout, so your monitor may look slightly different from the one shown below.
+The AI agent chooses the layout, so your monitor may look slightly different from the one shown below.
 
 Watch the monitor being created in Studio:
 
@@ -244,6 +246,8 @@ Change the threshold in the view and check that the values shown there match the
 ### 3.3 Create a model review
 
 The monitor gives a quick overview. Someone choosing the decision threshold needs more detail about how that threshold affects errors.
+
+Send this prompt to your paired agent:
 
 ```text
 Create another Studio view named model-review for occupancy.py.
@@ -277,6 +281,8 @@ Watch the model review being created in Studio:
 ### 3.4 Create a report
 
 Finally, create a view for someone who wants to read the results rather than explore them in detail.
+
+Send this prompt to your paired agent:
 
 ```text
 Create a Studio view named report for occupancy.py.
