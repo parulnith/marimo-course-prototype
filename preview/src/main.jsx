@@ -380,8 +380,8 @@ function CourseHome() {
         <li>See how reactive execution and clear dependencies prevent common reproducibility problems in notebooks.</li>
         <li>Build and share AI and ML experiments that use the same environment and dependencies.</li>
         <li>Explore data and evaluate models with interactive controls and visualizations.</li>
-        <li>Use AI coding agents while you prototype, debug models, and improve an AI workflow.</li>
-        <li>Turn one marimo notebook into a script, web app, shareable artifact, or Python module.</li>
+        <li>Use AI coding agents through marimo pair while you prototype, debug models, and improve an AI workflow.</li>
+        <li>Turn one marimo notebook into a script, web app, shareable artifact, or Python module, and create separate views with marimo Studio.</li>
       </ul>
     </section>
   </article>;
