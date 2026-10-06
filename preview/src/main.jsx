@@ -5,7 +5,6 @@ import ModuleTwo from "../../course/modules/02-reproducibility.mdx";
 import ModuleThree from "../../course/modules/03-interactivity.mdx";
 import ModuleFour from "../../course/modules/04-ai-coding-agents.mdx";
 import ModuleFive from "../../course/modules/05-reusable-systems.mdx";
-import ModuleFiveDraft from "../../course/modules/05-reusable-systems-studio-draft.mdx";
 import "../styles.css";
 
 const courseImages = import.meta.glob("../../course/images/**/*", {
@@ -93,20 +92,12 @@ const modules = {
   },
 };
 
-if (import.meta.env.VITE_MODULE_5_DRAFT === "true") {
-  modules[5] = {
-    ...modules[5],
-    title: "From Prototype to Production (Studio draft)",
-    duration: "20 min",
-    Content: ModuleFiveDraft,
-    lessons: [
-      ["1-share-your-notebook-in-multiple-ways", "Share your notebook in multiple ways", null, 1],
-      ["2-use-your-notebook-as-a-script-or-python-module", "Use your notebook as a script or Python module", null, 2],
-      ["3-create-a-custom-view-with-marimo-studio", "Create a custom view with marimo Studio", null, 3],
-      ["check-your-understanding", "Quiz", "nested"],
-    ],
-  };
-}
+modules[5].lessons = [
+  ["1-share-your-notebook-in-multiple-ways", "Share your notebook in multiple ways", null, 1],
+  ["2-use-your-notebook-as-a-script-or-python-module", "Use your notebook as a script or Python module", null, 2],
+  ["3-create-views-from-one-notebook-with-marimo-studio", "Create views with marimo Studio", null, 3],
+  ["check-your-understanding", "Quiz", null, 4],
+];
 
 const futureModules = [];
 

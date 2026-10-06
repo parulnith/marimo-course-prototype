@@ -12,6 +12,8 @@ import occupancyModelReviewVideo from "../images/module-5/occupancy-model-review
 import occupancyReport from "../images/module-5/occupancy-report.png";
 import studioAddSimpleView from "../images/module-5/studio-add-simple-view.png";
 import studioSimpleView from "../images/module-5/studio-simple-view.png";
+import appViewGif from "../images/module-5/app-view.gif";
+import exportFormatsGif from "../images/module-5/export-formats.gif";
 
 An interactive notebook is a great place to begin a project because it lets you experiment and test ideas quickly. However, your requirements may change when you need to share your work with others or integrate it into a larger production system.
 
@@ -46,11 +48,11 @@ Move the threshold from `0.5` to `0.7` and inspect the error counts. The datafra
 
 Select the **preview** button in the notebook editor to open app view. It shows the controls and results without the code.
 
-{/* Add GIF showing app view here. */}
+<img className="lesson-gif" src={appViewGif} alt="The occupancy notebook opens in app view, showing its controls and results without the editor." />
 
-You can also export the notebook in multiple formats, as shown in the image below.
+You can also export and share the notebook in multiple formats, as shown in the image below.
 
-{/* Add image showing export options here. */}
+<img className="lesson-gif" src={exportFormatsGif} alt="The marimo notebook editor opens the download menu to show the available export formats." />
 
 ## 2. Use your notebook as a script or Python module
 
@@ -183,7 +185,7 @@ You could continue building the view manually, as you just saw, or take the help
 
 Studio views can be created manually, as you just saw, or with a coding assistant. Studio works with marimo's built-in AI assistant as well as external coding agents.
 
-In this module, we will use marimo's AI assistant, introduced in [Module 4](/?module=4), because it is available directly inside the notebook editor. Open the AI sidebar and switch it to **Code Mode**. If you prefer another coding assistant, you can use the same prompts as long as it can access the notebook and Studio project files.
+Now you will use marimo's AI assistant, introduced in [Module 4](/?module=4), to build these views. Open the AI sidebar and switch it to **Code Mode**. You can also use another coding assistant, such as Codex or Claude Code, with the same prompts.
 
 First, ask the agent to inspect the notebook:
 
@@ -300,19 +302,19 @@ The three views now use the same `occupancy.py` analysis in different ways:
 - **Model review**: the person choosing the threshold can inspect how it affects errors.
 - **Report**: the manager can read a short summary of the analysis.
 
-The calculations have not been copied into the views. They remain in `occupancy.py`, while each view presents those results for a different audience.
+The calculations have not been copied into the views. They remain in `occupancy.py`, while each view presents those results for a different audience. You can also change the notebook and have those changes reflected in every view making use of the same analysis.
 
-### Check your understanding
+## Check your understanding
 
 <Quiz
   question="Why create separate views with marimo-studio?"
   options={[
-    "To present the same notebook analysis in different layouts for different audiences.",
     "To avoid calculating the results shown in the view.",
+    "To present the same notebook analysis in different layouts for different audiences.",
     "To automatically choose the best decision threshold.",
     "To make every notebook result correct."
   ]}
-  answer={0}
+  answer={1}
   correctFeedback="Correct. You can keep the shared analysis in the notebook and create a separate layout for each view."
   incorrectFeedback="Think about presenting the same results in a meeting and in a detailed report."
 />
@@ -320,12 +322,12 @@ The calculations have not been copied into the views. They remain in `occupancy.
 <Quiz
   question="When should you run a notebook as a web app?"
   options={[
-    "When people need to use its controls without editing the code.",
     "When a scheduled process needs to run without an interface.",
     "When you only need a fixed PDF.",
+    "When people need to use its controls without editing the code.",
     "When you want to download a dataset."
   ]}
-  answer={0}
+  answer={2}
   correctFeedback="Correct. App view shows the controls and outputs while hiding the code."
   incorrectFeedback="Think about someone who needs to use the notebook but does not need to edit its code."
 />
@@ -333,12 +335,12 @@ The calculations have not been copied into the views. They remain in `occupancy.
 <Quiz
   question="When is it useful to run a notebook as a script?"
   options={[
-    "When the same task needs to run repeatedly without notebook controls.",
     "When a reader needs to change a slider in the browser.",
     "When you want to turn the output into a PDF.",
-    "When you want to hide an import statement."
+    "When you want to hide an import statement.",
+    "When the same task needs to run repeatedly without notebook controls."
   ]}
-  answer={0}
+  answer={3}
   correctFeedback="Correct. A script can run the same task repeatedly and save its output for another process."
   incorrectFeedback="Think about work that must run without a person using the notebook interface."
 />
@@ -346,12 +348,12 @@ The calculations have not been copied into the views. They remain in `occupancy.
 <Quiz
   question="Why would you mark a notebook function as reusable?"
   options={[
-    "So another notebook or Python program can import it.",
     "So marimo always hides the function's code.",
+    "So another notebook or Python program can import it.",
     "So the function can change the notebook layout.",
     "So the notebook can only run as an app."
   ]}
-  answer={0}
+  answer={1}
   correctFeedback="Correct. A reusable function can be imported instead of copied."
   incorrectFeedback="Think about using the same Python logic in another place."
 />
