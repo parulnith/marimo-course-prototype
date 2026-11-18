@@ -7,6 +7,7 @@ duration: 20 min
 ---
 
 import agentViewWorkflow from "../images/module-5/pair-studio-lens-workflow.svg";
+import lensErrorTableFeedback from "../images/module-5/lens-error-table-feedback.png";
 import occupancyMonitorVideo from "../images/module-5/occupancy-monitor.mp4";
 import occupancyModelReviewVideo from "../images/module-5/occupancy-model-review.mp4";
 import occupancyReport from "../images/module-5/occupancy-report.png";
@@ -286,13 +287,19 @@ Make false negatives easier to spot. Highlight those rows and include a
 clear "False negative" label.
 ```
 
-Then send this message to your paired agent:
+Click **Done** to save the note. Then send this message to your paired agent:
 
 ```text
 Use Lens to address my current selection in this Studio view.
 Keep the predictions, threshold, and calculations unchanged.
 Build the updated view and show it in Preview.
 ```
+
+<img src={lensErrorTableFeedback} alt="Studio's model-review preview with the errors_output table selected in Lens and the note Make false negatives easier to spot. The AI sidebar in Code Mode contains an unsent request to address the current Lens selection." />
+
+<p className="figure-caption">
+  Select the error table with Lens, add a note, and ask the agent to address the selection. This example shows the request prepared in the AI sidebar's Code Mode.
+</p>
 
 Saving the note records your selection. Sending the message asks the agent to act on it. If you do not see the Lens dock, ask your paired agent to add Lens to the notebook, then continue when the dock appears in Preview.
 
@@ -302,9 +309,7 @@ Review the updated table. Check that false negatives have both a highlight and a
 
 ### Create a report
 
-Finally, create a view for someone who wants to read the results rather than explore them in detail.
-
-Send this prompt to your paired agent:
+Finally, create a view for someone who wants to read the results rather than explore them in detail. Send this prompt to your paired agent:
 
 ```text
 Create a Studio view named report for occupancy.py.
@@ -418,7 +423,7 @@ __marimo__/
 />
 
 <Quiz
-  question="Why would you mark a notebook function as reusable?"
+  question="Why would you import a function from your notebook into another Python file?"
   options={[
     "So marimo always hides the function's code.",
     "So another notebook or Python program can import it.",

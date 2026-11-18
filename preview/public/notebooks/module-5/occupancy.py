@@ -6,7 +6,10 @@
 #     "pyodide-http; sys_platform == 'emscripten'",
 #     "marimo-studio[lens]==0.2.3",
 #     "marimo-lens==0.2.3",
-#     "altair==6.3.0"
+#     "altair==6.3.0",
+#     "mcp==2.3.0",
+#     "pyodide-http==0.2.2",
+#     "pydantic-ai-slim[openai]==2.70.0",
 # ]
 #
 # [tool.marimo-studio]
