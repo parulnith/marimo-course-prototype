@@ -4,7 +4,8 @@
 #     "marimo>=0.23.16",
 #     "pandas>=2.2",
 #     "pyodide-http; sys_platform == 'emscripten'",
-#     "marimo-studio==0.2.3",
+#     "marimo-studio[lens]==0.2.3",
+#     "marimo-lens==0.2.3",
 #     "altair==6.3.0"
 # ]
 #
@@ -123,7 +124,11 @@ def load_readings(args, is_script):
     data_source = (
         args.input
         if is_script
-        else str(mo.notebook_location() / "occupancy.csv")
+        else (
+            "https://raw.githubusercontent.com/holoviz/panel/"
+            "62dda3f986251295ab4892a45e02c7f1533cf4c0/"
+            "examples/assets/occupancy.csv"
+        )
     )
     readings = pd.read_csv(data_source, parse_dates=["date"]).sort_values("date")
     readings.head(8)

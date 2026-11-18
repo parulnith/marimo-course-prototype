@@ -10,6 +10,8 @@ These are in-sample metrics from a simple scoring rule, not held-out estimates f
 
 ## Run locally
 
+In the browser and notebook editor, `occupancy.py` reads the CSV from the pinned Panel URL above, so no separate data download is needed. Script mode still uses the bundled `occupancy.csv` by default and accepts a custom file with `--input`.
+
 Keep the files and `public` folder together. From this folder:
 
 ```bash
@@ -18,3 +20,5 @@ uv run occupancy.py --threshold 0.5 --output occupancy_predictions.csv
 ```
 
 For Studio, run `uvx --with marimo-studio marimo edit occupancy.py --sandbox --watch`, then follow the guided exercise in Module 5. It adds views to this same notebook. The official model review is a reference, not the output of these course files.
+
+The notebook pins `marimo-studio[lens]==0.2.3` and `marimo-lens==0.2.3` for the Lens feedback exercise. Studio 0.2.3 requires marimo 0.25.0; Lens 0.2.3 supports that version. Keep these versions together rather than applying requirements from the latest hosted Lens documentation. The learner download includes these dependencies and installs them through `--sandbox`.

@@ -6,7 +6,7 @@ order: 5
 duration: 20 min
 ---
 
-import studioNotebookViews from "../images/module-5/studio-notebook-views.webp";
+import agentViewWorkflow from "../images/module-5/pair-studio-lens-workflow.svg";
 import occupancyMonitorVideo from "../images/module-5/occupancy-monitor.mp4";
 import occupancyModelReviewVideo from "../images/module-5/occupancy-model-review.mp4";
 import occupancyReport from "../images/module-5/occupancy-report.png";
@@ -28,29 +28,21 @@ Imagine you work for a company that wants to estimate whether a meeting room is 
 
 We will use this example throughout the module.
 
-Explore the occupancy notebook below. The sensor data is included, so you can run the example directly in the course.
-
-The following marimo notebook contains 8,143 sensor readings and a slider for the decision threshold. A reading is predicted as occupied when its score is at least the threshold. These controls use the widgets introduced in [Module 3](/?module=3).
+Run the occupancy notebook below directly in your browser. It automatically loads 8,143 sensor readings. Use the slider, a widget introduced in [Module 3](/?module=3), to adjust the decision threshold. A reading is predicted as occupied when its score is at least the threshold.
 
 <MarimoEmbed
-  notebook="/notebooks/module-5/occupancy.py?v=20261005-1"
+  notebook="/notebooks/module-5/occupancy.py?v=20261117-1"
   openUrl="https://molab.marimo.io/github/parulnith/marimo-course-prototype/blob/main/course/notebooks/module-5/occupancy.py"
   title="Review room occupancy"
 />
 
-<Callout title="Download the course files">
-
-You will work with this notebook locally in Sections 2 and 3. [Download the notebook and data](/notebooks/module-5/module-5-occupancy.zip), then extract the folder. It includes `occupancy.py` and `occupancy.csv`.
-
-</Callout>
-
 <Callout title="About this example">
 
-This simplified course notebook is adapted from [marimo-studio's original occupancy notebook](https://github.com/marimo-team/marimo-studio/blob/72376de50eb89fe8372ad55f3b341cfb439be154/examples/occupancy.py), using the [UCI Occupancy Detection dataset](https://doi.org/10.24432/C5X01N). We kept its scoring rule and threshold evaluation, and made its functions reusable. Section 2 shows how to add command-line arguments and save predictions. It combines light and CO₂ readings into a score. This is a simple scoring rule, not a trained model or a probability. Its metrics describe the same observations used to define the score.
+This example adapts [marimo Studio's occupancy notebook](https://github.com/marimo-team/marimo-studio/blob/72376de50eb89fe8372ad55f3b341cfb439be154/examples/occupancy.py) using the [UCI Occupancy Detection dataset](https://doi.org/10.24432/C5X01N). It combines light and CO₂ readings into a simple score, not a trained model or probability. The metrics describe this dataset, not performance on unseen data.
 
 </Callout>
 
-Move the threshold from `0.5` to `0.7` and inspect the error counts. The dataframe places each prediction beside the recorded occupancy, so you can inspect where they differ.
+Move the threshold from `0.5` to `0.7` and inspect the error counts. What happens to the false positive and false negative counts? Compare the predictions with the recorded occupancy in the table.
 
 ### Share and export your notebook
 
@@ -66,13 +58,13 @@ You can also export and share the notebook in multiple formats, as shown in the 
 
 ### Run the notebook as a script
 
-You can run the occupancy notebook you explored above as a script from the command line. This is useful when you want to run the same analysis repeatedly without opening the notebook interface. For example, you might want to process a batch of sensor readings and save the results for a dashboard or report.
+While a marimo notebook is primarily designed for interactive use, you can also run it as a script from the command line. For example, you might want to process a batch of sensor readings and save the results for a dashboard or report.
 
-As you saw in Module 1, a notebook cell can have a Python function name. Here, `script_options` is the cell that reads the input file, threshold, and output filename. The updated cells use these values when the notebook runs as a script.
+Below is the same notebook you explored in Section 1. Now, you will run it as a script from the command line.
 
 <MarimoEmbed
-  notebook="/notebooks/module-5/occupancy.py?v=20261005-1"
-  title="Add script support to the occupancy notebook"
+  notebook="/notebooks/module-5/occupancy.py?v=20261117-1"
+  title="Run the occupancy notebook as a script"
 />
 
 In the notebook, the `script_options` cell reads three command-line arguments:
@@ -81,9 +73,9 @@ In the notebook, the `script_options` cell reads three command-line arguments:
 - `--threshold` specifies the threshold to use.
 - `--output` specifies where to save the predictions.
 
-The `selected_model` cell uses the threshold from the command line when the file runs as a script. The `save_predictions` cell writes the CSV and prints the summary. In the editor, the notebook continues to use the slider.
+When you run the notebook as a script, you set the threshold in the command instead of using the slider. The script reads the sensor data, saves the predictions to a CSV file, and prints the error counts.
 
-To try it in a terminal, run the command below from the folder containing `occupancy.py` and `occupancy.csv`:
+To try it, [download the notebook and data](/notebooks/module-5/module-5-occupancy.zip) and unzip the folder. Open a terminal in that folder, where `occupancy.py` and `occupancy.csv` are saved. Run this command:
 
 ```bash
 uv run occupancy.py \
@@ -100,28 +92,24 @@ False positives: 90; false negatives: 5
 
 ### Reuse functions from the notebook
 
-Another advantage of a marimo notebook is that it is a Python file. You can import its functions into another notebook instead of copying code.
-
-You already explored the occupancy notebook above. Its `score_readings()` and `evaluate_occupancy()` functions are already in the correct format for reuse: each is defined in its own cell and uses imports from the setup cell. When your own function follows this pattern, marimo marks it as reusable in the editor.
-
-When another notebook or Python program needs the same scoring rule, import the functions from `occupancy.py`:
+You can also reuse the notebook's functions in another Python file. For example, import the occupancy functions instead of copying their code:
 
 ```python
 from occupancy import evaluate_occupancy, score_readings
 ```
 
-The functions remain in one source notebook, so you can update the scoring rule in one place and use it wherever you need it.
+You can use this import in another Python file in the same folder as `occupancy.py`, with marimo and pandas installed.
 
-## 3. Create views from one notebook with marimo Studio
+## 3. Build and refine multiple views
 
-App view and exports let you share a notebook as it is. Sometimes, however, different audiences need different ways to use the same analysis. Copying the notebook for each audience can create versions that drift apart. Adding all the presentation code to the notebook can also make the analysis harder to read.
+Different people need different views of the same results. This is where [marimo Studio](https://marimo.io/blog/introducing-marimo-studio) comes in. It lets you turn notebook results into views such as dashboards and reports, while keeping the data and calculations in the notebook.
 
-With [marimo Studio](https://marimo.io/blog/introducing-marimo-studio), the analysis stays in one notebook while you create separate views on top of it.
+You can connect an AI agent to your running notebook with [marimo Pair](/?module=4#3-work-with-a-coding-agent-using-marimo-pair), introduced in Module 4. Describe the view you want, and the agent can build it with Studio using your notebook's results. You can then use [Lens](https://marimo-team.github.io/marimo-studio/guide/lens), a tool for selecting part of a view and adding feedback, to show the agent what to improve.
 
-<img src={studioNotebookViews} alt="Without Studio, separate notebook copies or presentation code inside one notebook serve each audience. With Studio, one notebook provides separate views for different audiences." />
+<img src={agentViewWorkflow} alt="Pair connects the agent to the notebook, Studio creates views for different audiences, and Lens sends your feedback to the same agent." />
 
 <p className="figure-caption">
-  marimo Studio keeps the analysis in one notebook and gives each audience a separate view. A change to the analysis can then be used by every view. Source: <a href="https://marimo.io/blog/introducing-marimo-studio">Introducing marimo-studio</a>.
+  Connect your agent, review its work, and give feedback. The analysis stays in the notebook as you refine the views.
 </p>
 
 For our occupancy analysis, the same notebook can be useful in three different ways:
@@ -135,18 +123,19 @@ All three can use results from the same notebook which continues to contain the 
 
 ### Create a simple view manually
 
-Creating a Studio view is simple. In this activity, let's create a small view from the occupancy notebook.
+While Studio is designed to work with an AI agent, let's first create a simple view by hand to understand how it displays results from the notebook.
 
 <Callout title="Start marimo Studio locally">
 
 To create Studio views locally, [download the notebook and data](/notebooks/module-5/module-5-occupancy.zip) and extract the `module-5-occupancy` folder. Open a terminal in that folder, which contains `occupancy.py` and `occupancy.csv`, then run:
 
 ```bash
-cd module-5-occupancy
 uvx --with marimo-studio marimo edit occupancy.py --sandbox --watch
 ```
 
-Studio opens `occupancy.py` in your browser. Continue with the steps below.
+Studio opens `occupancy.py` in your browser. Run the notebook cells before creating the view.
+
+The notebook includes the dependencies for Studio and Lens, which the command installs for you.
 
 </Callout>
 
@@ -176,21 +165,21 @@ Click the **Source** button (`<>`) in the Studio toolbar. In the source panel, o
 
 Save the file, then open **Preview**. The `<marimo-cell>` element tells Studio to render the output of the notebook cell named `metrics_output` inside the view.
 
+You should see precision, recall, false positives, and false negatives. Change the notebook's threshold and check that these values update in the view.
+
 <img src={studioSimpleView} alt="The occupancy notebook beside Studio Preview, which displays the metrics_output cell in a simple HTML view." />
 
 <p className="figure-caption">
   The view references the notebook's <code>metrics_output</code> cell. The calculation remains in <code>occupancy.py</code>, while the view controls where the result appears.
 </p>
 
-You could continue building the view manually, as you just saw, or use an AI agent, as you will see in the next section.
+This is the basic building block of every Studio view. In practice, you won’t write these files by hand. You’ll describe the view you want, and a paired agent will build it from your notebook’s cells.
 
 ### Create Studio views with marimo pair
 
-Studio views can be created manually, as you just saw, or you can create them with an AI agent.
+Studio is designed to work with an AI agent. In [Module 4](/?module=4), you used [marimo pair](https://marimo.io/pair) to connect an agent to a running notebook. Here, you’ll use it to build Studio views.
 
-In [Module 4](/?module=4), you used [marimo pair](https://marimo.io/pair) to connect an AI agent to a running notebook. You will use it again here to create Studio views. marimo pair gives the agent access to the active notebook, so it can inspect the existing analysis, create Studio view files, and help you check the result.
-
-With the local `occupancy.py` notebook open, select **Actions → Pair with an agent**, choose your AI agent, and follow the connection instructions.
+With `occupancy.py` open, select **Actions → Pair with an agent**, choose your AI agent, and follow the connection instructions. Once your agent connects, marimo shows that an agent is connected to the notebook, so you can tell when it’s working alongside you.
 
 <img className="lesson-gif" src={marimoPairGif} alt="The Actions menu in a local occupancy notebook shows the option to pair with an agent." />
 
@@ -277,14 +266,38 @@ Build the view and show it in Preview.
 
 Set the threshold to `0.5`, then change it to `0.7`. Compare the precision, recall, false positive count, false negative count, and error rows at the two thresholds.
 
-The monitor and model review use the same analysis, but they support different tasks. The monitor gives the facilities team a quick summary, while the model review makes the effect of the decision threshold easier to inspect.
-
 Watch the model review being created in Studio:
 
 <video className="lesson-video" controls playsInline preload="metadata">
   <source src={occupancyModelReviewVideo} type="video/mp4" />
   Your browser does not support the video tag.
 </video>
+
+#### Give feedback with Lens
+
+As you compare the errors, consider how easily someone reviewing the model can find the false negatives: cases where an occupied room is predicted to be empty. Let's ask the agent to make those rows easier to spot.
+
+[Lens](https://marimo-team.github.io/marimo-studio/guide/lens) lets you select part of a view and attach a note for your agent. The selection gives the agent context about the result you mean and the notebook code behind it. You will use the same agent you connected through Pair to refine the Studio view it just built.
+
+In Preview, click **Select** in the Lens dock, select the error table, and add this note:
+
+```text
+Make false negatives easier to spot. Highlight those rows and include a
+clear "False negative" label.
+```
+
+Then send this message to your paired agent:
+
+```text
+Use Lens to address my current selection in this Studio view.
+Keep the predictions, threshold, and calculations unchanged.
+Build the updated view and show it in Preview.
+```
+
+Saving the note records your selection. Sending the message asks the agent to act on it. If you do not see the Lens dock, ask your paired agent to add Lens to the notebook, then continue when the dock appears in Preview.
+
+Review the updated table. Check that false negatives have both a highlight and a clear label, and that the metrics have not changed. Switch between thresholds of `0.5` and `0.7` again and check that the highlighting follows the updated results.
+
 
 
 ### Create a report
@@ -327,16 +340,55 @@ __marimo__/
 ## Check your understanding
 
 <Quiz
-  question="Why create separate views with marimo-studio?"
+  question="The facilities team needs a monitor, while a manager needs a report. How should you build these with Studio?"
   options={[
-    "To avoid calculating the results shown in the view.",
-    "To present the same notebook analysis in different layouts for different audiences.",
-    "To automatically choose the best decision threshold.",
-    "To make every notebook result correct."
+    "Copy the notebook and maintain separate calculations for each audience.",
+    "Keep the calculations in one notebook and create a separate view for each audience.",
+    "Move the calculations into each view so the notebook is no longer needed.",
+    "Use one fixed screenshot for both audiences, even when the threshold changes."
   ]}
   answer={1}
   correctFeedback="Correct. You can keep the shared analysis in the notebook and create a separate layout for each view."
   incorrectFeedback="Think about presenting the same results in a meeting and in a detailed report."
+/>
+
+<Quiz
+  question="You have occupancy.py open and want an external AI agent to build a Studio view. What should you do first?"
+  options={[
+    "Connect the agent to the running notebook through marimo pair.",
+    "Export a screenshot so the agent can infer all the notebook's calculations.",
+    "Close the notebook and ask the agent to recreate its results in the view.",
+    "Copy the dataset into the view's HTML file."
+  ]}
+  answer={0}
+  correctFeedback="Correct. Pair connects the agent to the live notebook so it can inspect the analysis and build views from its results."
+  incorrectFeedback="The agent needs access to the running notebook and its existing results before it builds the view."
+/>
+
+<Quiz
+  question="You selected the error table with Lens and saved a note asking for clearer false negatives. What should you do next?"
+  options={[
+    "Change the threshold to make the false negatives disappear.",
+    "Create a new notebook containing only the selected rows.",
+    "Send the paired agent a message asking it to address the current Lens selection.",
+    "Wait for Lens to edit the view automatically without an agent request."
+  ]}
+  answer={2}
+  correctFeedback="Correct. Lens records the selected result and your note. Your message asks the paired agent to act on that feedback."
+  incorrectFeedback="Saving a Lens note records feedback. The paired agent still needs a request to make the change."
+/>
+
+<Quiz
+  question="The agent has highlighted false negatives in the model-review table. How should you check its work?"
+  options={[
+    "Accept the change as soon as the agent says it is finished.",
+    "Check only that the table uses a different color.",
+    "Check that the false negative count has decreased after the styling change.",
+    "Check the labels and highlights, confirm the metrics are unchanged, and change the threshold to check that the table updates."
+  ]}
+  answer={3}
+  correctFeedback="Correct. A presentation change should make the errors easier to identify without changing predictions or calculations. The view should still follow the notebook's threshold."
+  incorrectFeedback="You asked for clearer presentation. Check both the visible change and whether the existing calculations and controls still behave as expected."
 />
 
 <Quiz

@@ -69,7 +69,7 @@ const modules = {
     duration: "15 min",
     Content: ModuleFour,
     lessons: [
-      ["1-generate-and-edit-with-the-ai-assistant", "Generate and edit with the AI assistant", null, 1],
+      ["1-generate-and-edit-with-the-ai-agent", "Generate and edit with the AI agent", null, 1],
       ["2-using-the-chat-panel", "Using the Chat panel", null, 2],
       ["3-work-with-a-coding-agent-using-marimo-pair", "Work with marimo pair", null, 3],
       ["4-review-ai-generated-work", "Review AI-generated work", null, 4],
@@ -95,7 +95,7 @@ const modules = {
 modules[5].lessons = [
   ["1-share-your-notebook-in-multiple-ways", "Share your notebook in multiple ways", null, 1],
   ["2-use-your-notebook-as-a-script-or-python-module", "Use your notebook as a script or Python module", null, 2],
-  ["3-create-views-from-one-notebook-with-marimo-studio", "Create views with marimo Studio", null, 3],
+  ["3-build-and-refine-multiple-views", "Build and refine multiple views", null, 3],
   ["check-your-understanding", "Quiz", null, 4],
 ];
 
@@ -380,8 +380,8 @@ function CourseHome() {
         <li>See how reactive execution and clear dependencies prevent common reproducibility problems in notebooks.</li>
         <li>Build and share AI and ML experiments that use the same environment and dependencies.</li>
         <li>Explore data and evaluate models with interactive controls and visualizations.</li>
-        <li>Use AI coding agents through marimo pair while you prototype, debug models, and improve an AI workflow.</li>
-        <li>Turn one marimo notebook into a script, web app, shareable artifact, or Python module, and create separate views with marimo Studio.</li>
+        <li>Connect an AI agent to your notebook with Pair, see its activity through agent-aware connections, build custom views for others with Studio, and give feedback on those views with Lens.</li>
+        <li>Turn one marimo notebook into a script, web app, shareable artifact, or reusable Python module.</li>
       </ul>
     </section>
   </article>;

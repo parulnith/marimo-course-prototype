@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" role="img" aria-labelledby="title desc">
+<title id="title">Build a Studio view and refine it with Lens</title>
+<desc id="desc">Pair connects your agent to the notebook. The agent uses Studio to build views for other people. You select part of a view with Lens and send feedback to the same agent.</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#64748b" stroke-width="1.5"/></marker></defs>
+<rect width="960" height="430" rx="20" fill="#f8fafc"/>
+<g transform="translate(0 -120)" font-family="Arial, Helvetica, sans-serif" fill="#172b36">
+<rect x="42" y="153" width="360" height="162" rx="16" fill="white" stroke="#b7d2e8" stroke-width="2"/>
+<text x="68" y="192" font-size="25" font-weight="700" fill="#225c88">Pair</text>
+<text x="68" y="225" font-size="19">Connect your agent to the notebook.</text>
+<text x="68" y="275" font-size="17" fill="#536672">Your agent + occupancy.py</text>
+<path d="M416 235 H542" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="480" y="216" text-anchor="middle" font-size="16" fill="#536672">Build</text>
+<rect x="558" y="153" width="360" height="162" rx="16" fill="white" stroke="#c8bce0" stroke-width="2"/>
+<text x="584" y="192" font-size="25" font-weight="700" fill="#715292">Studio</text>
+<text x="584" y="225" font-size="19">Build views for different audiences.</text>
+<text x="584" y="275" font-size="17" fill="#536672">Monitor · Model review · Report</text>
+<rect x="276" y="379" width="408" height="133" rx="16" fill="white" stroke="#e6c899" stroke-width="2"/>
+<text x="302" y="418" font-size="25" font-weight="700" fill="#916119">Lens</text>
+<text x="302" y="450" font-size="19">Select a result and give feedback.</text>
+<text x="302" y="483" font-size="17" fill="#536672">“Make false negatives easier to spot.”</text>
+<path d="M738 329 V445 H699" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="755" y="372" font-size="16" fill="#536672">Review</text>
+<path d="M262 445 H222 V329" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="60" y="376" font-size="16" fill="#536672">Send feedback</text>
+<text x="60" y="399" font-size="16" fill="#536672">to the same agent</text>
+</g></svg>

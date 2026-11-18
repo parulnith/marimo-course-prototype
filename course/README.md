@@ -36,7 +36,7 @@ course/
 
 `notebooks/module-3/` contains the editable starter and the complete interactive ML workflow used for data exploration, model comparison, and error analysis.
 
-`notebooks/module-4/` contains the notebook used to practise giving an AI assistant context and pairing a coding agent with marimo.
+`notebooks/module-4/` contains the notebook used to practise giving an AI agent context and pairing a coding agent with marimo.
 
 `components/placeholders.mdx` describes the custom MDX components used in the lessons. These names can be mapped to the components provided by the website.
 
